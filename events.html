@@ -75,7 +75,52 @@
       text-shadow: 0 0 15px #3bc4ff;
     }
 
-    
+    /* --- Shooting Stars --- */
+    .shooting-stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .shooting-star {
+      position: absolute;
+      width: 2px;
+      height: 100px;
+      background: linear-gradient(-45deg, #3bc4ff, rgba(124,107,255,0));
+      box-shadow: 0 0 15px #3bc4ff, 0 0 25px #7c6bff;
+      opacity: 0;
+      transform-origin: top left;
+      border-radius: 2px;
+    }
+
+    @keyframes shoot-right {
+      0% {
+        transform: translate(0, 0) rotate(45deg);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      100% {
+        transform: translate(100vw, 100vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes shoot-left {
+      0% {
+        transform: translate(0, 0) rotate(-45deg);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      100% {
+        transform: translate(-100vw, 100vh) rotate(-45deg);
+        opacity: 0;
+      }
+    }
 
     /* --- Floating Animation --- */
     @keyframes float {
@@ -251,7 +296,7 @@
   <!-- Parallax Background -->
   <div class="parallax-bg">
     <div class="parallax-layer">
-      <img src="assests/p1.png" alt="background" class="relative inset-0 w-full h-full object-cover opacity-30">
+      <img src="assests/p1.png" alt="background" class="absolute inset-0 w-full h-full object-cover opacity-30">
     </div>
   </div>
 
@@ -278,19 +323,19 @@
     <div class="w-full h-[1px] bg-gradient-to-r from-cyan-400/60 to-transparent my-3"></div>
     <p class="text-xs text-cyan-300/70 font-semibold tracking-widest">MENU</p>
   </div>
-<!--Right Frame-->
-     <div class="absolute right-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[60vh] border-r-4 border-purple-500/50 z-20">
-      <div class="flex flex-col items-center space-y-10 text-2xl text-gray-300">
-        <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
-        <a href="https://www.facebook.com" class="icon-hover"><i class="fa-brands fa-facebook"></i></a>
-        
-      </div>
-      <div class="w-full h-[1px] bg-gradient-to-l from-purple-500/60 to-transparent my-3"></div>
-      <p class="text-xs text-purple-300/70 font-semibold tracking-widest">SOCIAL</p>
+
+  <!-- RIGHT SOCIAL MEDIA FRAME -->
+  <div class="fixed right-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[60vh] border-r-4 border-purple-500/50 z-50">
+    <div class="flex flex-col items-center space-y-8 text-2xl text-gray-300">
+      <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
+      <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
+      <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
+      <a href="https://x.com" target="_blank" class="icon-hover"><i class="fa-brands fa-x-twitter"></i></a>
     </div>
+    <div class="w-full h-[1px] bg-gradient-to-l from-purple-500/60 to-transparent my-3"></div>
+    <p class="text-xs text-purple-300/70 font-semibold tracking-widest">SOCIAL</p>
+  </div>
 
   <!-- MAIN CONTENT -->
   <main class="relative z-10">
