@@ -276,6 +276,45 @@
       width: 100%;
       height: 100%;
     }
+      /* Search Error Styles */
+    #noResults {
+      z-index: 100;
+      background: rgba(239, 68, 68, 0.1);
+    }
+    .glow-red {
+      text-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444;
+    }
+    @keyframes pulse-red {
+      0%, 100% { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+      
+      50% { border-color: rgba(239, 68, 68, 1); box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
+    }
+    .animate-pulse {
+      animation: pulse-red 2s infinite;
+    }
+
+    /* Scroll Indicators Styles */
+    #scrollIndicator .glow, #backToTop .glow {
+      filter: drop-shadow(0 0 8px rgba(59, 196, 255, 0.8));
+    }
+
+    .opacity-0 {
+      opacity: 0 !important;
+     pointer-events: none;
+    }
+
+    /* Back to Top Button Specific */
+    #backToTop {
+      transition: all 0.5s ease;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+    }
+    #backToTop:hover {
+      border-color: #22d3ee;
+      transform: translateY(-5px);
+    }
+
   </style>
 </head>
 
@@ -357,20 +396,19 @@
 
   <!-- RIGHT SOCIAL MEDIA FRAME (FIXED) -->
   <div class="fixed right-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[50vh] border-r-4 border-purple-500/50 z-20">
-      <div class="flex flex-col items-center space-y-10 text-2xl text-gray-300">
-        <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
-        
-        <div class="mt-6 text-sm text-gray-300">
-          <a href="#about" class="flex flex-col items-center hover-glow">
-            <i class="fa-solid fa-circle-info text-xl mb-1"></i>
-            <span>About</span>
-          </a>
-        </div>
+  <div class="flex flex-col items-center space-y-10 text-2xl text-gray-300">
+    <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
+    <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
+    <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
+    
+    <div class="mt-6 text-sm text-gray-300">
+      <a href="#about" class="flex flex-col items-center hover-glow">        <i class="fa-solid fa-circle-info text-xl mb-1"></i>
+        <span>About</span>
+      </a>
+    </div>
     <div class="w-full h-[1px] bg-gradient-to-r from-cyan-400/60 to-transparent my-3"></div>
-        </div>
+    </div>
   </div>
 
   <!-- MAIN CONTENT -->
@@ -382,7 +420,29 @@
       <h1 id="events-title" class="text-7xl md:text-8xl font-black orbitron glow mb-4 tracking-wider max-w-full" style="word-break: break-word;">NON-TECH<br>WORKSHOPS</h1>
         <p class="text-2xl md:text-3xl text-cyan-300/90 font-medium tracking-wide">Explore the Five Verses of Innovation</p>
       </div>
+      <div class="mt-10 w-full max-w-lg relative group px-4">
+      <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+      <div class="relative flex items-center">
+        <input type="text" id="eventSearch" placeholder="Search events.." 
+             class="w-full bg-black border border-cyan-400/50 rounded-lg py-4 pl-12 pr-4 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 orbitron tracking-wider text-sm glass"
+             onkeyup="filterEvents()">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 text-cyan-400"></i>
+      </div>
+      </div>
+
+      <div id="noResults" class="hidden mt-4">
+  <p class="text-red-500 orbitron text-sm font-bold tracking-widest text-center">
+    NO MATCHING DATA FOUND
+  </p>
+</div>
+
+<div id="resultsFound" class="hidden mt-4">
+  <p class="text-cyan-400 orbitron text-sm font-bold tracking-widest text-center uppercase">
+    SCROLL DOWN TO VIEW
+  </p>
+</div>
     </section>
+
 
     <!-- SPY VERSE SECTION -->
     <section id="spy-verse" class="min-h-screen px-6 md:px-16 lg:px-32 py-20">
@@ -1014,7 +1074,13 @@
         <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
       </div>
     </footer>
+    <div id="scrollIndicator" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 transition-opacity duration-500 cursor-pointer" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
+      <i class="fa-solid fa-chevron-down text-cyan-400 text-3xl animate-bounce glow"></i>
+    </div>
 
+    <div id="backToTop" class="fixed bottom-10 right-10 z-50 p-4 rounded-full opacity-0 cursor-pointer transition-all duration-500" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      <i class="fa-solid fa-angles-up text-cyan-400 text-2xl glow"></i>
+    </div>
   </main>
 
   <!-- JAVASCRIPT -->
@@ -1148,6 +1214,68 @@
         workshopSub.classList.add('hidden');
       }
     });
+  function filterEvents() {
+  const input = document.getElementById('eventSearch');
+  const filter = input.value.toUpperCase();
+  const sections = document.querySelectorAll('section[id$="-verse"]');
+  const noResultsBox = document.getElementById('noResults');
+  const resultsFoundBox = document.getElementById('resultsFound');
+  let totalFound = 0;
+
+  sections.forEach(section => {
+    const cards = section.querySelectorAll('.event-card');
+    let sectionHasMatch = false;
+
+    cards.forEach(card => {
+      const text = card.innerText.toUpperCase();
+      if (text.includes(filter)) {
+        card.style.display = ""; 
+        sectionHasMatch = true;
+        totalFound++;
+      } else {
+        card.style.display = "none";
+      }
+    });
+    section.style.display = sectionHasMatch ? "" : "none";
+  });
+
+  // Toggle Visibility
+  noResultsBox.classList.toggle('hidden', filter === "" || totalFound > 0);
+  resultsFoundBox.classList.toggle('hidden', filter === "" || totalFound === 0);
+
+  if (typeof handleIndicators === "function") handleIndicators();
+}
+    
+    function handleIndicators() {
+      const downArrow = document.getElementById('scrollIndicator');
+      const upArrow = document.getElementById('backToTop');
+      
+      if (!downArrow || !upArrow) return;
+      
+      const scrollY = window.pageYOffset;
+      const isBottom = (window.innerHeight + scrollY) >= document.body.offsetHeight - 100;
+      const isShortPage = document.body.offsetHeight <= window.innerHeight + 50;
+  
+  // Logic for Down Arrow (Hide at bottom or on short pages)
+      if (isBottom || isShortPage) {
+        downArrow.classList.add('opacity-0');
+      } else {
+        downArrow.classList.remove('opacity-0');
+      }
+
+  // Logic for Up Arrow (Show after scrolling down 300px)
+      if (scrollY > 300) {
+        upArrow.classList.remove('opacity-0');
+      } else {
+        upArrow.classList.add('opacity-0');
+      }
+    }
+
+// Event Listeners
+window.addEventListener('scroll', handleIndicators);
+window.addEventListener('resize', handleIndicators);
+window.addEventListener('load', handleIndicators);
+
   </script>
 
 </body>
