@@ -423,7 +423,7 @@
         <div class="mt-10 w-full max-w-lg relative group px-4">
           <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
           <div class="relative flex items-center">
-            <input type="text" id="eventSearch" placeholder="Search events.." 
+            <input type="text" id="eventSearch" placeholder="Search by event name, verse, day, or time..." 
             class="w-full bg-black border border-cyan-400/50 rounded-lg py-4 pl-12 pr-4 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 orbitron tracking-wider text-sm glass"
             onkeyup="filterEvents()">
             <i class="fa-solid fa-magnifying-glass absolute left-4 text-cyan-400"></i>
@@ -431,17 +431,15 @@
         </div>
         
          <div id="noResults" class="hidden mt-4">
-  <p class="text-red-500 orbitron text-sm font-bold tracking-widest text-center">
-    NO MATCHING DATA FOUND
-  </p>
-</div>
-
-<div id="resultsFound" class="hidden mt-4">
-  <p class="text-cyan-400 orbitron text-sm font-bold tracking-widest text-center uppercase">
-    SCROLL DOWN TO VIEW
-  </p>
-</div>
-      
+          <p class="text-red-500 orbitron text-sm font-bold tracking-widest text-center">
+            NO MATCHING DATA FOUND
+          </p>
+        </div>
+        <div id="resultsFound" class="hidden mt-4">
+          <p class="text-cyan-400 orbitron text-sm font-bold tracking-widest text-center uppercase">
+            SCROLL DOWN TO VIEW
+          </p>
+        </div>
     </section>
 
     <!-- SPY VERSE SECTION -->
@@ -1217,37 +1215,50 @@
       }
     });
   function filterEvents() {
-  const input = document.getElementById('eventSearch');
-  const filter = input.value.toUpperCase();
-  const sections = document.querySelectorAll('section[id$="-verse"]');
-  const noResultsBox = document.getElementById('noResults');
-  const resultsFoundBox = document.getElementById('resultsFound');
-  let totalFound = 0;
-
-  sections.forEach(section => {
-    const cards = section.querySelectorAll('.event-card');
-    let sectionHasMatch = false;
-
-    cards.forEach(card => {
-      const text = card.innerText.toUpperCase();
-      if (text.includes(filter)) {
-        card.style.display = ""; 
-        sectionHasMatch = true;
-        totalFound++;
-      } else {
-        card.style.display = "none";
+      const input = document.getElementById('eventSearch');
+      const filter = input.value.toUpperCase();
+      const sections = document.querySelectorAll('section[id$="-verse"]');
+      const noResultsBox = document.getElementById('noResults');
+      const resultsFoundBox = document.getElementById('resultsFound');
+      let totalFound = 0;
+      
+      sections.forEach(section => {
+        // 1. Get the Verse Name (e.g., "SPY VERSE" or "MYTHIC VERSE")
+        // Assuming your section has a title element like <h2>
+          const verseTitle = section.querySelector('h2')?.innerText.toUpperCase() || "";
+          
+          const cards = section.querySelectorAll('.event-card');
+          let sectionHasMatch = false;
+          
+          cards.forEach(card => {
+            // 2. Combine Card text + Verse Title for the search
+            const cardText = card.innerText.toUpperCase();
+            const searchContent = cardText + " " + verseTitle;
+            
+            if (searchContent.includes(filter)) {
+              card.style.display = ""; 
+              sectionHasMatch = true;
+              totalFound++;
+            } else {
+              card.style.display = "none";
+            }
+          });
+          
+          // Show section only if it has matching cards
+          section.style.display = sectionHasMatch ? "" : "none";
+        });
+        
+        // UI Feedback
+        noResultsBox.classList.toggle('hidden', filter === "" || totalFound > 0);
+        resultsFoundBox.classList.toggle('hidden', filter === "" || totalFound === 0);
+        
+        // Update result count text if the box exists
+        if (resultsFoundBox && totalFound > 0) {
+          resultsFoundBox.innerText = `Found ${totalFound} events matching "${input.value}", Scroll down!`;
+        }
+        
+        if (typeof handleIndicators === "function") handleIndicators();
       }
-    });
-    section.style.display = sectionHasMatch ? "" : "none";
-  });
-
-  // Toggle Visibility
-  noResultsBox.classList.toggle('hidden', filter === "" || totalFound > 0);
-  resultsFoundBox.classList.toggle('hidden', filter === "" || totalFound === 0);
-
-  if (typeof handleIndicators === "function") handleIndicators();
-}
-
 function handleIndicators() {
   const downArrow = document.getElementById('scrollIndicator');
   const upArrow = document.getElementById('backToTop');
