@@ -422,7 +422,7 @@
         <input 
           type="text" 
           id="eventSearch" 
-          placeholder="Search events.." 
+          placeholder="Search by event name, verse, day, or time..." 
           class="w-full bg-black border border-cyan-400/50 rounded-lg py-4 pl-12 pr-4 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 orbitron tracking-wider text-sm glass"
           onkeyup="filterEvents()"
         >
@@ -461,6 +461,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-lock text-3xl text-cyan-400"></i>
                 <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-cyan-300 border border-cyan-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+              
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-cyan-400 mb-3">CIPHER QUEST</h3>
@@ -475,8 +477,7 @@
                 <span>Click for details</span>
                 <i class="fa-solid fa-chevron-down ml-2 transition-transform" id="spy-event-1-icon"></i>
               </div>
-              <button class="mt-4 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded">Register Now!</button>
-            </div>
+              <button disabled class="mt-4 bg-gray-600 text-gray-300 font-bold py-2 px-4 rounded cursor-not-allowed w-full">Registration Closed</button>            </div>
             <div id="spy-event-1" class="dropdown-content bg-black/40 border-t border-cyan-400/30 px-8 pb-8 hidden">
               <h4 class="text-lg font-bold text-cyan-300 mb-3 mt-4">Event Details</h4>
               <p class="text-gray-300 text-sm leading-relaxed mb-3">
@@ -497,6 +498,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-shield-halved text-3xl text-cyan-400"></i>
                 <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-cyan-300 border border-cyan-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+              
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-cyan-400 mb-3">CYBER SENTINEL</h3>
@@ -533,6 +536,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-fingerprint text-3xl text-cyan-400"></i>
                 <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-cyan-300 border border-cyan-400/30">Day 2</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-cyan-400 mb-3">COVERT OPS</h3>
@@ -584,6 +589,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-brain text-3xl text-purple-400"></i>
                 <span class="text-xs bg-purple-400/20 px-3 py-1 rounded-full text-purple-300 border border-purple-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-purple-400 mb-3">AI ARENA</h3>
@@ -620,6 +627,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-microchip text-3xl text-purple-400"></i>
                 <span class="text-xs bg-purple-400/20 px-3 py-1 rounded-full text-purple-300 border border-purple-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-purple-400 mb-3">ROBO WARS</h3>
@@ -656,6 +665,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-satellite-dish text-3xl text-purple-400"></i>
                 <span class="text-xs bg-purple-400/20 px-3 py-1 rounded-full text-purple-300 border border-purple-400/30">Day 2</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+              
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-purple-400 mb-3">SPACE TECH CHALLENGE</h3>
@@ -707,6 +718,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-gamepad text-3xl text-red-400"></i>
                 <span class="text-xs bg-red-400/20 px-3 py-1 rounded-full text-red-300 border border-red-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-red-400 mb-3">GAME JAM</h3>
@@ -743,6 +756,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-video text-3xl text-red-400"></i>
                 <span class="text-xs bg-red-400/20 px-3 py-1 rounded-full text-red-300 border border-red-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-red-400 mb-3">TECH REELS</h3>
@@ -779,6 +794,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-palette text-3xl text-red-400"></i>
                 <span class="text-xs bg-red-400/20 px-3 py-1 rounded-full text-red-300 border border-red-400/30">Day 2</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-red-400 mb-3">DIGITAL CANVAS</h3>
@@ -830,6 +847,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-book-skull text-3xl text-slate-400"></i>
                 <span class="text-xs bg-slate-400/20 px-3 py-1 rounded-full text-slate-300 border border-slate-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-slate-300 mb-3">MURDER MYSTERY TECH</h3>
@@ -866,6 +885,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-ghost text-3xl text-slate-400"></i>
                 <span class="text-xs bg-slate-400/20 px-3 py-1 rounded-full text-slate-300 border border-slate-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-slate-300 mb-3">HORROR CODE</h3>
@@ -902,6 +923,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-door-open text-3xl text-slate-400"></i>
                 <span class="text-xs bg-slate-400/20 px-3 py-1 rounded-full text-slate-300 border border-slate-400/30">Day 2</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-slate-300 mb-3">ESCAPE ROOM 404</h3>
@@ -953,6 +976,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-scroll text-3xl text-orange-400"></i>
                 <span class="text-xs bg-orange-400/20 px-3 py-1 rounded-full text-orange-300 border border-orange-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-orange-400 mb-3">ANCIENT ALGORITHMS</h3>
@@ -989,6 +1014,7 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-landmark text-3xl text-orange-400"></i>
                 <span class="text-xs bg-orange-400/20 px-3 py-1 rounded-full text-orange-300 border border-orange-400/30">Day 1</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-orange-400 mb-3">HERITAGE HACK</h3>
@@ -1025,6 +1051,8 @@
               <div class="flex items-center justify-between mb-4">
                 <i class="fa-solid fa-om text-3xl text-orange-400"></i>
                 <span class="text-xs bg-orange-400/20 px-3 py-1 rounded-full text-orange-300 border border-orange-400/30">Day 2</span>
+                <span class="text-xs bg-cyan-400/20 px-3 py-1 rounded-full text-white-300 border border-cyan-400/30">10:00 AM</span>
+
               </div>
               <img src="https://via.placeholder.com/300x200?text=Event+Poster" alt="Event Poster" class="w-full h-32 object-cover rounded-lg mb-4">
               <h3 class="text-2xl font-bold text-orange-400 mb-3">MYTHOLOGY MEETS AI</h3>
@@ -1221,27 +1249,42 @@
       let totalFound = 0;
       
       sections.forEach(section => {
-        const cards = section.querySelectorAll('.event-card');
-        let sectionHasMatch = false;
-        
-        cards.forEach(card => {
-          const text = card.innerText.toUpperCase();
-          if (text.includes(filter)) {
-            card.style.display = ""; 
-            sectionHasMatch = true;
-            totalFound++;
-          } else {
-            card.style.display = "none";
-          }
+        // 1. Get the Verse Name (e.g., "SPY VERSE" or "MYTHIC VERSE")
+        // Assuming your section has a title element like <h2>
+          const verseTitle = section.querySelector('h2')?.innerText.toUpperCase() || "";
+          
+          const cards = section.querySelectorAll('.event-card');
+          let sectionHasMatch = false;
+          
+          cards.forEach(card => {
+            // 2. Combine Card text + Verse Title for the search
+            const cardText = card.innerText.toUpperCase();
+            const searchContent = cardText + " " + verseTitle;
+            
+            if (searchContent.includes(filter)) {
+              card.style.display = ""; 
+              sectionHasMatch = true;
+              totalFound++;
+            } else {
+              card.style.display = "none";
+            }
+          });
+          
+          // Show section only if it has matching cards
+          section.style.display = sectionHasMatch ? "" : "none";
         });
-        section.style.display = sectionHasMatch ? "" : "none";
-      });
-      // Toggle Visibility
-      noResultsBox.classList.toggle('hidden', filter === "" || totalFound > 0);
-      resultsFoundBox.classList.toggle('hidden', filter === "" || totalFound === 0);
-      
-      if (typeof handleIndicators === "function") handleIndicators();
-    }
+        
+        // UI Feedback
+        noResultsBox.classList.toggle('hidden', filter === "" || totalFound > 0);
+        resultsFoundBox.classList.toggle('hidden', filter === "" || totalFound === 0);
+        
+        // Update result count text if the box exists
+        if (resultsFoundBox && totalFound > 0) {
+          resultsFoundBox.innerText = `Found ${totalFound} events matching "${input.value}", Scroll down!`;
+        }
+        
+        if (typeof handleIndicators === "function") handleIndicators();
+      }
     function handleIndicators() {
       const downArrow = document.getElementById('scrollIndicator');
       const upArrow = document.getElementById('backToTop');
