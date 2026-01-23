@@ -119,7 +119,20 @@
 
     ::-webkit-scrollbar-thumb:hover {
       background: linear-gradient(to bottom, #7c6bff, #3bc4ff);
+
     }
+
+    /* Expansion logic for the extra menu */
+#extra-menu.expanded {
+    max-height: 100px; /* Adjust based on total icons */
+    opacity: 1;
+    margin-top: 1.5rem; /* Matches space-y-8 */
+}
+
+/* Arrow rotation */
+.rotate-180 {
+    transform: rotate(180deg);
+}
   </style>
 </head>
 
@@ -135,20 +148,23 @@
     </div>
 
   <!-- LEFT NAVIGATION FRAME (FIXED) -->
-  <div class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[70vh] border-l-4 border-cyan-400/50 z-50">
-    <nav class="flex flex-col items-center space-y-8 text-gray-300 text-sm">
+
+  <div class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-start items-center glass rounded-2xl p-6 w-20 h-auto border-l-4 border-cyan-400/50 z-50 transition-all duration-500">
+  <nav class="flex flex-col items-center text-gray-300 text-sm ">
+    
+    <div class="flex flex-col items-center space-y-6">
       <a href="index.html" class="flex flex-col items-center hover-glow">
         <i class="fa-solid fa-house text-xl mb-1"></i>
         <span>Home</span>
       </a>
-          <a href="history.html" class="flex flex-col items-center hover-glow">
-      <i class="fa-solid fa-hourglass-half text-xl mb-1"></i>
-      <span>History</span>
-    </a>
-    <a href="theme.html" class="flex flex-col items-center hover-glow">
-      <i class="fa-solid fa-globe text-xl mb-1"></i>
-      <span>Theme</span>
-    </a>
+      <a href="history.html" class="flex flex-col items-center hover-glow">
+        <i class="fa-solid fa-hourglass-half text-xl mb-1"></i>
+        <span>History</span>
+      </a>
+      <a href="theme.html" class="flex flex-col items-center hover-glow">
+        <i class="fa-solid fa-globe text-xl mb-1"></i>
+        <span>Theme</span>
+      </a>
       <div class="relative" id="events-nav">
         <a href="javascript:void(0)" onclick="toggleEventsNav()" class="flex flex-col items-center hover-glow">
           <i class="fa-solid fa-calendar-days text-xl mb-1"></i>
@@ -185,18 +201,27 @@
           </div>
         </div>
       </div>
-          <a href="#gallery" class="flex flex-col items-center hover-glow">
-      <i class="fa-solid fa-images text-xl mb-1"></i>
-      <span>Gallery</span>
-    </a>
-    <a href="#coordinators" class="flex flex-col items-center hover-glow">
-      <i class="fa-solid fa-user-group text-xl mb-1"></i>
-      <span>Coordinators</span>
-    </a>
-    </nav>
-    <div class="w-full h-[1px] bg-gradient-to-r from-cyan-400/60 to-transparent my-3"></div>
-    <p class="text-xs text-cyan-300/70 font-semibold tracking-widest">MENU</p>
-  </div>
+      <a href="#gallery" class="flex flex-col items-center hover-glow">
+        <i class="fa-solid fa-images text-xl mb-1"></i>
+        <span>Gallery</span>
+      </a>
+    </div>
+
+    <div id="extra-menu" class="flex flex-col items-center space-y-8 overflow-hidden max-h-0 opacity-0 transition-all duration-500 ease-in-out">
+      <a href="#coordinators" class="flex flex-col items-center hover-glow">
+        <i class="fa-solid fa-user-group text-xl mb-1"></i>
+        <span>Team</span>
+      </a>
+      </div>
+
+    <button id="see-more-btn" class="mt-4 text-cyan-400 hover:text-white transition-transform duration-300">
+      <i class="fa-solid fa-chevron-down text-lg"></i>
+    </button>
+  </nav>
+
+  <div class="w-full h-[1px] bg-gradient-to-r from-cyan-400/60 to-transparent my-3"></div>
+  <p class="text-xs text-cyan-300/70 font-semibold tracking-widest">MENU</p>
+</div>
 
   <!-- RIGHT SOCIAL MEDIA FRAME (FIXED) -->
   <div class="fixed right-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[50vh] border-r-4 border-purple-500/50 z-20">
@@ -377,6 +402,17 @@
         }
       });
     });
+
+    document.getElementById('see-more-btn').addEventListener('click', function() {
+    const extraMenu = document.getElementById('extra-menu');
+    const btnIcon = this.querySelector('i');
+
+    // Toggle expansion
+    extraMenu.classList.toggle('expanded');
+    
+    // Rotate arrow
+    this.classList.toggle('rotate-180');
+});
   </script>
 
 </body>
