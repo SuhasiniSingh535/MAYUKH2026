@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAYUKH 2026 | The Multiverse</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #050508;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --spy-color: #00f2ff;
+            --scifi-color: #a020f0;
+            --carnival-color: #ff007f;
+            --dark-color: #ff4500;
+            --mythic-color: #ffd700;
+            --cyan-glow: rgba(0, 242, 255, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: white; 
+            font-family: 'Rajdhani', sans-serif; 
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+
+        /* --- Dynamic Animated Background --- */
+        #canvas-bg { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            z-index: -1; 
+            opacity: 0.6; 
+            background: radial-gradient(circle at center, #0a0e1a 0%, #050508 100%);
+        }
+
+        /* --- Fixed Navigation Panels (Glassmorphism) --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .side-nav-container {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 1.5rem 0.5rem;
+            border-radius: 20px;
+            width: 70px;
+            align-items: center;
+        }
+
+        .left-nav { left: 20px; border-left: 4px solid var(--spy-color); }
+        .right-nav { right: 20px; border-right: 4px solid var(--scifi-color); height: 60vh; }
+
+        .nav-item {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.7rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-item i { font-size: 1.2rem; margin-bottom: 5px; }
+        .nav-item:hover { color: var(--spy-color); text-shadow: 0 0 10px var(--spy-color); }
+
+        /* --- Main Content Layout --- */
+        .main-container { 
+            margin: 0 120px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 80px 20px; 
+        }
+
+        header { text-align: center; max-width: 850px; margin-bottom: 80px; }
+        header h1 { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: clamp(2.5rem, 5vw, 4rem); 
+            letter-spacing: 12px; 
+            margin-bottom: 20px; 
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+        .theme-subtext { font-size: 1.1rem; line-height: 1.8; color: #ccc; font-weight: 300; }
+
+        /* --- The Multiverse Grid --- */
+        .verses-hub { 
+            width: 100%; 
+            max-width: 1200px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 50px; 
+        }
+        
+        /* Centering Logic */
+        .row-top { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+        }
+        
+        .row-bottom { 
+            display: flex; 
+            justify-content: center; 
+            gap: 40px; 
+            flex-wrap: wrap;
+        }
+
+        .verse-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px 30px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .row-bottom .verse-card { width: 450px; } /* Wider focal point for Dark/Mythic */
+
+        .verse-card:hover { 
+            transform: translateY(-20px); 
+            border-color: var(--accent); 
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 60px -15px var(--accent); 
+        }
+
+        .verse-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
+            z-index: -1;
+        }
+
+        .icon { font-size: 3.5rem; margin-bottom: 25px; display: block; transition: 0.3s; }
+        .verse-card:hover .icon { transform: scale(1.2) rotate(5deg); }
+
+        h2 { font-family: 'Orbitron', sans-serif; color: var(--accent); margin-bottom: 15px; font-size: 1.8rem; letter-spacing: 2px; }
+        p { font-size: 1.05rem; color: #bbb; margin-bottom: 30px; line-height: 1.6; }
+
+        .view-btn {
+            display: inline-block; padding: 14px 35px; background: transparent; color: white; border: 1px solid var(--accent);
+            text-decoration: none; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 0.85rem; letter-spacing: 3px;
+            transition: 0.4s; border-radius: 8px;
+        }
+
+        .view-btn:hover { background: var(--accent); color: black; box-shadow: 0 0 25px var(--accent); transform: scale(1.05); }
+
+        footer { margin-top: 100px; border-top: 1px solid var(--border); padding-top: 40px; width: 100%; text-align: center; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <nav class="side-nav-container left-nav glass">
+        <a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="history.html" class="nav-item"><i class="fa-solid fa-hourglass-half"></i><span>History</span></a>
+        <a href="theme.html" class="nav-item"><i class="fa-solid fa-globe"></i><span>Theme</span></a>
+        <a href="#events" class="nav-item"><i class="fa-solid fa-calendar-days"></i><span>Events</span></a>
+    </nav>
+
+    <nav class="side-nav-container right-nav glass">
+        <a href="#" class="nav-item"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" class="nav-item"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" class="nav-item"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:mayukh@banasthali.org" class="nav-item"><i class="fa-solid fa-envelope"></i></a>
+    </nav>
+
+    <div class="main-container">
+        <header>
+            <h1 class="orbitron">THE MULTIVERSE</h1>
+            <div class="theme-subtext">
+                Welcome to Mayukh 2026 — a celebration of limitless imagination. Step into parallel worlds where innovation is a new reality and every idea a new world.
+            </div>
+        </header>
+
+        <div class="verses-hub">
+            <div class="row-top">
+                <div class="verse-card" style="--accent: var(--spy-color);">
+                    <span class="icon">🕵️‍♂️</span>
+                    <h2>SpyVerse</h2>
+                    <p>Intelligence, encryption, and digital warfare challenges.</p>
+                    <a href="spyverse.html" class="view-btn">VIEW EVENTS</a>
+                </div>
+                <div class="verse-card" style="--accent: var(--scifi-color);">
+                    <span class="icon">🤖</span>
+                    <h2>Sci-FiVerse</h2>
+                    <p>Robotics, AI, and futuristic exploration of humankind.</p>
+                    <a href="scifiverse.html" class="view-btn">VIEW EVENTS</a>
+                </div>
+                <div class="verse-card" style="--accent: var(--carnival-color);">
+                    <span class="icon">🎮</span>
+                    <h2>CarnivalVerse</h2>
+                    <p>Gaming, design, and interactive storytelling.</p>
+                    <a href="carnivalverse.html" class="view-btn">VIEW EVENTS</a>
+                </div>
+            </div>
+
+            <div class="row-bottom">
+                <div class="verse-card" style="--accent: var(--dark-color);">
+                    <span class="icon">💀</span>
+                    <h2>DarkVerse</h2>
+                    <p>Mysteries of human psychology and the thrill of the unknown.</p>
+                    <a href="darkverse.html" class="view-btn">VIEW EVENTS</a>
+                </div>
+                <div class="verse-card" style="--accent: var(--mythic-color);">
+                    <span class="icon">🏛️</span>
+                    <h2>MythicVerse</h2>
+                    <p>Ancient wisdom meets modern tech and Vedic algorithms.</p>
+                    <a href="mythicverse.html" class="view-btn">VIEW EVENTS</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>© 2026 Banasthali Vidyapith. Celebrating Innovation Beyond Boundaries.</footer>
+    </div>
+
+    <script>
+        // --- Dynamic Canvas Starfield ---
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for(let i=0; i<120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.5,
+                    speedX: (Math.random() - 0.5) * 0.4,
+                    speedY: (Math.random() - 0.5) * 0.4
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX; p.y += p.speedY;
+                if(p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // --- Card Mouse Tracking ---
+        document.querySelectorAll('.verse-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        window.addEventListener('resize', init);
+        init(); animate();
+    </script>
+</body>
+</html>

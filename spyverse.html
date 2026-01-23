@@ -3,36 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mayukh 2026</title>
+  <title>SpyVerse | Mayukh 2026</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
 
-     <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .orbitron {
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .rajdhani {
-      font-family: 'Rajdhani', sans-serif;
-    }
-
-    /* --- Rotating Circle --- */
-    @keyframes spin-slow {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .rotate-slow {
-      animation: spin-slow 20s linear infinite;
-    }
-
+  <style>
+    
+    
     /* --- Glowing Text --- */
     .glow {
       text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff, 0 0 30px #7c6bff;
@@ -59,44 +40,7 @@
       transition: all 0.3s ease-in-out;
       text-shadow: 0 0 15px #3bc4ff;
     }
-
-    /* --- Shooting Star Animations --- */
-    @keyframes shoot-left {
-      0% {
-        transform: translateX(0) translateY(0) rotate(45deg) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(-1000px) translateY(1000px) rotate(45deg) scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    @keyframes shoot-right {
-      0% {
-        transform: translateX(0) translateY(0) rotate(-45deg) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(1000px) translateY(1000px) rotate(-45deg) scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    .shooting-star {
-      position: absolute;
-      width: 2px;
-      height: 100px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0), #3bc4ff);
-      opacity: 0;
-    }
-
-    /* --- Random placements --- */
-    .shooting-star:nth-child(1) { top: 10%; left: 80%; animation-delay: 0s; }
-    .shooting-star:nth-child(2) { top: 5%; left: 60%; animation-delay: 1s; }
-    .shooting-star:nth-child(3) { top: 15%; left: 40%; animation-delay: 2s; }
-    .shooting-star:nth-child(4) { top: 20%; left: 30%; animation-delay: 3s; }
-    .shooting-star:nth-child(5) { top: 25%; left: 70%; animation-delay: 4s; }
+  
 
 
 
@@ -130,19 +74,70 @@
 .rotate-180 {
     transform: rotate(180deg);
 }
+  
+    body { background-color: #050805; color: #00FF41; font-family: 'Rajdhani', sans-serif; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    
+    /* Matrix Rain Canvas */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      opacity: 0.15;
+    }
+
+    /* Spy Glow Effect */
+    .spy-glow {
+      text-shadow: 0 0 10px #00FF41, 0 0 20px rgba(0, 255, 65, 0.5);
+    }
+
+    /* Dossier Card Style (Based on Reference Video) */
+    .dossier-card {
+      background: rgba(0, 20, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 65, 0.3);
+      clip-path: polygon(0 0, 85% 0, 100% 15%, 100% 100%, 0 100%);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .dossier-card:hover {
+      border-color: #00FF41;
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 255, 65, 0.2);
+    }
+
+    /* Scanning Line */
+    .scanner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: rgba(0, 255, 65, 0.5);
+      box-shadow: 0 0 15px #00FF41;
+      z-index: 50;
+      animation: scan 4s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    .glass-nav {
+      background: rgba(0, 40, 0, 0.3);
+      backdrop-filter: blur(15px);
+      border-right: 2px solid #00FF41;
+    }
   </style>
 </head>
+<body class="overflow-x-hidden">
 
-<body class="bg-black text-white font-[Poppins] overflow-x-hidden">
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanner"></div>
 
-  <div id="intro-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-700 ease-in-out">
-    <video id="intro-video" class="w-full h-full object-cover" autoplay muted playsinline>
-      <source src="assests/MayukhLogo2.mp4" type="video/mp4">
-    </video>
-  </div>
-
-  <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out"></div>
-      <div class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-start items-center glass rounded-2xl p-6 w-20 h-auto border-l-4 border-cyan-400/50 z-50 transition-all duration-500">
+<div class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-start items-center glass rounded-2xl p-6 w-20 h-auto border-l-4 border-cyan-400/50 z-50 transition-all duration-500">
   <nav class="flex flex-col items-center text-gray-300 text-sm ">
     
     <div class="flex flex-col items-center space-y-6">
@@ -233,93 +228,119 @@
     
         </div>
   </div>
+
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
     
+    <div class="text-center mb-20">
+      <p class="text-xs orbitron tracking-[0.8em] mb-2 opacity-60">ENCRYPTED // DATA CHANNEL 05</p>
+      <h1 class="orbitron text-7xl md:text-8xl font-black spy-glow mb-4">SPYVERSE</h1>
+      <div class="h-1 w-48 bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto"></div>
+      <p class="mt-6 text-xl max-w-2xl text-green-300/60 font-medium italic">
+        "Secrecy is the beginning of all tyranny; innovation is the key to liberation."
+      </p>
+    </div>
 
-    <section id="home" class="relative h-screen flex flex-col justify-center items-center text-center overflow-hidden">
-      <video id="bg-video-main" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-70 z-0">
-        <source src="assests/bgwithtitle2.mp4" type="video/mp4">
-      </video>
-      <div class="absolute bottom-6 text-sm tracking-wider opacity-70 animate-bounce">Scroll ↓</div>
-    </section>
-
-    <section id="about" class="relative min-h-screen px-6 md:px-16 py-20 bg-[#060911] overflow-hidden">
-      <div class="absolute inset-0">
-        <img src="assests/p1.png" alt="background" class="absolute inset-0 w-full h-full object-cover opacity-40">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[80%] w-full px-4 md:px-12 lg:px-20 relative z-10">
+  
+  <div class="dossier-card p-6 group h-full flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between items-start mb-4">
+        <span class="text-[10px] orbitron border border-green-500 px-2 py-0.5">CASE: CRPT_HNT</span>
+        <i class="fa-solid fa-fingerprint text-2xl opacity-40 group-hover:opacity-100 transition-opacity"></i>
       </div>
-      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 glow relative z-10">About Us</h2>
-      <div class="relative flex flex-col md:flex-row justify-center items-center gap-10 z-10">
-        <div class="w-full md:w-1/2 flex justify-center">
-          <img src="assests/P6.jpg" alt="Banasthali" class="rounded-2xl shadow-lg w-96 border-2 border-cyan-400/40">
-        </div>
-        <div class="relative bg-[#0a1020]/80 border border-cyan-400/30 rounded-2xl p-8 md:p-10 max-w-xl text-gray-300 shadow-[0_0_25px_rgba(59,196,255,0.2)]">
-          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-t-2xl"></div>
-          <h3 class="text-2xl font-semibold text-cyan-300 mb-4">Mayukh 2026</h3>
-          <p class="leading-relaxed">
-            <span class="text-purple-400 font-semibold">Mayukh</span> is the grand annual technical fest of 
-            <span class="text-cyan-400 font-semibold">Banasthali Vidyapith</span> – a convergence of innovation, 
-            creativity, and technology. It brings together brilliant minds from across disciplines to collaborate, compete, and redefine possibilities through hackathons, tech events, and project showcases.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <footer class="relative border-t border-cyan-400/30 py-12 px-6 text-center z-10">
-      <div class="glass rounded-2xl p-8 max-w-4xl mx-auto">
-        <h3 class="text-3xl font-bold orbitron glow mb-4">MAYUKH 2026</h3>
-        <p class="text-gray-400 mb-6">Celebrating Innovation Beyond Boundaries</p>
-        <div class="flex justify-center space-x-6 text-2xl mb-6">
-          <a href="#" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
-          <a href="#" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
-          <a href="#" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
-        </div>
-        <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
-      </div>
-    </footer>
+      <h3 class="orbitron text-lg font-bold mb-2">Cryptic Hunt</h3>
+      <p class="text-gray-400 text-xs leading-relaxed mb-6">
+        Decrypt riddles hidden within metadata and source codes to reach the final terminal.
+      </p>
+    </div>
+    <button class="w-full py-2 border border-green-500/50 hover:bg-green-500 hover:text-black orbitron text-xs font-bold transition-all mt-auto">
+      ACCESS INTEL
+    </button>
   </div>
 
+  <div class="dossier-card p-6 group h-full flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between items-start mb-4">
+        <span class="text-[10px] orbitron border border-green-500 px-2 py-0.5">CASE: CTF_WAR</span>
+        <i class="fa-solid fa-terminal text-2xl opacity-40 group-hover:opacity-100 transition-opacity"></i>
+      </div>
+      <h3 class="orbitron text-lg font-bold mb-2">Capture The Flag</h3>
+      <p class="text-gray-400 text-xs leading-relaxed mb-6">
+        Standardized cybersecurity warfare. Infiltrate simulated servers and secure flagship data.
+      </p>
+    </div>
+    <button class="w-full py-2 border border-green-500/50 hover:bg-green-500 hover:text-black orbitron text-xs font-bold transition-all mt-auto">
+      BYPASS FIREWALL
+    </button>
+  </div>
+
+  <div class="dossier-card p-6 group h-full flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between items-start mb-4">
+        <span class="text-[10px] orbitron border border-green-500 px-2 py-0.5">CASE: LOGIC_G</span>
+        <i class="fa-solid fa-microchip text-2xl opacity-40 group-hover:opacity-100 transition-opacity"></i>
+      </div>
+      <h3 class="orbitron text-lg font-bold mb-2">Logic Gates</h3>
+      <p class="text-gray-400 text-xs leading-relaxed mb-6">
+        Design circuit paths to bypass security protocols. Test hardware logic and digital engineering.
+      </p>
+    </div>
+    <button class="w-full py-2 border border-green-500/50 hover:bg-green-500 hover:text-black orbitron text-xs font-bold transition-all mt-auto">
+      DOWNLOAD SCHEMATICS
+    </button>
+  </div>
+
+</div>
+  </main>
+  
+  <!-- FOOTER -->
+  <footer class="relative border-t border-cyan-400/30 py-12 px-6 text-center z-10">
+    <div class="glass rounded-2xl p-8 max-w-4xl mx-auto">
+      <h3 class="text-3xl font-bold orbitron glow mb-4">MAYUKH 2026</h3>
+      <p class="text-gray-400 mb-6">Celebrating Innovation Beyond Boundaries</p>
+      <div class="flex justify-center space-x-6 text-2xl mb-6">
+        <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://x.com" target="_blank" class="icon-hover"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+      <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
+    </div>
+  </footer>
+
   <script>
-    const introVideo = document.getElementById('intro-video');
-    const introScreen = document.getElementById('intro-screen');
-    const mainContent = document.getElementById('main-content');
-    const mainVideo = document.getElementById('bg-video-main');
-    const leftPanel = document.getElementById('left-panel');
-    const rightPanel = document.getElementById('right-panel');
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
 
-    // 1. Seamless Transition Logic
-    // We trigger the transition slightly before the video ends (0.8s) to avoid black frames.
-    introVideo.addEventListener('timeupdate', function() {
-      if (this.duration - this.currentTime < 0.8) {
-        initiateReveal();
-      }
-    });
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    function initiateReveal() {
-      if (introScreen.style.display === 'none') return; // Prevent double trigger
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%';
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = [];
 
-      // Fade-in Main Content / Fade-out Intro Screen
-      mainContent.classList.remove('opacity-0');
-      mainContent.classList.add('opacity-100');
-      introScreen.classList.add('opacity-0');
-
-      setTimeout(() => {
-        introScreen.style.display = 'none';
-        
-        // Trigger Panel Slide-ins
-        if (leftPanel) {
-          leftPanel.classList.remove('opacity-0', '-translate-x-10');
-          leftPanel.classList.add('opacity-100', 'translate-x-0');
-        }
-        if (rightPanel) {
-          rightPanel.classList.remove('opacity-0', 'translate-x-10');
-          rightPanel.classList.add('opacity-100', 'translate-x-0');
-        }
-      }, 700);
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
     }
 
-    // Safety fallback
-    introVideo.onended = initiateReveal;
-    setTimeout(() => { if (introScreen.style.display !== 'none') initiateReveal(); }, 9000);
+    function draw() {
+      ctx.fillStyle = 'rgba(5, 8, 5, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0F0';
+      ctx.font = fontSize + 'px arial';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+    setInterval(draw, 33);
 
     // Events Navigation Dropdown Functions
     function toggleEventsNav() {
@@ -361,9 +382,6 @@
     function toggleModal() {
       document.getElementById("authModal").classList.toggle("hidden");
     }
-
-  
-
     // Smooth Scroll for Navigation Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -388,7 +406,7 @@
     // Rotate arrow
     this.classList.toggle('rotate-180');
 });
-  </script>
 
+  </script>
 </body>
 </html>

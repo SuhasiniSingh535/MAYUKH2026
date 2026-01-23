@@ -3,36 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mayukh 2026</title>
+  <title>Sci-FiVerse | Mayukh 2026</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;600;700&display=swap" rel="stylesheet">
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-     <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .orbitron {
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    .rajdhani {
-      font-family: 'Rajdhani', sans-serif;
-    }
-
-    /* --- Rotating Circle --- */
-    @keyframes spin-slow {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .rotate-slow {
-      animation: spin-slow 20s linear infinite;
-    }
-
+  <style>
     /* --- Glowing Text --- */
     .glow {
       text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff, 0 0 30px #7c6bff;
@@ -59,44 +36,7 @@
       transition: all 0.3s ease-in-out;
       text-shadow: 0 0 15px #3bc4ff;
     }
-
-    /* --- Shooting Star Animations --- */
-    @keyframes shoot-left {
-      0% {
-        transform: translateX(0) translateY(0) rotate(45deg) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(-1000px) translateY(1000px) rotate(45deg) scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    @keyframes shoot-right {
-      0% {
-        transform: translateX(0) translateY(0) rotate(-45deg) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(1000px) translateY(1000px) rotate(-45deg) scale(0.5);
-        opacity: 0;
-      }
-    }
-
-    .shooting-star {
-      position: absolute;
-      width: 2px;
-      height: 100px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0), #3bc4ff);
-      opacity: 0;
-    }
-
-    /* --- Random placements --- */
-    .shooting-star:nth-child(1) { top: 10%; left: 80%; animation-delay: 0s; }
-    .shooting-star:nth-child(2) { top: 5%; left: 60%; animation-delay: 1s; }
-    .shooting-star:nth-child(3) { top: 15%; left: 40%; animation-delay: 2s; }
-    .shooting-star:nth-child(4) { top: 20%; left: 30%; animation-delay: 3s; }
-    .shooting-star:nth-child(5) { top: 25%; left: 70%; animation-delay: 4s; }
+  
 
 
 
@@ -130,19 +70,104 @@
 .rotate-180 {
     transform: rotate(180deg);
 }
+  
+    body { background-color: #050805; color: #00FF41; font-family: 'Rajdhani', sans-serif; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    
+    :root { --neon: #3bc4ff; --bg: #02050a; }
+    body { background-color: var(--bg); color: var(--neon); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+
+    /* --- Animated 3D Grid Floor --- */
+    .perspective-container {
+      perspective: 1000px;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .grid-plane {
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      bottom: -10%;
+      left: -50%;
+      background-image: 
+        linear-gradient(to right, rgba(59, 196, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(59, 196, 255, 0.1) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: rotateX(60deg);
+      animation: grid-move 20s linear infinite;
+    }
+    @keyframes grid-move {
+      from { background-position: 0 0; }
+      to { background-position: 0 100%; }
+    }
+
+    /* --- Holographic Card Style --- */
+    .holo-card {
+      background: rgba(10, 25, 45, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(59, 196, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(10% 0, 100% 0, 100% 85%, 90% 100%, 0 100%, 0 15%);
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .holo-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: 0.5s;
+    }
+    .holo-card:hover::before { left: 200%; }
+    .holo-card:hover {
+      border-color: var(--neon);
+      transform: translateY(-15px) rotateY(5deg);
+      box-shadow: 0 0 30px rgba(59, 196, 255, 0.3);
+    }
+
+    /* --- Floating HUD Elements --- */
+    .hud-line {
+      position: absolute;
+      background: var(--neon);
+      opacity: 0.3;
+    }
+
+    .cyan-glow { text-shadow: 0 0 15px var(--neon), 0 0 30px rgba(59, 196, 255, 0.5); }
+
+    /* --- Back-to-Multiverse Button --- */
+    .btn-cyber {
+      position: relative;
+      border: 1px solid var(--neon);
+      padding: 10px 20px;
+      color: var(--neon);
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 2px;
+      transition: 0.3s;
+      overflow: hidden;
+    }
+    .btn-cyber:hover {
+      background: var(--neon);
+      color: #000;
+      box-shadow: 0 0 20px var(--neon);
+    }
   </style>
 </head>
+<body>
 
-<body class="bg-black text-white font-[Poppins] overflow-x-hidden">
-
-  <div id="intro-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-700 ease-in-out">
-    <video id="intro-video" class="w-full h-full object-cover" autoplay muted playsinline>
-      <source src="assests/MayukhLogo2.mp4" type="video/mp4">
-    </video>
+  <div class="perspective-container">
+    <div class="grid-plane"></div>
   </div>
 
-  <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out"></div>
-      <div class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-start items-center glass rounded-2xl p-6 w-20 h-auto border-l-4 border-cyan-400/50 z-50 transition-all duration-500">
+  <div class="fixed top-10 left-10 opacity-40 orbitron text-xs tracking-widest z-50">
+    SYSTEM_STATUS: ONLINE<br>NEURAL_LINK: ACTIVE
+  </div>
+
+  <div class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-start items-center glass rounded-2xl p-6 w-20 h-auto border-l-4 border-cyan-400/50 z-50 transition-all duration-500">
   <nav class="flex flex-col items-center text-gray-300 text-sm ">
     
     <div class="flex flex-col items-center space-y-6">
@@ -233,94 +258,95 @@
     
         </div>
   </div>
+
+  <main class="relative z-10 flex flex-col items-center pt-24 pb-32">
     
-
-    <section id="home" class="relative h-screen flex flex-col justify-center items-center text-center overflow-hidden">
-      <video id="bg-video-main" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-70 z-0">
-        <source src="assests/bgwithtitle2.mp4" type="video/mp4">
-      </video>
-      <div class="absolute bottom-6 text-sm tracking-wider opacity-70 animate-bounce">Scroll ↓</div>
-    </section>
-
-    <section id="about" class="relative min-h-screen px-6 md:px-16 py-20 bg-[#060911] overflow-hidden">
-      <div class="absolute inset-0">
-        <img src="assests/p1.png" alt="background" class="absolute inset-0 w-full h-full object-cover opacity-40">
+    <div class="text-center mb-24">
+      <h1 class="orbitron text-8xl font-black cyan-glow mb-6 tracking-tighter italic">SCI-FIVERSE</h1>
+      <div class="flex items-center justify-center space-x-4 opacity-60 mb-8">
+        <div class="h-px w-20 bg-cyan-400"></div>
+        <span class="orbitron text-xs uppercase tracking-widest">Beyond the Horizon of Imagination</span>
+        <div class="h-px w-20 bg-cyan-400"></div>
       </div>
-      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 glow relative z-10">About Us</h2>
-      <div class="relative flex flex-col md:flex-row justify-center items-center gap-10 z-10">
-        <div class="w-full md:w-1/2 flex justify-center">
-          <img src="assests/P6.jpg" alt="Banasthali" class="rounded-2xl shadow-lg w-96 border-2 border-cyan-400/40">
-        </div>
-        <div class="relative bg-[#0a1020]/80 border border-cyan-400/30 rounded-2xl p-8 md:p-10 max-w-xl text-gray-300 shadow-[0_0_25px_rgba(59,196,255,0.2)]">
-          <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-t-2xl"></div>
-          <h3 class="text-2xl font-semibold text-cyan-300 mb-4">Mayukh 2026</h3>
-          <p class="leading-relaxed">
-            <span class="text-purple-400 font-semibold">Mayukh</span> is the grand annual technical fest of 
-            <span class="text-cyan-400 font-semibold">Banasthali Vidyapith</span> – a convergence of innovation, 
-            creativity, and technology. It brings together brilliant minds from across disciplines to collaborate, compete, and redefine possibilities through hackathons, tech events, and project showcases.
-          </p>
-        </div>
-      </div>
-    </section>
+      <p class="max-w-3xl text-xl text-cyan-100/60 rajdhani font-light leading-relaxed">
+        Where robotics meet AI and creativity finds its computational home. 
+        Explore the future of humankind through the lens of technology.
+      </p>
+    </div>
 
-    <footer class="relative border-t border-cyan-400/30 py-12 px-6 text-center z-10">
-      <div class="glass rounded-2xl p-8 max-w-4xl mx-auto">
-        <h3 class="text-3xl font-bold orbitron glow mb-4">MAYUKH 2026</h3>
-        <p class="text-gray-400 mb-6">Celebrating Innovation Beyond Boundaries</p>
-        <div class="flex justify-center space-x-6 text-2xl mb-6">
-          <a href="#" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
-          <a href="#" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
-          <a href="#" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
-        </div>
-        <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
-      </div>
-    </footer>
-  </div>
-
-  <script>
-    const introVideo = document.getElementById('intro-video');
-    const introScreen = document.getElementById('intro-screen');
-    const mainContent = document.getElementById('main-content');
-    const mainVideo = document.getElementById('bg-video-main');
-    const leftPanel = document.getElementById('left-panel');
-    const rightPanel = document.getElementById('right-panel');
-
-    // 1. Seamless Transition Logic
-    // We trigger the transition slightly before the video ends (0.8s) to avoid black frames.
-    introVideo.addEventListener('timeupdate', function() {
-      if (this.duration - this.currentTime < 0.8) {
-        initiateReveal();
-      }
-    });
-
-    function initiateReveal() {
-      if (introScreen.style.display === 'none') return; // Prevent double trigger
-
-      // Fade-in Main Content / Fade-out Intro Screen
-      mainContent.classList.remove('opacity-0');
-      mainContent.classList.add('opacity-100');
-      introScreen.classList.add('opacity-0');
-
-      setTimeout(() => {
-        introScreen.style.display = 'none';
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-[85%] w-full px-8">
+      
+      <div class="holo-card p-8 group">
+        <div class="hud-line top-0 left-0 w-8 h-px"></div>
+        <div class="hud-line top-0 left-0 w-px h-8"></div>
         
-        // Trigger Panel Slide-ins
-        if (leftPanel) {
-          leftPanel.classList.remove('opacity-0', '-translate-x-10');
-          leftPanel.classList.add('opacity-100', 'translate-x-0');
-        }
-        if (rightPanel) {
-          rightPanel.classList.remove('opacity-0', 'translate-x-10');
-          rightPanel.classList.add('opacity-100', 'translate-x-0');
-        }
-      }, 700);
-    }
+        <div class="flex justify-between items-center mb-8">
+          <i class="fa-solid fa-microchip text-4xl text-cyan-400 group-hover:scale-110 transition"></i>
+          <span class="orbitron text-[10px] opacity-40">SEC_LEVEL_04</span>
+        </div>
+        
+        <h3 class="orbitron text-2xl font-bold text-white mb-4 uppercase tracking-tighter">Robowars</h3>
+        <p class="text-cyan-100/50 text-sm leading-relaxed mb-10">
+          The ultimate steel carnage. High-performance combat robots collide in a state-of-the-art bulletproof arena.
+        </p>
+        
+        <button class="btn-cyber w-full orbitron text-xs">Initialize_Protocol</button>
+      </div>
 
-    // Safety fallback
-    introVideo.onended = initiateReveal;
-    setTimeout(() => { if (introScreen.style.display !== 'none') initiateReveal(); }, 9000);
+      <div class="holo-card p-8 group">
+        <div class="flex justify-between items-center mb-8">
+          <i class="fa-solid fa-brain text-4xl text-cyan-400 group-hover:scale-110 transition"></i>
+          <span class="orbitron text-[10px] opacity-40">AI_SYNC_ACTIVE</span>
+        </div>
+        
+        <h3 class="orbitron text-2xl font-bold text-white mb-4 uppercase tracking-tighter">AI-Genesis</h3>
+        <p class="text-cyan-100/50 text-sm leading-relaxed mb-10">
+          A hackathon focusing on Generative AI and LLM architectures. Build the next generation of thinking machines.
+        </p>
+        
+        <button class="btn-cyber w-full orbitron text-xs">Establish_Link</button>
+      </div>
 
+      <div class="holo-card p-8 group">
+        <div class="flex justify-between items-center mb-8">
+          <i class="fa-solid fa-shuttle-space text-4xl text-cyan-400 group-hover:scale-110 transition"></i>
+          <span class="orbitron text-[10px] opacity-40">FLIGHT_READY</span>
+        </div>
+        
+        <h3 class="orbitron text-2xl font-bold text-white mb-4 uppercase tracking-tighter">Drone Racing</h3>
+        <p class="text-cyan-100/50 text-sm leading-relaxed mb-10">
+          Navigate a high-speed aerodynamic obstacle course. Speed and precision define the victor of the skies.
+        </p>
+        
+        <button class="btn-cyber w-full orbitron text-xs">Take_Off</button>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="cursor-glow" class="fixed w-[400px] h-[400px] rounded-full pointer-events-none z-0 opacity-20 bg-cyan-600 blur-[100px]" style="transform: translate(-50%, -50%);"></div>
+  
+  <!-- FOOTER -->
+  <footer class="relative border-t border-cyan-400/30 py-12 px-6 text-center z-10">
+    <div class="glass rounded-2xl p-8 max-w-4xl mx-auto">
+      <h3 class="text-3xl font-bold orbitron glow mb-4">MAYUKH 2026</h3>
+      <p class="text-gray-400 mb-6">Celebrating Innovation Beyond Boundaries</p>
+      <div class="flex justify-center space-x-6 text-2xl mb-6">
+        <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://x.com" target="_blank" class="icon-hover"><i class="fa-brands fa-x-twitter"></i></a>
+      </div>
+      <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
+    </div>
+  </footer>
+  <script>
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
     // Events Navigation Dropdown Functions
     function toggleEventsNav() {
       const dropdown = document.getElementById('events-dropdown-nav');
@@ -361,9 +387,6 @@
     function toggleModal() {
       document.getElementById("authModal").classList.toggle("hidden");
     }
-
-  
-
     // Smooth Scroll for Navigation Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -389,6 +412,5 @@
     this.classList.toggle('rotate-180');
 });
   </script>
-
 </body>
 </html>
