@@ -6,6 +6,7 @@ const path = require('path');
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const eventRoutes = require('./routes/events');
 
 const app = express();
 
@@ -38,6 +39,7 @@ connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
