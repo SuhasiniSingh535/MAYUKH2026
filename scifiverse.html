@@ -2,324 +2,112 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sci-FiVerse | Mayukh 2026</title>
-
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;600;700&display=swap" rel="stylesheet">
-
   <style>
-    /* --- Glowing Text --- */
-    .glow {
-      text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff, 0 0 30px #7c6bff;
-    }
-
-    /* --- Glass Effect --- */
-    .glass {
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 20px rgba(59, 196, 255, 0.15);
-    }
-
-    /* --- Hover Glow --- */
-    .hover-glow:hover {
-      color: #3bc4ff;
-      text-shadow: 0 0 10px #3bc4ff, 0 0 20px #7c6bff;
-    }
-
-    /* --- Icon Glow --- */
-    .icon-hover:hover {
-      color: #3bc4ff;
-      transform: scale(1.2);
-      transition: all 0.3s ease-in-out;
-      text-shadow: 0 0 15px #3bc4ff;
-    }
-  
-
-
-
-    /* --- Custom Scrollbar --- */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #0a0e1a;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(to bottom, #3bc4ff, #7c6bff);
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(to bottom, #7c6bff, #3bc4ff);
-
-    }
-
-    /* Expansion logic for the extra menu */
-#extra-menu.expanded {
-    max-height: 100px; /* Adjust based on total icons */
-    opacity: 1;
-    margin-top: 1.5rem; /* Matches space-y-8 */
-}
-
-/* Arrow rotation */
-.rotate-180 {
-    transform: rotate(180deg);
-}
-  
-    body { background-color: #050805; color: #00FF41; font-family: 'Rajdhani', sans-serif; }
-    .orbitron { font-family: 'Orbitron', sans-serif; }
-    
     :root { --neon: #3bc4ff; --bg: #02050a; }
     body { background-color: var(--bg); color: var(--neon); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
     .orbitron { font-family: 'Orbitron', sans-serif; }
-
-    /* --- Animated 3D Grid Floor --- */
-    .perspective-container {
-      perspective: 1000px;
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-    .grid-plane {
-      position: absolute;
-      width: 200%;
-      height: 100%;
-      bottom: -10%;
-      left: -50%;
-      background-image: 
-        linear-gradient(to right, rgba(59, 196, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(59, 196, 255, 0.1) 1px, transparent 1px);
-      background-size: 60px 60px;
-      transform: rotateX(60deg);
-      animation: grid-move 20s linear infinite;
-    }
-    @keyframes grid-move {
-      from { background-position: 0 0; }
-      to { background-position: 0 100%; }
-    }
-
-    /* --- Holographic Card Style --- */
-    .holo-card {
-      background: rgba(10, 25, 45, 0.4);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(59, 196, 255, 0.2);
-      position: relative;
-      overflow: hidden;
-      clip-path: polygon(10% 0, 100% 0, 100% 85%, 90% 100%, 0 100%, 0 15%);
-      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .holo-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 50%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-      transition: 0.5s;
-    }
-    .holo-card:hover::before { left: 200%; }
-    .holo-card:hover {
-      border-color: var(--neon);
-      transform: translateY(-15px) rotateY(5deg);
-      box-shadow: 0 0 30px rgba(59, 196, 255, 0.3);
-    }
-
-    /* --- Floating HUD Elements --- */
-    .hud-line {
-      position: absolute;
-      background: var(--neon);
-      opacity: 0.3;
-    }
-
+    .perspective-container { perspective: 1000px; position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .grid-plane { position: absolute; width: 200%; height: 100%; bottom: -10%; left: -50%; background-image: linear-gradient(to right, rgba(59, 196, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(59, 196, 255, 0.1) 1px, transparent 1px); background-size: 60px 60px; transform: rotateX(60deg); animation: grid-move 20s linear infinite; }
+    @keyframes grid-move { from { background-position: 0 0; } to { background-position: 0 100%; } }
+    .holo-card { background: rgba(10, 25, 45, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(59, 196, 255, 0.2); position: relative; overflow: hidden; clip-path: polygon(10% 0, 100% 0, 100% 85%, 90% 100%, 0 100%, 0 15%); transition: all 0.5s; }
+    .holo-card:hover { border-color: var(--neon); transform: translateY(-15px) rotateY(5deg); box-shadow: 0 0 30px rgba(59, 196, 255, 0.3); }
+    .hud-line { position: absolute; background: var(--neon); opacity: 0.3; }
     .cyan-glow { text-shadow: 0 0 15px var(--neon), 0 0 30px rgba(59, 196, 255, 0.5); }
-
-    /* --- Back-to-Multiverse Button --- */
-    .btn-cyber {
-      position: relative;
-      border: 1px solid var(--neon);
-      padding: 10px 20px;
-      color: var(--neon);
-      text-transform: uppercase;
-      font-weight: bold;
-      letter-spacing: 2px;
-      transition: 0.3s;
-      overflow: hidden;
-    }
-    .btn-cyber:hover {
-      background: var(--neon);
-      color: #000;
-      box-shadow: 0 0 20px var(--neon);
-    }
+    .btn-cyber { position: relative; border: 1px solid var(--neon); padding: 10px 20px; color: var(--neon); text-transform: uppercase; font-weight: bold; letter-spacing: 2px; transition: 0.3s; overflow: hidden; }
+    .btn-cyber:hover { background: var(--neon); color: #000; box-shadow: 0 0 20px var(--neon); }
+    .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
   </style>
 </head>
 <body>
-  <a href="theme.html" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-cyan-900/40 flex items-center gap-2 hover:border-cyan-600 hover:text-green-500 transition-all group">
+  <a href="theme.html" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-cyan-900/40 flex items-center gap-2 hover:border-cyan-600 hover:text-cyan-500 transition-all group">
       <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
-      <span class="horror-font text-xs tracking-widest">THEME</span>
+      <span class="text-xs tracking-widest">THEME</span>
   </a>
-  <div class="perspective-container">
-    <div class="grid-plane"></div>
-  </div>
-
-  
+  <div class="perspective-container"><div class="grid-plane"></div></div>
 
   <main class="relative z-10 flex flex-col items-center pt-24 pb-32">
-    
     <div class="text-center mb-24">
       <h1 class="orbitron text-8xl font-black cyan-glow mb-6 tracking-tighter italic">SCI-FIVERSE</h1>
       <div class="flex items-center justify-center space-x-4 opacity-60 mb-8">
-        <div class="h-px w-20 bg-cyan-400"></div>
-        <span class="orbitron text-xs uppercase tracking-widest">Beyond the Horizon of Imagination</span>
-        <div class="h-px w-20 bg-cyan-400"></div>
+        <div class="h-px w-20 bg-cyan-400"></div><span class="orbitron text-xs uppercase tracking-widest">Beyond the Horizon</span><div class="h-px w-20 bg-cyan-400"></div>
       </div>
-      <p class="max-w-3xl text-xl text-cyan-100/60 rajdhani font-light leading-relaxed">
-        Where robotics meet AI and creativity finds its computational home. 
-        Explore the future of humankind through the lens of technology.
-      </p>
+      <p class="max-w-3xl text-xl text-cyan-100/60 rajdhani font-light leading-relaxed">Where robotics meet AI. Explore the future.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-[85%] w-full px-8">
-      
-      <div class="holo-card p-8 group">
-        <div class="hud-line top-0 left-0 w-8 h-px"></div>
-        <div class="hud-line top-0 left-0 w-px h-8"></div>
-        
-        <div class="flex justify-between items-center mb-8">
-          <i class="fa-solid fa-microchip text-4xl text-cyan-400 group-hover:scale-110 transition"></i>
-          <span class="orbitron text-[10px] opacity-40">SEC_LEVEL_04</span>
-        </div>
-        
-        <h3 class="orbitron text-2xl font-bold text-white mb-4 uppercase tracking-tighter">Robowars</h3>
-        <p class="text-cyan-100/50 text-sm leading-relaxed mb-10">
-          The ultimate steel carnage. High-performance combat robots collide in a state-of-the-art bulletproof arena.
-        </p>
-        
-        <button class="btn-cyber w-full orbitron text-xs">Initialize_Protocol</button>
-      </div>
-
-      <div class="holo-card p-8 group">
-        <div class="flex justify-between items-center mb-8">
-          <i class="fa-solid fa-brain text-4xl text-cyan-400 group-hover:scale-110 transition"></i>
-          <span class="orbitron text-[10px] opacity-40">AI_SYNC_ACTIVE</span>
-        </div>
-        
-        <h3 class="orbitron text-2xl font-bold text-white mb-4 uppercase tracking-tighter">AI-Genesis</h3>
-        <p class="text-cyan-100/50 text-sm leading-relaxed mb-10">
-          A hackathon focusing on Generative AI and LLM architectures. Build the next generation of thinking machines.
-        </p>
-        
-        <button class="btn-cyber w-full orbitron text-xs">Establish_Link</button>
-      </div>
-
-      <div class="holo-card p-8 group">
-        <div class="flex justify-between items-center mb-8">
-          <i class="fa-solid fa-shuttle-space text-4xl text-cyan-400 group-hover:scale-110 transition"></i>
-          <span class="orbitron text-[10px] opacity-40">FLIGHT_READY</span>
-        </div>
-        
-        <h3 class="orbitron text-2xl font-bold text-white mb-4 uppercase tracking-tighter">Drone Racing</h3>
-        <p class="text-cyan-100/50 text-sm leading-relaxed mb-10">
-          Navigate a high-speed aerodynamic obstacle course. Speed and precision define the victor of the skies.
-        </p>
-        
-        <button class="btn-cyber w-full orbitron text-xs">Take_Off</button>
-      </div>
-
+    <div id="scifi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-[85%] w-full px-8">
+        <p class="col-span-full text-center text-cyan-500 animate-pulse orbitron">INITIALIZING DATA FEED...</p>
     </div>
   </main>
 
   <div id="cursor-glow" class="fixed w-[400px] h-[400px] rounded-full pointer-events-none z-0 opacity-20 bg-cyan-600 blur-[100px]" style="transform: translate(-50%, -50%);"></div>
-  
-  <!-- FOOTER -->
-  <footer class="relative border-t border-cyan-400/30 py-12 px-6 text-center z-10">
-    <div class="glass rounded-2xl p-8 max-w-4xl mx-auto">
-      <h3 class="text-3xl font-bold orbitron glow mb-4">MAYUKH 2026</h3>
-      <p class="text-gray-400 mb-6">Celebrating Innovation Beyond Boundaries</p>
-      <div class="flex justify-center space-x-6 text-2xl mb-6">
-        <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
-        <a href="https://x.com" target="_blank" class="icon-hover"><i class="fa-brands fa-x-twitter"></i></a>
-      </div>
-      <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
-    </div>
-  </footer>
+
   <script>
     const glow = document.getElementById('cursor-glow');
-    document.addEventListener('mousemove', (e) => {
-      glow.style.left = e.clientX + 'px';
-      glow.style.top = e.clientY + 'px';
-    });
-    // Events Navigation Dropdown Functions
-    function toggleEventsNav() {
-      const dropdown = document.getElementById('events-dropdown-nav');
-      dropdown.classList.toggle('hidden');
+    document.addEventListener('mousemove', (e) => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+
+    // --- DYNAMIC DATA ---
+    const CURRENT_VERSE = 'scifi-verse';
+
+    function createCardHTML(event) {
+        let code = 'SYS_01';
+        if(event.eventType.includes('workshop')) code = 'WORKSHOP_MODE';
+        else if(event.eventType.includes('non-tech')) code = 'NON_TECH_NODE';
+
+        return `
+          <div class="holo-card p-8 group h-full flex flex-col">
+            <div class="hud-line top-0 left-0 w-8 h-px"></div><div class="hud-line top-0 left-0 w-px h-8"></div>
+            
+            <div class="relative w-full h-40 mb-6 border border-cyan-500/20 overflow-hidden">
+                <img src="${event.posterLink}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition">
+            </div>
+
+            <div class="flex justify-between items-center mb-6">
+              ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain">` : `<i class="fa-solid fa-robot text-4xl text-cyan-400"></i>`}
+              <span class="orbitron text-[10px] opacity-40">${code}</span>
+            </div>
+            
+            <h3 class="orbitron text-2xl font-bold text-white mb-4 uppercase tracking-tighter">${event.title}</h3>
+            <p class="text-cyan-100/50 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+              ${event.description}
+            </p>
+            
+            <div class="text-xs text-cyan-400 mb-6 font-mono border-t border-cyan-900/50 pt-2">
+                DAY: ${event.day} | ${event.time}
+            </div>
+
+            <a href="${event.registrationLink}" target="_blank" class="btn-cyber w-full orbitron text-xs block text-center mt-auto">
+              INITIALIZE_PROTOCOL
+            </a>
+          </div>
+        `;
     }
 
-    function toggleSubNav(type) {
-      const subDropdown = document.getElementById(type + '-sub-nav');
-      
-      // Close the other sub-dropdown if it's open
-      if (type === 'technical') {
-        document.getElementById('workshop-sub-nav').classList.add('hidden');
-      } else if (type === 'workshop') {
-        document.getElementById('technical-sub-nav').classList.add('hidden');
-      }
-      
-      subDropdown.classList.toggle('hidden');
+    async function loadVerseData() {
+        try {
+            const res = await fetch('http://localhost:5000/api/events');
+            const data = await res.json();
+            const container = document.getElementById('scifi-container');
+            
+            if(!data.events) return;
+
+            let events = data.events.filter(e => e.category === CURRENT_VERSE);
+            
+            // Sort: Tech -> Non-Tech -> Workshops
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4 };
+            events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
+
+            if(events.length > 0) {
+                container.innerHTML = events.map(createCardHTML).join('');
+            } else {
+                container.innerHTML = `<p class="col-span-full text-center text-cyan-500/50 orbitron">NO SIGNAL DETECTED</p>`;
+            }
+        } catch(err) { console.error(err); }
     }
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(event) {
-      const eventsNav = document.getElementById('events-nav');
-      const dropdown = document.getElementById('events-dropdown-nav');
-      const technicalSub = document.getElementById('technical-sub-nav');
-      const workshopSub = document.getElementById('workshop-sub-nav');
-      
-      if (!eventsNav.contains(event.target) && 
-          !dropdown.contains(event.target) && 
-          !technicalSub.contains(event.target) && 
-          !workshopSub.contains(event.target)) {
-        dropdown.classList.add('hidden');
-        technicalSub.classList.add('hidden');
-        workshopSub.classList.add('hidden');
-      }
-    });
-
-    // Modal Functions
-    function toggleModal() {
-      document.getElementById("authModal").classList.toggle("hidden");
-    }
-    // Smooth Scroll for Navigation Links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-
-    document.getElementById('see-more-btn').addEventListener('click', function() {
-    const extraMenu = document.getElementById('extra-menu');
-    const btnIcon = this.querySelector('i');
-
-    // Toggle expansion
-    extraMenu.classList.toggle('expanded');
-    
-    // Rotate arrow
-    this.classList.toggle('rotate-180');
-});
+    loadVerseData();
   </script>
 </body>
 </html>
