@@ -41,6 +41,7 @@
     </div>
   </main>
 
+  <script src="api-config.js"></script>
   <script>
     // --- PARTICLE EFFECT ---
     const canvas = document.getElementById('carnival-particles');
@@ -98,7 +99,7 @@
 
     async function loadVerseData() {
         try {
-            const res = await fetch('http://localhost:5000/api/events');
+            const res = await fetch(API_CONFIG.eventsUrl);
             const data = await res.json();
             const container = document.getElementById('carnival-container');
             

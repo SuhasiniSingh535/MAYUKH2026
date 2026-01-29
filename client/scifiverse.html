@@ -85,6 +85,7 @@
 
   <div id="cursor-glow" class="fixed w-[400px] h-[400px] rounded-full pointer-events-none z-0 opacity-20 bg-cyan-600 blur-[100px]" style="transform: translate(-50%, -50%);"></div>
 
+  <script src="api-config.js"></script>
   <script>
     const glow = document.getElementById('cursor-glow');
     document.addEventListener('mousemove', (e) => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
@@ -141,7 +142,7 @@
 
     async function loadVerseData() {
         try {
-            const res = await fetch('http://localhost:5000/api/events');
+            const res = await fetch(API_CONFIG.eventsUrl);
             const data = await res.json();
             const container = document.getElementById('scifi-container');
             

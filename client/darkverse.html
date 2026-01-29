@@ -85,6 +85,7 @@
     </div>
   </main>
 
+  <script src="api-config.js"></script>
   <script>
     // --- ASH EFFECT ---
     const canvas = document.getElementById('ash-canvas'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -148,7 +149,7 @@
 
     async function loadVerseData() {
         try {
-            const res = await fetch('http://localhost:5000/api/events');
+            const res = await fetch(API_CONFIG.eventsUrl);
             const data = await res.json();
             const container = document.getElementById('dark-container');
             

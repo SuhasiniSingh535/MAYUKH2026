@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayukh 2026 - Non-Tech Workshops</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Rajdhani', sans-serif; background-color: black; color: white; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
+    .hover-glow:hover { color: #3bc4ff; text-shadow: 0 0 10px #3bc4ff; }
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <div class="fixed inset-0 -z-10"><img src="assests/p1.png" class="w-full h-full object-cover opacity-30"></div>
+
+  <div class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[70vh] border-l-4 border-cyan-400/50 z-50">
+    <nav class="flex flex-col items-center space-y-8 text-gray-300 text-sm">
+      <a href="index.html" class="flex flex-col items-center hover-glow"><i class="fa-solid fa-house text-xl mb-1"></i><span>Home</span></a>
+      
+      <div class="relative" id="events-nav">
+        <a href="javascript:void(0)" onclick="toggleEventsNav()" class="flex flex-col items-center hover-glow">
+          <i class="fa-solid fa-calendar-days text-xl mb-1"></i><span>Events</span>
+        </a>
+        <div id="events-dropdown-nav" class="absolute left-full top-1/2 -translate-y-1/2 ml-4 rounded-2xl p-4 hidden z-50 w-48 glass" style="background: rgba(0,0,0,0.95); border: 1px solid cyan;">
+          <div class="space-y-3">
+            <div class="relative">
+              <button onclick="toggleSubNav('technical')" class="w-full text-left hover:text-cyan-300 font-semibold py-2 px-3 rounded flex justify-between">TECHNICAL <i class="fa-solid fa-chevron-right text-xs mt-1"></i></button>
+              <div id="technical-sub-nav" class="absolute left-full bottom-0 ml-2 rounded-2xl p-4 hidden z-50 w-48 glass" style="background: rgba(0,0,0,0.95); border: 1px solid cyan;">
+                <a href="tech-events.html" class="block hover:text-cyan-300 py-1">Tech Events</a>
+                <a href="non-tech-events.html" class="block hover:text-cyan-300 py-1">Non-Tech Events</a>
+              </div>
+            </div>
+            <div class="relative">
+              <button onclick="toggleSubNav('workshop')" class="w-full text-left hover:text-cyan-300 font-semibold py-2 px-3 rounded flex justify-between">WORKSHOP <i class="fa-solid fa-chevron-right text-xs mt-1"></i></button>
+              <div id="workshop-sub-nav" class="absolute left-full top-0 ml-2 rounded-2xl p-4 hidden z-50 w-48 glass" style="background: rgba(0,0,0,0.95); border: 1px solid cyan;">
+                <a href="tech-workshops.html" class="block hover:text-cyan-300 py-1">Tech Workshops</a>
+                <a href="non-tech-workshops.html" class="block hover:text-cyan-300 py-1">Non-Tech Workshops</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="relative z-10 pt-20">
+    <section class="min-h-[50vh] flex flex-col justify-center items-center text-center px-6">
+      <h1 class="text-6xl md:text-8xl font-black orbitron text-cyan-400 mb-4 tracking-wider glow">NON-TECH WORKSHOPS</h1>
+      <p class="text-2xl text-gray-300 font-medium">Creative & Artistic Workshops across Verses</p>
+    </section>
+
+    <section id="spy-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-cyan-400">SPY VERSE</h2></div>
+      <div id="spy-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="scifi-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-purple-400">SCI-FI VERSE</h2></div>
+      <div id="scifi-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="carnival-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-red-400">CARNIVAL VERSE</h2></div>
+      <div id="carnival-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="dark-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-slate-400">DARK VERSE</h2></div>
+      <div id="dark-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="mythic-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-orange-400">MYTHIC VERSE</h2></div>
+      <div id="mythic-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+  </main>
+
+  <script src="api-config.js"></script>
+  <script>
+    function toggleEventsNav() { document.getElementById('events-dropdown-nav').classList.toggle('hidden'); }
+    function toggleSubNav(type) {
+        const t = document.getElementById('technical-sub-nav');
+        const w = document.getElementById('workshop-sub-nav');
+        if(type==='technical'){ t.classList.toggle('hidden'); w.classList.add('hidden'); }
+        else { w.classList.toggle('hidden'); t.classList.add('hidden'); }
+    }
+
+    const TARGET_TYPE = 'non-tech-workshop';
+
+    function createCardHTML(event) {
+        return `
+          <div class="glass rounded-2xl border border-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+            <div class="p-6">
+              <div class="flex justify-between items-center mb-4">
+                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain">` : `<i class="fa-solid fa-paintbrush text-2xl text-cyan-400"></i>`}
+                 <span class="text-xs bg-white/10 px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
+              </div>
+              <img src="${event.posterLink}" class="w-full h-48 object-cover rounded-lg mb-4 border border-white/10">
+              <h3 class="text-xl font-bold orbitron text-cyan-400 mb-2 uppercase">${event.title}</h3>
+              <p class="text-gray-400 text-sm mb-4 line-clamp-3">${event.description}</p>
+              <a href="${event.registrationLink}" target="_blank" class="block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition-all">REGISTER NOW</a>
+            </div>
+          </div>
+        `;
+    }
+
+    async function loadAllEvents() {
+        try {
+            const response = await fetch(API_CONFIG.eventsUrl);
+            const data = await response.json();
+            
+            if (!data.events) return;
+
+            const sections = [
+                { id: 'spy-verse-container', category: 'spy-verse' },
+                { id: 'scifi-verse-container', category: 'scifi-verse' },
+                { id: 'carnival-verse-container', category: 'carnival-verse' },
+                { id: 'dark-verse-container', category: 'dark-verse' },
+                { id: 'mythic-verse-container', category: 'mythic-verse' }
+            ];
+
+            sections.forEach(section => {
+                const container = document.getElementById(section.id);
+                if (container) {
+                    // Filter: Must be 'non-tech-workshop' AND belong to the specific Verse
+                    const filteredEvents = data.events.filter(e => 
+                        e.category === section.category && 
+                        e.eventType === TARGET_TYPE 
+                    );
+                    
+                    if (filteredEvents.length > 0) {
+                        container.innerHTML = filteredEvents.map(createCardHTML).join('');
+                    } else {
+                        container.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10 italic">No Non-Tech Workshops scheduled.</p>`;
+                    }
+                }
+            });
+        } catch (error) { console.error(error); }
+    }
+
+    // Scroll Reveal
+    window.addEventListener('scroll', () => {
+        document.querySelectorAll('.reveal').forEach(el => {
+            if(el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+        });
+    });
+
+    loadAllEvents();
+  </script>
+</body>
+</html>

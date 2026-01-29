@@ -39,6 +39,7 @@
     </div>
   </main>
 
+  <script src="api-config.js"></script>
   <script>
     // --- PARTICLES ---
     const canvas = document.getElementById('mythic-particles'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -86,7 +87,7 @@
 
     async function loadVerseData() {
         try {
-            const res = await fetch('http://localhost:5000/api/events');
+            const res = await fetch(API_CONFIG.eventsUrl);
             const data = await res.json();
             const container = document.getElementById('mythic-container');
             

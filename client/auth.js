@@ -1,6 +1,8 @@
 // Frontend API helper for authentication
-
-const API_BASE_URL = '/api';
+// Dynamically determine API base URL for production/development
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000/api' 
+  : '/api';
 
 // Sign up a new user
 async function signup(name, email, password, role) {
@@ -16,7 +18,6 @@ async function signup(name, email, password, role) {
     const data = await response.json();
 
     if (response.ok) {
-      // Store token in localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       return { success: true, data };
@@ -24,7 +25,8 @@ async function signup(name, email, password, role) {
       return { success: false, error: data.message || 'Signup failed' };
     }
   } catch (error) {
-    return { success: false, error: error.message };
+    console.error('Signup error:', error);
+    return { success: false, error: 'Network error. Please try again.' };
   }
 }
 
@@ -42,7 +44,6 @@ async function login(email, password) {
     const data = await response.json();
 
     if (response.ok) {
-      // Store token in localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       return { success: true, data };
@@ -50,7 +51,8 @@ async function login(email, password) {
       return { success: false, error: data.message || 'Login failed' };
     }
   } catch (error) {
-    return { success: false, error: error.message };
+    console.error('Login error:', error);
+    return { success: false, error: 'Network error. Please try again.' };
   }
 }
 
@@ -58,6 +60,8 @@ async function login(email, password) {
 async function getProfile() {
   try {
     const token = localStorage.getItem('token');
+    if (!token) return null;
+
     const response = await fetch(`${API_BASE_URL}/auth/profile`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -65,11 +69,16 @@ async function getProfile() {
     });
 
     if (response.ok) {
-      return await response.json();
-    } else {
-      throw new Error('Failed to fetch profile');
+      const user = await response.json();
+      localStorage.setItem('user', JSON.stringify(user));
+      return user;
+    } else if (response.status === 401) {
+      logout();
+      return null;
     }
+    return null;
   } catch (error) {
+    console.error('Profile fetch error:', error);
     return null;
   }
 }
@@ -82,11 +91,35 @@ function logout() {
 
 // Check if user is logged in
 function isLoggedIn() {
-  return localStorage.getItem('token') !== null;
+  const token = localStorage.getItem('token');
+  if (!token) return false;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 > Date.now();
+  } catch {
+    return false;
+  }
 }
 
 // Get current user
 function getCurrentUser() {
+  if (!isLoggedIn()) {
+    logout();
+    return null;
+  }
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : null;
+}
+
+// Check if user has specific role
+function hasRole(requiredRole) {
+  const user = getCurrentUser();
+  return user && user.role === requiredRole;
+}
+
+// Get auth header for API calls
+function getAuthHeader() {
+  const token = localStorage.getItem('token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
 }
