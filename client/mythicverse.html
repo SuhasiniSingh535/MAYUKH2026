@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MythicVerse | Mayukh 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #0d0a05; color: #ffd384; font-family: 'Rajdhani', sans-serif; background-image: radial-gradient(circle at center, #241a08 0%, #0d0a05 100%); }
+    .cinzel { font-family: 'Cinzel', serif; } .orbitron { font-family: 'Orbitron', sans-serif; }
+    .mythic-glow { text-shadow: 0 0 10px #ff9d00, 0 0 20px #ff6a00; }
+    .artifact-card { background: rgba(40, 30, 10, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 157, 0, 0.3); position: relative; overflow: hidden; transition: all 0.5s ease; }
+    .artifact-card:hover { border-color: #ff9d00; transform: scale(1.03); box-shadow: 0 0 30px rgba(255, 157, 0, 0.2); }
+    .btn-mythic { background: linear-gradient(45deg, #ff9d00, #ff4500); color: black; transition: all 0.3s ease; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); }
+    .btn-mythic:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 69, 0, 0.4); }
+    #mythic-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .glass { background: rgba(20, 15, 5, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 157, 0, 0.15); }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  <a href="theme2.html#mythic-verse" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-orange-900/40 flex items-center gap-2 hover:border-orange-600 hover:text-orange-500 transition-all group">
+      <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
+      <span class="text-xs tracking-widest">THEME</span>
+  </a>
+  <canvas id="mythic-particles"></canvas>
+
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
+    <div class="text-center mb-16">
+      <p class="text-xs orbitron tracking-[0.6em] mb-2 opacity-60 text-orange-400">WHERE ANCIENT WISDOM MEETS FUTURE CODE</p>
+      <h1 class="cinzel text-6xl md:text-8xl font-black mythic-glow mb-4">MYTHICVERSE</h1>
+      <div class="h-1 w-64 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto"></div>
+      <p class="mt-6 text-xl max-w-3xl text-orange-200/70 font-medium italic">"Bridges ancient algorithms with modern tech to shape the civilization of tomorrow."</p>
+    </div>
+
+    <div id="mythic-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl w-full px-6">
+        <p class="col-span-full text-center text-orange-500 animate-pulse">Unearthing Artifacts...</p>
+    </div>
+  </main>
+
+  <script src="api-config.js"></script>
+  <script>
+    // --- PARTICLES ---
+    const canvas = document.getElementById('mythic-particles'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let particles = [];
+    class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.1; this.speedX = Math.random() * 1 - 0.5; this.speedY = Math.random() * 1 - 0.5; this.color = `rgba(255, ${150 + Math.random() * 100}, 0, ${Math.random() * 0.5})`; } update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width; if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height; } draw() { ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
+    function init() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
+    function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+    init(); animate(); window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+    // --- DYNAMIC DATA ---
+    const CURRENT_VERSE = 'mythic-verse';
+
+    function createCardHTML(event) {
+        let label = 'QUEST';
+        if(event.eventType.includes('workshop')) label = 'WORKSHOP';
+        else if(event.eventType.includes('non-tech')) label = 'NON-TECH';
+
+        return `
+          <div class="artifact-card rounded-xl p-4 flex flex-col h-full">
+            <div class="w-full h-48 bg-orange-900/30 border border-orange-500/20 rounded-lg mb-4 overflow-hidden relative group">
+              <div class="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-0 transition">
+                ${event.logoLink ? `<img src="${event.logoLink}" class="w-16 h-16">` : `<i class="fa-solid fa-scroll text-6xl"></i>`}
+              </div>
+              <img src="${event.posterLink}" class="w-full h-full object-cover mix-blend-overlay transition-transform duration-500 group-hover:scale-110 group-hover:mix-blend-normal">
+            </div>
+            <div class="px-2 flex-grow">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="cinzel text-2xl font-bold text-orange-300 leading-tight">${event.title}</h3>
+                <span class="text-[10px] orbitron border border-orange-500/50 px-2 py-0.5 text-orange-400">${label}</span>
+              </div>
+              <p class="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
+                ${event.description}
+              </p>
+              <div class="text-xs text-orange-500 mb-4 flex gap-3">
+                 <span><i class="fa-solid fa-calendar"></i> ${event.day}</span>
+                 <span><i class="fa-solid fa-clock"></i> ${event.time}</span>
+              </div>
+            </div>
+            <a href="${event.registrationLink}" target="_blank" class="btn-mythic w-full py-3 orbitron text-sm font-black tracking-widest mt-auto block text-center">
+              COMMENCE RITUAL
+            </a>
+          </div>
+        `;
+    }
+
+    async function loadVerseData() {
+        try {
+            const res = await fetch(API_CONFIG.eventsUrl);
+            const data = await res.json();
+            const container = document.getElementById('mythic-container');
+            
+            if(!data.events) return;
+
+            let events = data.events.filter(e => e.category === CURRENT_VERSE);
+            
+            // Sort: Tech -> Non-Tech -> Workshops
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4 };
+            events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
+
+            if(events.length > 0) {
+                container.innerHTML = events.map(createCardHTML).join('');
+            } else {
+                container.innerHTML = `<p class="col-span-full text-center text-orange-500/50 cinzel">Prophecy awaits data...</p>`;
+            }
+        } catch(err) { console.error(err); }
+    }
+    loadVerseData();
+  </script>
+</body>
+</html>

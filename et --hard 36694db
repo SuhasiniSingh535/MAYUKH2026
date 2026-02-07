@@ -1,0 +1,7 @@
+[33m0a649de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to ORIG_HEAD
+[33m0a649de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{1}: commit: dynamic site
+[33m27a4df8[m HEAD@{2}: commit: made all events fields optional and fixed form and added roadmap.html
+[33ma153f80[m HEAD@{3}: commit (merge): MOAerge branch 'main' of https://github.com/Bhumi379/Mayukh.bv
+[33m36694db[m HEAD@{4}: commit: updated verse paged with dynamic code
+[33mda8803f[m HEAD@{5}: commit: Fixed backend file upload limit and updated frontend navigation
+[33m2c7c2e9[m HEAD@{6}: clone: from https://github.com/Bhumi379/Mayukh.bv.git

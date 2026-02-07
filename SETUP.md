@@ -1,8 +1,9 @@
 # MongoDB & Authentication Setup Guide
 
 ## Prerequisites
-- Node.js (v14+) and npm installed
+- Node.js (v18+) and npm installed
 - MongoDB Atlas account (free at https://www.mongodb.com/cloud/atlas)
+- Cloudinary account (for image uploads) at https://cloudinary.com
 
 ## Step 1: Set Up MongoDB Atlas
 
@@ -29,11 +30,22 @@
    npm install
    ```
 
-3. Update `.env` file with your MongoDB connection string:
+3. Copy `.env.example` to `.env` and update with your credentials:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` with your values:
    ```
    MONGODB_URI=mongodb+srv://mayukh_user:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/mayukh?retryWrites=true&w=majority
-   PORT=5000
    JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+   PORT=5000
+   NODE_ENV=development
+   
+   # Cloudinary (for image uploads)
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
    ```
 
 4. Start the backend server:
@@ -81,6 +93,11 @@ Add the following to your HTML login/signup forms:
   <input type="text" id="name" placeholder="Full Name" required />
   <input type="email" id="email" placeholder="Email" required />
   <input type="password" id="password" placeholder="Password" required />
+  <select id="role" required>
+    <option value="Participant">Participant</option>
+    <option value="Core">Core</option>
+    <option value="Subcore">Subcore</option>
+  </select>
   <button type="submit">Sign Up</button>
 </form>
 
@@ -92,8 +109,9 @@ Add the following to your HTML login/signup forms:
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
     
-    const result = await signup(name, email, password);
+    const result = await signup(name, email, password, role);
     
     if (result.success) {
       alert('Signup successful! Welcome ' + result.data.user.name);
@@ -113,9 +131,12 @@ Register a new user
 {
   "name": "John Doe",
   "email": "john@example.com",
-  "password": "password123"
+  "password": "password123",
+  "role": "Participant"
 }
 ```
+
+**Valid roles**: `Core`, `Subcore`, `Participant`
 
 Response:
 ```json
@@ -125,7 +146,8 @@ Response:
   "user": {
     "id": "user_id",
     "name": "John Doe",
-    "email": "john@example.com"
+    "email": "john@example.com",
+    "role": "Participant"
   }
 }
 ```
@@ -167,18 +189,40 @@ await getProfile();
 ## Project Structure
 ```
 mayukh.bv/
-├── index.html (your frontend)
-├── auth.js (frontend authentication helper)
-├── server/
+├── client/                    # Frontend files
+│   ├── index.html             # Main landing page
+│   ├── auth.js                # Frontend authentication helper
+│   ├── api-config.js          # API URL configuration
+│   ├── assests/               # Images, videos, static assets
+│   ├── tech-events.html       # Tech events page
+│   ├── non-tech-events.html   # Non-tech events page
+│   ├── tech-workshops.html    # Tech workshops page
+│   ├── non-tech-workshops.html # Non-tech workshops page
+│   ├── spyverse.html          # Spy verse theme page
+│   ├── scifiverse.html        # Sci-Fi verse theme page
+│   ├── carnivalverse.html     # Carnival verse theme page
+│   ├── darkverse.html         # Dark verse theme page
+│   └── mythicverse.html       # Mythic verse theme page
+│
+├── server/                    # Backend files
 │   ├── package.json
-│   ├── server.js (main server file)
-│   ├── .env (configuration)
+│   ├── server.js              # Main Express server
+│   ├── .env                   # Environment configuration
+│   ├── .env.example           # Example env file
+│   ├── admin.html             # Admin dashboard
+│   ├── upload.html            # Event upload page
+│   ├── config/
+│   │   └── cloudinary.js      # Cloudinary configuration
 │   ├── models/
-│   │   └── User.js (MongoDB user schema)
+│   │   ├── User.js            # User schema
+│   │   └── Event.js           # Event schema
 │   ├── routes/
-│   │   └── auth.js (authentication endpoints)
+│   │   ├── auth.js            # Authentication routes
+│   │   └── events.js          # Event CRUD routes
 │   └── middleware/
-│       └── auth.js (JWT authentication)
+│       └── auth.js            # JWT authentication middleware
+│
+└── SETUP.md                   # This file
 ```
 
 ## Important Security Notes
@@ -191,10 +235,18 @@ mayukh.bv/
 
 ## Troubleshooting
 
-- **MongoDB connection error**: Check your connection string and whitelist your IP
-- **CORS error**: Make sure the frontend is calling `http://localhost:5000`
+- **MongoDB connection error (querySrv ENODATA)**: 
+  - Check your connection string format
+  - Ensure your IP is whitelisted in MongoDB Atlas
+  - The server uses IPv4 by default to avoid DNS issues on Windows
+  
+- **CORS error**: The server is configured to allow all origins in development. For production, set `FRONTEND_URL` in `.env`
+
 - **Token invalid**: Tokens expire in 7 days, user needs to login again
+
 - **Email already exists**: User with that email already has an account
+
+- **Cloudinary upload fails**: Check your Cloudinary credentials in `.env`
 
 ## Next Steps
 
