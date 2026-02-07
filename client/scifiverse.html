@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sci-FiVerse | Mayukh 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --neon: #3bc4ff; --bg: #02050a; }
+    body { background-color: var(--bg); color: var(--neon); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    
+    .perspective-container { perspective: 1000px; position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .grid-plane { position: absolute; width: 200%; height: 100%; bottom: -10%; left: -50%; background-image: linear-gradient(to right, rgba(59, 196, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(59, 196, 255, 0.1) 1px, transparent 1px); background-size: 60px 60px; transform: rotateX(60deg); animation: grid-move 20s linear infinite; }
+    @keyframes grid-move { from { background-position: 0 0; } to { background-position: 0 100%; } }
+    
+    .holo-card { 
+        background: rgba(10, 25, 45, 0.6); 
+        backdrop-filter: blur(15px); 
+        border: 1px solid rgba(59, 196, 255, 0.2); 
+        position: relative; 
+        overflow: hidden; 
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%); 
+        transition: all 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    .holo-card:hover { border-color: var(--neon); transform: translateY(-10px); box-shadow: 0 0 30px rgba(59, 196, 255, 0.3); }
+    .hud-line { position: absolute; background: var(--neon); opacity: 0.3; }
+    .cyan-glow { text-shadow: 0 0 15px var(--neon), 0 0 30px rgba(59, 196, 255, 0.5); }
+    
+    .btn-cyber { position: relative; border: 1px solid var(--neon); padding: 12px 20px; color: var(--neon); text-transform: uppercase; font-weight: bold; letter-spacing: 2px; transition: 0.3s; overflow: hidden; }
+    .btn-cyber:hover { background: var(--neon); color: #000; box-shadow: 0 0 20px var(--neon); }
+    .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
+
+    .info-label {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        opacity: 0.5;
+        color: var(--neon);
+    }
+
+    .info-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: white;
+    }
+
+    .logo-container {
+        width: 56px;
+        height: 56px;
+        background: rgba(59, 196, 255, 0.05);
+        border: 1px solid rgba(59, 196, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="theme2.html#sci-fi-verse" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-cyan-900/40 flex items-center gap-2 hover:border-cyan-600 hover:text-cyan-500 transition-all group text-cyan-400">
+      <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
+      <span class="text-xs tracking-widest">THEME</span>
+  </a>
+  <div class="perspective-container"><div class="grid-plane"></div></div>
+
+  <main class="relative z-10 flex flex-col items-center pt-24 pb-32">
+    <div class="text-center mb-24">
+      <h1 class="orbitron text-8xl font-black cyan-glow mb-6 tracking-tighter italic">SCI-FIVERSE</h1>
+      <div class="flex items-center justify-center space-x-4 opacity-60 mb-8">
+        <div class="h-px w-20 bg-cyan-400"></div><span class="orbitron text-xs uppercase tracking-widest">Beyond the Horizon</span><div class="h-px w-20 bg-cyan-400"></div>
+      </div>
+      <p class="max-w-3xl text-xl text-cyan-100/60 rajdhani font-light leading-relaxed">Where robotics meet AI. Explore the future.</p>
+    </div>
+
+    <div id="scifi-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-[85%] w-full px-8">
+        <p class="col-span-full text-center text-cyan-500 animate-pulse orbitron">INITIALIZING DATA FEED...</p>
+    </div>
+  </main>
+
+  <div id="cursor-glow" class="fixed w-[400px] h-[400px] rounded-full pointer-events-none z-0 opacity-20 bg-cyan-600 blur-[100px]" style="transform: translate(-50%, -50%);"></div>
+
+  <script src="api-config.js"></script>
+  <script>
+    const glow = document.getElementById('cursor-glow');
+    document.addEventListener('mousemove', (e) => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+
+    const CURRENT_VERSE = 'scifi-verse';
+
+    function createCardHTML(event) {
+        let code = 'SYS_01';
+        if(event.eventType.includes('workshop')) code = 'WKS_MD';
+        else if(event.eventType.includes('non-tech')) code = 'NT_ND';
+
+        return `
+          <div class="holo-card p-6 group">
+            <div class="flex justify-between items-start mb-6">
+               <div class="flex items-center gap-4">
+                  <div class="logo-container">
+                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain">` : `<i class="fa-solid fa-robot text-3xl"></i>`}
+                  </div>
+                  <div class="flex flex-col">
+                     <span class="orbitron text-[10px] tracking-widest opacity-60 uppercase">${code}</span>
+                     <h3 class="orbitron text-xl font-bold text-white uppercase tracking-tight leading-tight">${event.title}</h3>
+                  </div>
+               </div>
+               <div class="hud-line top-0 right-0 w-8 h-px"></div>
+            </div>
+
+            <div class="relative w-full h-44 mb-6 border border-cyan-500/10 rounded-sm overflow-hidden flex-shrink-0">
+                <img src="${event.posterLink}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition duration-500">
+            </div>
+            
+            <div class="flex-grow">
+                <p class="text-cyan-100/60 text-sm leading-relaxed mb-6 rajdhani">
+                  ${event.description}
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-cyan-900/30 flex-shrink-0">
+                <div class="flex flex-col">
+                    <span class="info-label">DATE</span>
+                    <span class="info-value">${event.day}</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="info-label">TIME</span>
+                    <span class="info-value">${event.time}</span>
+                </div>
+            </div>
+
+            <a href="${event.registrationLink}" target="_blank" class="btn-cyber w-full orbitron text-xs block text-center mt-auto flex-shrink-0">
+              REGISTER NOW
+            </a>
+          </div>
+        `;
+    }
+
+    async function loadVerseData() {
+        try {
+            const res = await fetch(API_CONFIG.eventsUrl);
+            const data = await res.json();
+            const container = document.getElementById('scifi-container');
+            
+            if(!data.events) return;
+
+            let events = data.events.filter(e => e.category === CURRENT_VERSE);
+            
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4 };
+            events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
+
+            if(events.length > 0) {
+                container.innerHTML = events.map(createCardHTML).join('');
+            } else {
+                container.innerHTML = `<p class="col-span-full text-center text-cyan-500/50 orbitron">NO SIGNAL DETECTED</p>`;
+            }
+        } catch(err) { console.error(err); }
+    }
+    loadVerseData();
+  </script>
+</body>
+</html>

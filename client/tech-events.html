@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayukh 2026 - Tech Events</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Rajdhani', sans-serif; background-color: black; color: white; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff; }
+    .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
+    .spy-verse-bg { border-color: rgba(14, 165, 233, 0.3); } .scifi-verse-bg { border-color: rgba(168, 85, 247, 0.3); }
+    .carnival-verse-bg { border-color: rgba(239, 68, 68, 0.3); } .dark-verse-bg { border-color: rgba(71, 85, 105, 0.3); }
+    .mythic-verse-bg { border-color: rgba(249, 115, 22, 0.3); }
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: #3bc4ff; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="fixed inset-0 -z-10"><img src="assests/p1.png" class="w-full h-full object-cover opacity-30"></div>
+  <a href="index.html" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:text-cyan-400 transition-all"><i class="fa-solid fa-chevron-left"></i> <span class="orbitron text-xs font-bold tracking-widest">HOME</span></a>
+
+  <main class="relative z-10 pt-20">
+    <section class="min-h-[50vh] flex flex-col justify-center items-center text-center px-6">
+      <h1 class="text-7xl md:text-8xl font-black orbitron glow mb-4 tracking-wider">TECH EVENTS</h1>
+      <p class="text-2xl text-cyan-300 font-medium">Explore the Five Verses of Innovation</p>
+    </section>
+
+    <section id="spy-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-cyan-400">SPY VERSE</h2></div>
+      <div id="spy-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="scifi-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-purple-400">SCI-FI VERSE</h2></div>
+      <div id="scifi-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="carnival-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-red-400">CARNIVAL VERSE</h2></div>
+      <div id="carnival-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="dark-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-slate-400">DARK VERSE</h2></div>
+      <div id="dark-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="mythic-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-orange-400">MYTHIC VERSE</h2></div>
+      <div id="mythic-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+  </main>
+
+  <script src="api-config.js"></script>
+  <script>
+    const TARGET_TYPE = 'tech-event';
+
+    function createCardHTML(event) {
+        return `
+          <div class="glass rounded-2xl border border-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+            <div class="p-6">
+              <div class="flex justify-between items-center mb-4">
+                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain">` : `<i class="fa-solid fa-microchip text-2xl text-cyan-400"></i>`}
+                 <span class="text-xs bg-white/10 px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
+              </div>
+              <img src="${event.posterLink}" class="w-full h-48 object-cover rounded-lg mb-4 border border-white/10">
+              <h3 class="text-xl font-bold orbitron text-cyan-400 mb-2 uppercase">${event.title}</h3>
+              <p class="text-gray-400 text-sm mb-4 line-clamp-3">${event.description}</p>
+              <a href="${event.registrationLink}" target="_blank" class="block w-full text-center bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition-all">REGISTER NOW</a>
+            </div>
+          </div>
+        `;
+    }
+
+    async function loadAllEvents() {
+        try {
+            const response = await fetch(API_CONFIG.eventsUrl);
+            const data = await response.json();
+            
+            if (!data.events) return;
+
+            const sections = [
+                { id: 'spy-verse-container', category: 'spy-verse' },
+                { id: 'scifi-verse-container', category: 'scifi-verse' },
+                { id: 'carnival-verse-container', category: 'carnival-verse' },
+                { id: 'dark-verse-container', category: 'dark-verse' },
+                { id: 'mythic-verse-container', category: 'mythic-verse' }
+            ];
+
+            sections.forEach(section => {
+                const container = document.getElementById(section.id);
+                if (container) {
+                    const filteredEvents = data.events.filter(e => 
+                        e.category === section.category && 
+                        e.eventType === TARGET_TYPE 
+                    );
+                    
+                    if (filteredEvents.length > 0) {
+                        container.innerHTML = filteredEvents.map(createCardHTML).join('');
+                    } else {
+                        container.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10 italic">No Tech Events in this Verse yet.</p>`;
+                    }
+                }
+            });
+        } catch (error) { console.error('Failed to load events:', error); }
+    }
+
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.reveal').forEach(el => {
+        if(el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+      });
+    });
+
+    loadAllEvents();
+  </script>
+</body>
+</html>

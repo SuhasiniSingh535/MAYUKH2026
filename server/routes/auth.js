@@ -6,16 +6,18 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+const JWT_SECRET = process.env.JWT_SECRET || 'mayukh2026-default-secret-change-in-production';
+
 // Validation middleware
 const validateSignup = [
   body('name').trim().notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Valid email is required'),
+  body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   body('role').isIn(['Core', 'Subcore', 'Participant']).withMessage('Invalid role selected')
 ];
 
 const validateLogin = [
-  body('email').isEmail().withMessage('Valid email is required'),
+  body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
   body('password').notEmpty().withMessage('Password is required')
 ];
 
@@ -55,8 +57,8 @@ router.post('/signup', validateSignup, async (req, res) => {
 
     // Create JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      { userId: user._id, email: user.email, role: user.role },
+      JWT_SECRET,
       { expiresIn: '7d' }
     );
 
@@ -72,7 +74,7 @@ router.post('/signup', validateSignup, async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error.message);
-    res.status(500).json({ message: 'Server error: ' + error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -102,8 +104,8 @@ router.post('/login', validateLogin, async (req, res) => {
 
     // Create JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      { userId: user._id, email: user.email, role: user.role },
+      JWT_SECRET,
       { expiresIn: '7d' }
     );
 
@@ -113,11 +115,12 @@ router.post('/login', validateLogin, async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error) {
-    console.error(error);
+    console.error('Login error:', error.message);
     res.status(500).json({ message: 'Server error' });
   }
 });

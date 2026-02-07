@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HorrorVerse | Mayukh 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #050000; color: #ff0000; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+    .horror-font { font-family: 'Creepster', cursive; } .nosifer { font-family: 'Nosifer', cursive; }
+    .blood-glow { text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000; }
+    .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, black 150%); pointer-events: none; z-index: 40; }
+    
+    /* Updated Horror Card Design */
+    .horror-card { 
+        background: rgba(25, 0, 0, 0.85); 
+        backdrop-filter: blur(12px); 
+        border: 1px solid rgba(255, 0, 0, 0.2); 
+        clip-path: polygon(2% 0%, 98% 2%, 100% 95%, 95% 100%, 0% 98%); 
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 550px;
+    }
+    
+    .horror-card:hover { 
+        border-color: #ff0000; 
+        transform: scale(1.03) rotate(1deg); 
+        box-shadow: 0 0 40px rgba(255, 0, 0, 0.4); 
+        background: rgba(40, 0, 0, 0.9);
+    }
+
+    #ash-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.4; }
+    .glass { background: rgba(30, 0, 0, 0.5); backdrop-filter: blur(15px); border: 1px solid rgba(255,0,0,0.3); }
+
+    .void-label {
+        font-family: 'Creepster', cursive;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        opacity: 0.6;
+        color: #ff4d4d;
+    }
+
+    .void-value {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 0 0 5px #ff0000;
+    }
+
+    .logo-container {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 0, 0, 0.05);
+        border: 1px solid rgba(255, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+    <a href="theme2.html#dark-verse" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-red-900/30 transition-all group text-red-500">
+        <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
+        <span class="horror-font text-xs tracking-widest">THEME</span>
+    </a>
+    <canvas id="ash-canvas"></canvas>
+    <div class="vignette"></div>
+
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
+    <div class="text-center mb-20">
+      <p class="text-xs tracking-[0.8em] mb-2 opacity-60">WARNING // UNKNOWN ENTITY DETECTED</p>
+      <h1 class="horror-font text-6xl md:text-8xl blood-glow mb-4">DARK VERSE</h1>
+      <div class="h-1 w-64 bg-gradient-to-r from-transparent via-red-700 to-transparent mx-auto"></div>
+      <p class="mt-6 horror-font text-3xl max-w-2xl text-red-600 opacity-80">"Abandon all hope, ye who enter here."</p>
+    </div>
+
+    <div id="dark-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-[90%] w-full px-6">
+        <p class="col-span-full text-center text-red-700 font-bold animate-pulse horror-font text-2xl">SUMMONING EVENTS...</p>
+    </div>
+  </main>
+
+  <script src="api-config.js"></script>
+  <script>
+    // --- ASH EFFECT ---
+    const canvas = document.getElementById('ash-canvas'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let particles = [];
+    class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 3 + 1; this.speedY = Math.random() * 1 + 0.5; this.speedX = Math.random() * 0.5 - 0.25; } update() { this.y += this.speedY; this.x += this.speedX; if (this.y > canvas.height) this.y = -10; } draw() { ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
+    function init() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
+    function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+    init(); animate(); window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+    // --- DYNAMIC DATA ---
+    const CURRENT_VERSE = 'dark-verse';
+
+    function createCardHTML(event) {
+        let tag = 'ENTITY';
+        if(event.eventType.includes('tech-event')) tag = 'VOICE';
+        else if(event.eventType.includes('workshop')) tag = 'RITUAL';
+        else tag = 'SHADOW';
+
+        return `
+          <div class="horror-card p-7 group">
+            <div class="flex justify-between items-start mb-6">
+               <div class="flex items-center gap-4">
+                  <div class="logo-container">
+                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain opacity-80 group-hover:opacity-100 transition">` : `<i class="fa-solid fa-skull text-3xl opacity-60"></i>`}
+                  </div>
+                  <div class="flex flex-col">
+                     <span class="horror-font text-[10px] border border-red-700/40 px-2 py-0.5 inline-block w-fit mb-1 text-red-400">${tag}</span>
+                     <h3 class="horror-font text-2xl text-red-500 mb-1 leading-tight group-hover:text-red-400 transition-colors">${event.title}</h3>
+                  </div>
+               </div>
+            </div>
+
+            <div class="w-full h-44 mb-6 border border-red-900/40 overflow-hidden relative bg-red-950/20">
+                <img src="${event.posterLink}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 filter sepia(50%) contrast(120%)">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            </div>
+            
+            <div class="flex-grow mb-6">
+                <p class="text-gray-400 text-sm leading-relaxed rajdhani">
+                  ${event.description}
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-red-900/40 flex-shrink-0">
+                <div class="flex flex-col">
+                    <span class="void-label">DATE</span>
+                    <span class="void-value">${event.day}</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="void-label">TIME</span>
+                    <span class="void-value">${event.time}</span>
+                </div>
+            </div>
+
+            <a href="${event.registrationLink}" target="_blank" class="block w-full text-center py-3 border border-red-900 hover:bg-red-700 hover:text-white horror-font text-2xl transition-all flex-shrink-0">
+              REGISTER NOW
+            </a>
+          </div>
+        `;
+    }
+
+    async function loadVerseData() {
+        try {
+            const res = await fetch(API_CONFIG.eventsUrl);
+            const data = await res.json();
+            const container = document.getElementById('dark-container');
+            
+            if(!data.events) return;
+
+            let events = data.events.filter(e => e.category === CURRENT_VERSE);
+            
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4 };
+            events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
+
+            if(events.length > 0) {
+                container.innerHTML = events.map(createCardHTML).join('');
+            } else {
+                container.innerHTML = `<p class="col-span-full text-center text-red-900 horror-font text-2xl">NO SOULS FOUND</p>`;
+            }
+        } catch(err) { console.error(err); }
+    }
+    loadVerseData();
+  </script>
+</body>
+</html>
