@@ -18,7 +18,7 @@
         background: rgba(25, 0, 0, 0.85); 
         backdrop-filter: blur(12px); 
         border: 1px solid rgba(255, 0, 0, 0.2); 
-        clip-path: polygon(2% 0%, 98% 2%, 100% 95%, 95% 100%, 0% 98%); 
+        border-radius: 8px;
         transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         display: flex;
         flex-direction: column;
@@ -27,7 +27,7 @@
     
     .horror-card:hover { 
         border-color: #ff0000; 
-        transform: scale(1.03) rotate(1deg); 
+        transform: scale(1.03); 
         box-shadow: 0 0 40px rgba(255, 0, 0, 0.4); 
         background: rgba(40, 0, 0, 0.9);
     }
@@ -37,7 +37,7 @@
 
     .void-label {
         font-family: 'Creepster', cursive;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         letter-spacing: 0.1em;
         opacity: 0.6;
         color: #ff4d4d;
@@ -56,6 +56,7 @@
         height: 60px;
         background: rgba(255, 0, 0, 0.05);
         border: 1px solid rgba(255, 0, 0, 0.2);
+        border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -99,6 +100,8 @@
         cursor: pointer;
         transition: transform 0.3s ease;
         position: relative;
+        border-radius: 4px;
+        overflow: hidden;
     }
 
     .poster-zoom-hint {
@@ -113,14 +116,14 @@
         transition: opacity 0.3s ease;
         pointer-events: none;
         font-weight: 700;
-        clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 95%);
+        border-radius: 4px;
     }
 
     .poster-clickable:hover .poster-zoom-hint {
         opacity: 1;
     }
 
-    /* Centered Detail Panel */
+    /* Centered Detail Panel - Clean Design */
     .detail-panel {
         display: none;
         position: fixed;
@@ -139,22 +142,21 @@
     .panel-content {
         background: linear-gradient(135deg, rgba(25, 0, 0, 0.95), rgba(15, 0, 0, 0.98));
         border: 2px solid #ff0000;
-        border-radius: 10px;
+        border-radius: 12px;
         max-width: 1400px;
         width: 90%;
         margin: 2rem auto;
         animation: scaleIn 0.4s ease;
         box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
         position: relative;
-        clip-path: polygon(1% 0%, 99% 1%, 100% 96%, 97% 100%, 0% 99%);
     }
 
     .close-btn {
         position: absolute;
         top: 1.5rem;
         right: 1.5rem;
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
         border: 2px solid #ff0000;
         background: rgba(255, 0, 0, 0.2);
         color: #ff0000;
@@ -164,7 +166,7 @@
         align-items: center;
         justify-content: center;
         z-index: 10;
-        clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 90%);
+        border-radius: 50%;
     }
 
     .close-btn:hover {
@@ -185,7 +187,7 @@
         cursor: pointer;
         padding: 12px 20px;
         text-align: center;
-        clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 95%);
+        border-radius: 6px;
     }
 
     .btn-see-more:hover {
@@ -195,13 +197,31 @@
         box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
     }
 
+    .btn-register {
+        border: 2px solid #ff0000;
+        background: transparent;
+        color: #ff0000;
+        padding: 12px 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .btn-register:hover {
+        background: #ff0000;
+        color: white;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+
     .detail-section {
         background: rgba(255, 0, 0, 0.05);
         border: 1px solid rgba(255, 0, 0, 0.2);
-        border-radius: 8px;
+        border-radius: 10px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
-        clip-path: polygon(2% 0%, 98% 1%, 100% 97%, 98% 100%, 0% 99%);
     }
 
     .detail-section h3 {
@@ -219,8 +239,7 @@
         border-left: 4px solid #ff0000;
         padding: 1rem;
         margin-bottom: 0.75rem;
-        border-radius: 5px;
-        clip-path: polygon(0% 0%, 98% 0%, 100% 100%, 0% 98%);
+        border-radius: 6px;
     }
 
     .round-title {
@@ -238,7 +257,7 @@
 
     .info-label {
         font-family: 'Creepster', cursive;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         letter-spacing: 0.1em;
         opacity: 0.6;
         color: #ff4d4d;
@@ -292,7 +311,7 @@
     <button class="close-btn" onclick="closePosterModal()">
       <i class="fas fa-times"></i>
     </button>
-    <img id="modal-poster-img" src="" class="max-w-[90vw] max-h-[90vh] object-contain border-4 border-red-500 shadow-2xl" style="box-shadow: 0 0 50px rgba(255, 0, 0, 0.5); clip-path: polygon(2% 0%, 98% 1%, 100% 96%, 97% 100%, 0% 99%);">
+    <img id="modal-poster-img" src="" class="max-w-[90vw] max-h-[90vh] object-contain border-4 border-red-500 shadow-2xl rounded-lg" style="box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);">
   </div>
 
   <!-- Centered Detail Panel -->
@@ -305,7 +324,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Left: Poster -->
         <div class="flex items-start justify-center">
-          <img id="panel-poster" src="" class="w-full max-w-md border-4 border-red-500 shadow-2xl sticky top-4" style="box-shadow: 0 0 30px rgba(255, 0, 0, 0.4); clip-path: polygon(2% 0%, 98% 1%, 100% 96%, 97% 100%, 0% 99%);">
+          <img id="panel-poster" src="" class="w-full max-w-md border-4 border-red-500 shadow-2xl rounded-lg sticky top-4" style="box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);">
         </div>
 
         <!-- Right: Details -->
@@ -358,30 +377,40 @@
         detailsContainer.innerHTML = `
             <div class="mb-8">
                 <div class="flex items-center gap-4 mb-4">
-                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-16 h-16 object-contain border-2 border-red-500/30 p-2 bg-red-950/40">` : ''}
+                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-16 h-16 object-contain border-2 border-red-500/30 p-2 bg-red-950/40 rounded-lg">` : ''}
                     <div>
-                        <h2 class="horror-font text-4xl font-bold text-red-500 uppercase tracking-tight">${event.title}</h2>
-                        <p class="text-red-400 text-sm font-mono tracking-widest mt-1">${event.eventType.toUpperCase().replace(/-/g, ' ')}</p>
+                        <h2 class="horror-font text-4xl font-bold text-red-500 uppercase tracking-tight">${event.title || 'Event'}</h2>
+                        <p class="text-red-400 text-sm font-mono tracking-widest mt-1">${event.eventType ? event.eventType.toUpperCase().replace(/-/g, ' ') : 'EVENT'}</p>
                     </div>
                 </div>
-                <p class="text-gray-300 text-base leading-relaxed rajdhani">${event.description}</p>
+                ${event.description ? `<p class="text-gray-300 text-base leading-relaxed rajdhani">${event.description}</p>` : ''}
             </div>
 
             <div class="detail-section">
                 <h3 class="horror-font">Cursed Information</h3>
                 <div class="grid grid-cols-2 gap-4">
+                    ${event.day ? `
                     <div>
                         <span class="info-label">DATE</span>
                         <p class="info-value text-lg">${event.day}</p>
                     </div>
+                    ` : ''}
+                    ${event.time ? `
                     <div>
                         <span class="info-label">TIME</span>
                         <p class="info-value text-lg">${event.time}</p>
                     </div>
+                    ` : ''}
                     ${event.venue ? `
                     <div class="col-span-2">
                         <span class="info-label">LOCATION</span>
                         <p class="info-value text-lg">${event.venue}</p>
+                    </div>
+                    ` : ''}
+                    ${event.duration ? `
+                    <div>
+                        <span class="info-label">DURATION</span>
+                        <p class="info-value text-lg">${event.duration}</p>
                     </div>
                     ` : ''}
                     ${event.teamSize ? `
@@ -390,35 +419,36 @@
                         <p class="info-value text-lg">${event.teamSize}</p>
                     </div>
                     ` : ''}
-                    ${event.entryFee ? `
+                    ${event.registrationFee ? `
                     <div>
                         <span class="info-label">ENTRY FEE</span>
-                        <p class="info-value text-lg">${event.entryFee}</p>
+                        <p class="info-value text-lg">${event.registrationFee}</p>
+                    </div>
+                    ` : ''}
+                    ${event.prizePool ? `
+                    <div class="col-span-2">
+                        <span class="info-label">BLOOD REWARDS</span>
+                        <p class="info-value text-lg">${event.prizePool}</p>
                     </div>
                     ` : ''}
                 </div>
             </div>
 
-            ${event.rounds && event.rounds.length > 0 ? `
+            ${event.rounds && event.rounds.trim() ? `
             <div class="detail-section">
                 <h3 class="horror-font">Torment Phases</h3>
-                <div class="space-y-3">
-                    ${event.rounds.map((round, index) => `
-                        <div class="round-item">
-                            <div class="round-title horror-font">Phase ${index + 1}: ${round.title || 'Phase ' + (index + 1)}</div>
-                            <div class="round-desc">${round.description || round.details || 'Darkness awaits...'}</div>
-                        </div>
-                    `).join('')}
+                <div class="text-gray-300 leading-relaxed whitespace-pre-line">
+                    ${event.rounds}
                 </div>
             </div>
             ` : ''}
 
-            ${event.rules && event.rules.length > 0 ? `
+            ${event.requirements && event.requirements.trim() ? `
             <div class="detail-section">
-                <h3 class="horror-font">Rules of the Damned</h3>
-                <ul class="space-y-2 text-gray-300">
-                    ${event.rules.map(rule => `<li class="flex items-start gap-2"><i class="fas fa-skull-crossbones text-red-400 mt-1 text-xs"></i><span>${rule}</span></li>`).join('')}
-                </ul>
+                <h3 class="horror-font">Requirements</h3>
+                <div class="text-gray-300 leading-relaxed whitespace-pre-line">
+                    ${event.requirements}
+                </div>
             </div>
             ` : ''}
 
@@ -448,7 +478,7 @@
             </div>
             ` : ''}
 
-            <a href="${event.registrationLink}" target="_blank" class="block w-full text-center py-3 border-2 border-red-900 hover:bg-red-700 hover:text-white horror-font text-2xl transition-all mt-8" style="clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 95%);">
+            <a href="${event.registrationLink || '#'}" target="_blank" class="btn-register block w-full text-center horror-font text-lg mt-8">
                 REGISTER NOW
             </a>
         `;
@@ -472,9 +502,9 @@
 
     function createCardHTML(event) {
         let tag = 'ENTITY';
-        if(event.eventType.includes('tech-event')) tag = 'VOICE';
-        else if(event.eventType.includes('workshop')) tag = 'RITUAL';
-        else tag = 'SHADOW';
+        if(event.eventType && event.eventType.includes('tech-event')) tag = 'VOICE';
+        else if(event.eventType && event.eventType.includes('workshop')) tag = 'RITUAL';
+        else if(event.eventType && event.eventType.includes('non-tech')) tag = 'SHADOW';
 
         const eventId = event._id || event.id || event.title.replace(/\s+/g, '-');
 
@@ -486,8 +516,8 @@
                     ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain opacity-80 group-hover:opacity-100 transition">` : `<i class="fa-solid fa-skull text-3xl opacity-60"></i>`}
                   </div>
                   <div class="flex flex-col">
-                     <span class="horror-font text-[10px] border border-red-700/40 px-2 py-0.5 inline-block w-fit mb-1 text-red-400">${tag}</span>
-                     <h3 class="horror-font text-2xl text-red-500 mb-1 leading-tight group-hover:text-red-400 transition-colors">${event.title}</h3>
+                     <span class="horror-font text-[10px] border border-red-700/40 px-2 py-0.5 inline-block w-fit mb-1 text-red-400 rounded">${tag}</span>
+                     <h3 class="horror-font text-2xl text-red-500 mb-1 leading-tight group-hover:text-red-400 transition-colors">${event.title || 'Event'}</h3>
                   </div>
                </div>
             </div>
@@ -500,10 +530,11 @@
             
             <div class="flex-grow mb-6">
                 <p class="text-gray-400 text-sm leading-relaxed rajdhani line-clamp-3">
-                  ${event.description}
+                  ${event.description || 'Darkness awaits...'}
                 </p>
             </div>
             
+            ${event.day && event.time ? `
             <div class="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-red-900/40 flex-shrink-0">
                 <div class="flex flex-col">
                     <span class="void-label">DATE</span>
@@ -514,12 +545,13 @@
                     <span class="void-value">${event.time}</span>
                 </div>
             </div>
+            ` : ''}
 
             <div class="flex gap-3 flex-shrink-0">
                 <button onclick="event.stopPropagation(); openDetailPanel('${eventId}')" class="btn-see-more horror-font text-xs flex-1">
                     SEE MORE
                 </button>
-                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center py-3 border border-red-900 hover:bg-red-700 hover:text-white horror-font text-xl transition-all">
+                <a href="${event.registrationLink || '#'}" target="_blank" class="btn-register flex-1 horror-font text-sm">
                     REGISTER
                 </a>
             </div>
