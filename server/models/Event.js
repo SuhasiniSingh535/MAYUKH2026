@@ -55,7 +55,7 @@ const eventSchema = new mongoose.Schema(
     // --- LOGISTICS ---
     day: { 
         type: String, 
-        enum: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'], 
+        enum: ['Pre-Fest', 'Day 1', 'Day 2', 'Day 3'], 
         required: [true, 'Day is required'] 
     },
     date: { type: String }, // Flexible string for date

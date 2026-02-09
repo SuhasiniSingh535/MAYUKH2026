@@ -120,6 +120,14 @@
       transition: all 0.6s ease;
     }
 
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 30px;
+      transition: all 0.6s ease;
+    }
+
     .photo-container:hover .photo-box {
       border-color: var(--team-color);
       box-shadow: 0 20px 50px var(--shadow-color);
@@ -223,7 +231,14 @@
     .photo-box::before {
       content: "";
       position: absolute;
+<<<<<<< HEAD
       top: 0; left: 0; right: 0; bottom: 0;
+=======
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
       background: linear-gradient(135deg, var(--team-color)00 0%, var(--team-color)20 100%);
       opacity: 0;
       transition: opacity 0.6s ease;
@@ -231,7 +246,13 @@
       border-radius: 30px;
     }
 
+<<<<<<< HEAD
     .photo-container:hover .photo-box::before { opacity: 1; }
+=======
+    .photo-container:hover .photo-box::before {
+      opacity: 1;
+    }
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
   </style>
 </head>
 <body>
@@ -264,6 +285,7 @@
   </section>
 
   <main class="relative z-10 pb-40 px-8 flex flex-col items-center">
+<<<<<<< HEAD
     <div id="teams-container" class="max-w-6xl w-full space-y-96"></div>
   </main>
 
@@ -389,6 +411,113 @@
             container.innerHTML = `<p class="text-center text-red-500 font-mono">System Offline: Ensure Backend is running on Port 5001</p>`;
         }
     }
+=======
+    <div id="teams-container" class="max-w-6xl w-full space-y-96">
+      <!-- Teams will be dynamically inserted here -->
+    </div>
+  </main>
+
+  <script>
+    const teamData = [
+      { 
+        name: "Technical Team", 
+        color: "#3bc4ff", 
+        
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      },
+      { 
+        name: "Cultural Team", 
+        color: "#ff00ff", 
+       
+        coreImg: "assests/3.jpeg",
+        subImg: "assests/4.jpeg"
+      },
+      { 
+        name: "PR Team", 
+        color: "#7c6bff", 
+        
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      },
+      { 
+        name: "Sponsorship Team", 
+        color: "#ffd700", 
+        
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      },
+      { 
+        name: "Design Team", 
+        color: "#00ff7f", 
+        
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      },
+      { 
+        name: "Catering Team", 
+        color: "#ff7f50", 
+        
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      },
+      { 
+        name: "Workshop Team", 
+        color: "#00ffff", 
+        
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      },
+      { 
+        name: "Discipline Team", 
+        color: "#ff4d4d", 
+        
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      },
+      { 
+        name: "Coverage Team", 
+        color: "#ffffff", 
+     
+        coreImg: "assests/1.jpeg",
+        subImg: "assests/2.jpeg"
+      }
+    ];
+
+    const container = document.getElementById('teams-container');
+
+    teamData.forEach(team => {
+      const section = document.createElement('section');
+      section.className = 'team-section';
+      section.style.setProperty('--team-color', team.color);
+      section.style.setProperty('--shadow-color', team.color + '44');
+      
+      section.innerHTML = `
+        <div class="flex flex-col items-center">
+          <h2 class="orbitron team-title text-center">${team.name}</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-24 w-full px-4">
+            <div class="photo-container text-center group">
+              <span class="member-label">CORE MEMBERS</span>
+              <div class="photo-box">
+                <img src="${team.coreImg}" alt="${team.name} Core Members" loading="lazy" />
+              </div>
+              
+            </div>
+
+            <div class="photo-container text-center group">
+              <span class="member-label">SUB-CORE MEMBERS</span>
+              <div class="photo-box">
+                <img src="${team.subImg}" alt="${team.name} Sub-Core Members" loading="lazy" />
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(section);
+    });
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
 
     // --- Typewriter Effect ---
     const text = "ARCHITECTS OF THE MULTIVERSE";
