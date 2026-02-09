@@ -17,7 +17,7 @@ const app = express();
 
 // Production CORS configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
+  origin: process.env.NODE_ENV === 'production'
     ? [process.env.FRONTEND_URL, 'https://mayukh.bv'].filter(Boolean)
     : '*',
   credentials: true,
@@ -29,11 +29,11 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static files from client folder
-app.use(express.static(path.join(__dirname, 'server/public')));
+// Serve static files from public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve admin pages from server directory
-app.use('/admin', express.static(path.join(__dirname, 'server')));
+app.use('/admin', express.static(path.join(__dirname, '.')));
 
 // MongoDB Connection with retry logic
 const connectDB = async (retries = 5) => {
@@ -109,7 +109,7 @@ app.get('/api/health', async (req, res) => {
 
 // Serve frontend for all other routes (SPA fallback)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Global error handler

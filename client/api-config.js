@@ -1,9 +1,11 @@
 // API Configuration - determines the correct API URL based on environment
+
 const API_CONFIG = {
   // Auto-detect: use localhost for development, relative path for production
   BASE_URL: window.location.hostname === 'localhost' 
     ? 'http://localhost:5000' 
     : '',
+
   
   get eventsUrl() {
     return `${this.BASE_URL}/api/events`;
