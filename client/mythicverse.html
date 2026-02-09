@@ -324,28 +324,38 @@
                 <div class="flex items-center gap-4 mb-4">
                     ${event.logoLink ? `<img src="${event.logoLink}" class="w-16 h-16 object-contain border-2 border-orange-500/30 p-2 rounded-lg bg-orange-950/40">` : ''}
                     <div>
-                        <h2 class="cinzel text-3xl font-black text-orange-300 uppercase tracking-tight">${event.title}</h2>
-                        <p class="text-orange-400 text-sm orbitron tracking-widest mt-1">${event.eventType.toUpperCase().replace(/-/g, ' ')}</p>
+                        <h2 class="cinzel text-3xl font-black text-orange-300 uppercase tracking-tight">${event.title || 'Quest'}</h2>
+                        <p class="text-orange-400 text-sm orbitron tracking-widest mt-1">${event.eventType ? event.eventType.toUpperCase().replace(/-/g, ' ') : 'QUEST'}</p>
                     </div>
                 </div>
-                <p class="text-orange-200/80 text-base leading-relaxed rajdhani">${event.description}</p>
+                ${event.description ? `<p class="text-orange-200/80 text-base leading-relaxed rajdhani">${event.description}</p>` : ''}
             </div>
 
             <div class="detail-section">
                 <h3 class="cinzel">Quest Information</h3>
                 <div class="grid grid-cols-2 gap-4">
+                    ${event.day ? `
                     <div>
                         <span class="info-label">DATE</span>
                         <p class="info-value text-lg">${event.day}</p>
                     </div>
+                    ` : ''}
+                    ${event.time ? `
                     <div>
                         <span class="info-label">TIME</span>
                         <p class="info-value text-lg">${event.time}</p>
                     </div>
+                    ` : ''}
                     ${event.venue ? `
                     <div class="col-span-2">
                         <span class="info-label">VENUE</span>
                         <p class="info-value text-lg">${event.venue}</p>
+                    </div>
+                    ` : ''}
+                    ${event.duration ? `
+                    <div>
+                        <span class="info-label">DURATION</span>
+                        <p class="info-value text-lg">${event.duration}</p>
                     </div>
                     ` : ''}
                     ${event.teamSize ? `
@@ -354,35 +364,36 @@
                         <p class="info-value text-lg">${event.teamSize}</p>
                     </div>
                     ` : ''}
-                    ${event.entryFee ? `
+                    ${event.registrationFee ? `
                     <div>
                         <span class="info-label">ENTRY FEE</span>
-                        <p class="info-value text-lg">${event.entryFee}</p>
+                        <p class="info-value text-lg">${event.registrationFee}</p>
+                    </div>
+                    ` : ''}
+                    ${event.prizePool ? `
+                    <div class="col-span-2">
+                        <span class="info-label">TREASURE POOL</span>
+                        <p class="info-value text-lg">${event.prizePool}</p>
                     </div>
                     ` : ''}
                 </div>
             </div>
 
-            ${event.rounds && event.rounds.length > 0 ? `
+            ${event.rounds && event.rounds.trim() ? `
             <div class="detail-section">
                 <h3 class="cinzel">Quest Phases</h3>
-                <div class="space-y-3">
-                    ${event.rounds.map((round, index) => `
-                        <div class="round-item">
-                            <div class="round-title cinzel">Phase ${index + 1}: ${round.title || 'Phase ' + (index + 1)}</div>
-                            <div class="round-desc">${round.description || round.details || 'Ancient secrets await...'}</div>
-                        </div>
-                    `).join('')}
+                <div class="text-orange-200/80 leading-relaxed whitespace-pre-line">
+                    ${event.rounds}
                 </div>
             </div>
             ` : ''}
 
-            ${event.rules && event.rules.length > 0 ? `
+            ${event.requirements && event.requirements.trim() ? `
             <div class="detail-section">
-                <h3 class="cinzel">Sacred Rules</h3>
-                <ul class="space-y-2 text-orange-200/80">
-                    ${event.rules.map(rule => `<li class="flex items-start gap-2"><i class="fas fa-scroll text-orange-400 mt-1 text-xs"></i><span>${rule}</span></li>`).join('')}
-                </ul>
+                <h3 class="cinzel">Requirements</h3>
+                <div class="text-orange-200/80 leading-relaxed whitespace-pre-line">
+                    ${event.requirements}
+                </div>
             </div>
             ` : ''}
 
@@ -412,7 +423,7 @@
             </div>
             ` : ''}
 
-            <a href="${event.registrationLink}" target="_blank" class="btn-mythic w-full py-3 orbitron text-sm font-black tracking-widest mt-8 block text-center">
+            <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic w-full py-3 orbitron text-sm font-black tracking-widest mt-8 block text-center">
                 COMMENCE RITUAL
             </a>
         `;
@@ -445,8 +456,8 @@
 
     function createCardHTML(event) {
         let label = 'QUEST';
-        if(event.eventType.includes('workshop')) label = 'WORKSHOP';
-        else if(event.eventType.includes('non-tech')) label = 'NON-TECH';
+        if(event.eventType && event.eventType.includes('workshop')) label = 'WORKSHOP';
+        else if(event.eventType && event.eventType.includes('non-tech')) label = 'NON-TECH';
 
         const eventId = event._id || event.id || event.title.replace(/\s+/g, '-');
 
@@ -458,22 +469,24 @@
             </div>
             <div class="px-2 flex-grow">
               <div class="flex justify-between items-center mb-2">
-                <h3 class="cinzel text-2xl font-bold text-orange-300 leading-tight">${event.title}</h3>
+                <h3 class="cinzel text-2xl font-bold text-orange-300 leading-tight">${event.title || 'Quest'}</h3>
                 <span class="text-[10px] orbitron border border-orange-500/50 px-2 py-0.5 text-orange-400">${label}</span>
               </div>
               <p class="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
-                ${event.description}
+                ${event.description || 'Ancient secrets await discovery...'}
               </p>
+              ${event.day && event.time ? `
               <div class="text-xs text-orange-500 mb-4 flex gap-3">
                  <span><i class="fa-solid fa-calendar"></i> ${event.day}</span>
                  <span><i class="fa-solid fa-clock"></i> ${event.time}</span>
               </div>
+              ` : ''}
             </div>
             <div class="flex gap-3 flex-shrink-0">
                 <button onclick="event.stopPropagation(); openDetailPanel('${eventId}')" class="btn-see-more orbitron text-xs flex-1">
                     SEE MORE
                 </button>
-                <a href="${event.registrationLink}" target="_blank" class="btn-mythic flex-1 py-3 orbitron text-xs font-black tracking-widest text-center">
+                <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic flex-1 py-3 orbitron text-xs font-black tracking-widest text-center">
                     JOIN
                 </a>
             </div>
@@ -507,5 +520,4 @@
   </script>
 </body>
 </html>
-
 
