@@ -30,10 +30,10 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Serve static files from client folder
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, 'server/public')));
 
 // Serve admin pages from server directory
-app.use('/admin', express.static(__dirname));
+app.use('/admin', express.static(path.join(__dirname, 'server')));
 
 // MongoDB Connection with retry logic
 const connectDB = async (retries = 5) => {
@@ -122,13 +122,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// For Vercel deployment
-if (require.main === module) {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  });
-}
-
-module.exports = app;
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+});
