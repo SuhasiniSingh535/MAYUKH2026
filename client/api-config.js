@@ -1,8 +1,14 @@
+<<<<<<< HEAD
+=======
+// API Configuration - determines the correct API URL based on environment
+
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
 const API_CONFIG = {
   // Fix: Check for BOTH 'localhost' AND '127.0.0.1'
   BASE_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:5001' 
     : '',
+
   
   get eventsUrl() {
     return `${this.BASE_URL}/api/events`;

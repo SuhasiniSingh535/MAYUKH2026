@@ -1,16 +1,30 @@
+<<<<<<< HEAD
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
+=======
+const dns = require('node:dns');
+dns.setDefaultResultOrder('ipv4first');
+dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+<<<<<<< HEAD
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
 const { Readable } = require('stream');
+=======
+const path = require('path');
+
+const authRoutes = require('./routes/auth');
+const eventRoutes = require('./routes/events');
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
 
 const app = express();
 const PORT = 5001;
 
+<<<<<<< HEAD
 // ==========================================
 // 1. CONFIGURATION & MIDDLEWARE
 // ==========================================
@@ -167,6 +181,70 @@ app.delete('/api/teams/:id', async (req, res) => {
         res.json({ success: true }); 
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
+=======
+app.use(cors({
+  origin: '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Serve frontend from client folder
+app.use(express.static(path.join(__dirname, '../client')));
+
+// Serve admin pages
+app.use('/admin', express.static(__dirname));
+
+// MongoDB Connection
+const connectDB = async () => {
+  const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/mayukh';
+
+  if (!process.env.MONGODB_URI) {
+    console.warn('MONGODB_URI not set; using local MongoDB');
+  } else {
+    console.log('Connecting to MongoDB Atlas...');
+  }
+
+  try {
+    await mongoose.connect(mongoUri, {
+      family: 4,
+      serverSelectionTimeoutMS: 15000,
+      socketTimeoutMS: 45000,
+    });
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection error:', error.message);
+    process.exit(1);
+  }
+};
+
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB error:', err.message);
+});
+
+connectDB();
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+  const dbState = mongoose.connection.readyState;
+  const dbStatus = ['disconnected', 'connected', 'connecting', 'disconnecting'][dbState];
+  res.json({ status: 'Server is running', database: dbStatus });
+});
+
+// SPA fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
+});
+
+const PORT = process.env.PORT || 5000;
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
 
 // --- GALLERY ROUTES ---
 app.get('/api/gallery', async (req, res) => {
@@ -201,8 +279,13 @@ app.delete('/api/gallery/:id', async (req, res) => {
 // 4. START SERVER
 // ==========================================
 app.listen(PORT, () => {
+<<<<<<< HEAD
     console.log(`\n🚀 SERVER STARTED ON PORT: ${PORT}`);
     // console.log(`👉 Events API: http://localhost:${PORT}/api/events`);
     // console.log(`👉 Teams API:  http://localhost:${PORT}/api/teams`);
     // console.log(`👉 Gallery API: http://localhost:${PORT}/api/gallery\n`);
 });
+=======
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c

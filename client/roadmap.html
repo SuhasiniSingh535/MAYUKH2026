@@ -13,6 +13,7 @@
       --neon-pink: #ff00ff; 
       --neon-purple: #8b00ff;
       --neon-red: #ff003c; 
+      --neon-yellow: #ffff00;
       --bg: #000103; 
     }
     
@@ -310,6 +311,80 @@
       );
     }
     
+    /* PRE-FEST DATES (18-20) - YELLOW HIGHLIGHT */
+    .prefest-glow {
+      background: linear-gradient(135deg, 
+        rgba(255, 204, 0, 0.4) 0%,
+        rgba(255, 153, 0, 0.4) 50%,
+        rgba(255, 102, 0, 0.4) 100%
+      ) !important;
+      border: 2px solid !important;
+      border-image: linear-gradient(135deg, var(--neon-yellow), #ff9900) 1 !important;
+      animation: prefestPulse 3s ease-in-out infinite;
+      position: relative;
+      z-index: 4;
+      box-shadow: 
+        0 0 40px rgba(255, 204, 0, 0.6),
+        inset 0 0 30px rgba(255, 153, 0, 0.3);
+    }
+
+    .prefest-glow::before {
+      opacity: 0 !important;
+    }
+
+    .prefest-clickable {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .prefest-clickable:hover {
+      transform: scale(1.08) !important;
+      box-shadow: 
+        0 0 60px rgba(255, 204, 0, 0.9),
+        inset 0 0 40px rgba(255, 153, 0, 0.5) !important;
+    }
+
+    @keyframes prefestPulse {
+      0%, 100% { 
+        transform: scale(1);
+        box-shadow: 
+          0 0 40px rgba(255, 204, 0, 0.6),
+          inset 0 0 30px rgba(255, 153, 0, 0.3);
+      } 
+      50% { 
+        transform: scale(1.05);
+        box-shadow: 
+          0 0 60px rgba(255, 153, 0, 0.8),
+          inset 0 0 40px rgba(255, 102, 0, 0.4);
+      } 
+    }
+
+    .prefest-glow .day-num {
+      opacity: 1 !important;
+      color: white !important;
+      text-shadow: 
+        0 0 20px var(--neon-yellow),
+        0 0 40px #ff9900;
+      font-size: 2.8rem !important;
+    }
+
+    .prefest-day-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-top: 0.5rem;
+      font-weight: 700;
+      animation: labelPulse 2s ease-in-out infinite;
+      text-shadow: 0 0 15px var(--neon-yellow);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      position: relative;
+      z-index: 2;
+    }
+    
     /* FEST DATES - CYAN TO PURPLE GRADIENT HIGHLIGHT */
     .fest-glow { 
       background: linear-gradient(135deg, 
@@ -330,6 +405,20 @@
 
     .fest-glow::before {
       opacity: 0 !important;
+    }
+
+    /* Click functionality for fest dates */
+    .fest-clickable {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .fest-clickable:hover {
+      transform: scale(1.1) !important;
+      box-shadow: 
+        0 0 70px rgba(0, 242, 255, 1),
+        0 0 100px rgba(138, 43, 226, 0.8),
+        inset 0 0 50px rgba(0, 242, 255, 0.5) !important;
     }
 
     @keyframes festPulse { 
@@ -478,6 +567,14 @@
       animation: dayLabelGlow 3s ease-in-out infinite;
     }
 
+    /* Pre-Fest label styling */
+    .day-label.prefest-label {
+      border-color: var(--neon-yellow);
+      color: var(--neon-yellow);
+      box-shadow: 0 0 40px var(--neon-yellow);
+      animation: prefestLabelGlow 3s ease-in-out infinite;
+    }
+
     @keyframes dayLabelGlow {
       0%, 100% { 
         box-shadow: 0 0 40px var(--neon-blue);
@@ -486,6 +583,30 @@
       50% { 
         box-shadow: 0 0 60px var(--neon-purple);
         border-color: var(--neon-purple);
+      }
+    }
+
+    @keyframes prefestLabelGlow {
+      0%, 100% { 
+        box-shadow: 0 0 40px var(--neon-yellow);
+        border-color: var(--neon-yellow);
+      }
+      50% { 
+        box-shadow: 0 0 60px #ff9900;
+        border-color: #ff9900;
+      }
+    }
+
+    @keyframes flashHighlight {
+      0% { 
+        box-shadow: 0 0 100px rgba(255, 255, 255, 1);
+        border-color: white;
+        transform: scale(1.1);
+      }
+      100% { 
+        box-shadow: 0 0 40px var(--neon-blue);
+        border-color: var(--neon-blue);
+        transform: scale(1);
       }
     }
     
@@ -696,6 +817,9 @@
       .fest-glow .day-num {
         font-size: 2.5rem !important;
       }
+      .prefest-glow .day-num {
+        font-size: 2.3rem !important;
+      }
       .day-cell {
         height: 12vh;
         min-height: 90px;
@@ -879,9 +1003,15 @@
         classList += ' tuesday-off';
       }
       
-      // FEST DATES HIGHLIGHTING (21, 22, 23)
+      // PRE-FEST DATES HIGHLIGHTING (18, 19, 20) - WITH CLICK FUNCTIONALITY
+      if(day >= 18 && day <= 20) { 
+        classList += ' prefest-glow prefest-clickable'; 
+        inner += `<div class="prefest-day-label">PRE-FEST</div>`; 
+      }
+      
+      // FEST DATES HIGHLIGHTING (21, 22, 23) - WITH CLICK FUNCTIONALITY
       if(day >= 21 && day <= 23) { 
-        classList += ' fest-glow'; 
+        classList += ' fest-glow fest-clickable'; 
         inner += `<div class="fest-day-label">DAY_0${day - 20}</div>`; 
       }
       
@@ -896,8 +1026,63 @@
     
     grid.innerHTML = calHTML;
 
+    // Add click handlers to pre-fest and fest dates
+    document.addEventListener('click', function(e) {
+        // Handle pre-fest dates (18-20)
+        const preFestCell = e.target.closest('.prefest-clickable');
+        if (preFestCell) {
+            const dayNum = parseInt(preFestCell.querySelector('.day-num').textContent);
+            if (dayNum >= 18 && dayNum <= 20) {
+                const targetId = 'PRE_FEST';
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    
+                    const dayLabel = targetElement.querySelector('.day-label');
+                    if (dayLabel) {
+                        dayLabel.style.animation = 'none';
+                        setTimeout(() => {
+                            dayLabel.style.animation = 'flashHighlight 1s ease-out';
+                        }, 10);
+                    }
+                }
+            }
+        }
+        
+        // Handle fest dates (21-23)
+        const festCell = e.target.closest('.fest-clickable');
+        if (festCell && !preFestCell) { // Make sure we didn't already handle it as pre-fest
+            const dayNum = parseInt(festCell.querySelector('.day-num').textContent);
+            if (dayNum >= 21 && dayNum <= 23) {
+                const dayIndex = dayNum - 20; // 21->1, 22->2, 23->3
+                const targetId = `DAY_0${dayIndex}`;
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                    
+                    const dayLabel = targetElement.querySelector('.day-label');
+                    if (dayLabel) {
+                        dayLabel.style.animation = 'none';
+                        setTimeout(() => {
+                            dayLabel.style.animation = 'flashHighlight 1s ease-out';
+                        }, 10);
+                    }
+                }
+            }
+        }
+    });
+
     // --- ROADMAP LOGIC (PRESERVING BACKEND INTEGRATION) ---
     const normalizationMap = {
+        "Pre-Fest": "PRE_FEST",
         "Day 1": "DAY_01", "2026-02-21": "DAY_01",
         "Day 2": "DAY_02", "2026-02-22": "DAY_02",
         "Day 3": "DAY_03", "2026-02-23": "DAY_03"
@@ -923,7 +1108,13 @@
             const eventsList = data.events || data;
 
             const groupedDays = eventsList.reduce((acc, event) => {
-                const dayKey = normalizationMap[event.day] || normalizationMap[event.date];
+                let dayKey = normalizationMap[event.day] || normalizationMap[event.date];
+                
+                // For Pre-Fest events, use the normalized key
+                if (event.day === 'Pre-Fest') {
+                    dayKey = 'PRE_FEST';
+                }
+                
                 if (dayKey) {
                     if (!acc[dayKey]) acc[dayKey] = [];
                     acc[dayKey].push(event);
@@ -931,15 +1122,31 @@
                 return acc;
             }, {});
 
-            const sortedKeys = Object.keys(groupedDays).sort();
+            // Sort keys to show PRE_FEST first, then DAY_01, DAY_02, DAY_03
+            const sortOrder = ['PRE_FEST', 'DAY_01', 'DAY_02', 'DAY_03'];
+            const sortedKeys = sortOrder.filter(key => groupedDays[key]);
             let roadmapHTML = '';
 
             sortedKeys.forEach((dayKey) => {
-                roadmapHTML += `<div class="day-separator"><div class="day-label">${dayKey}</div></div>`;
+                // Different styling for PRE_FEST label
+                const isPrefest = dayKey === 'PRE_FEST';
+                const labelClass = isPrefest ? 'day-label prefest-label' : 'day-label';
+                const displayLabel = isPrefest ? 'PRE-FEST' : dayKey;
+                
+                roadmapHTML += `<div class="day-separator" id="${dayKey}"><div class="${labelClass}">${displayLabel}</div></div>`;
                 const dayEvents = groupedDays[dayKey].sort((a, b) => (a.time || '').localeCompare(b.time || ''));
 
                 dayEvents.forEach((event) => {
                     const style = getVerseStyle(event.category);
+                    
+                    // Format date display for pre-fest events
+                    let dateDisplay = event.date || 'FEB 2026';
+                    if (isPrefest && event.date) {
+                        const dateObj = new Date(event.date);
+                        const day = dateObj.getDate();
+                        dateDisplay = `${day} FEB 2026`;
+                    }
+                    
                     roadmapHTML += `
                         <div class="roadmap-item">
                             <div class="roadmap-node" style="border-color: ${style.color}; box-shadow: 0 0 15px ${style.color}"></div>
@@ -956,30 +1163,27 @@
                                                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-full h-full object-contain">` : `<i class="fa-solid fa-bolt text-2xl" style="color: ${style.color}"></i>`}
                                             </div>
                                             <div>
-                                                <h3 class="event-title orbitron uppercase leading-tight">${event.title}</h3>
-                                                <span class="orbitron text-[10px] tracking-widest font-semibold" style="color: ${style.color}">${style.label}_VERSE</span>
+                                                <h2 class="event-title rajdhani uppercase leading-tight">${event.title}</h2>
+                                                <span class="orbitron text-[12px] tracking-widest font-semibold" style="color: ${style.color}">${style.label}_VERSE</span>
                                             </div>
                                         </div>
                                         <span class="text-[9px] orbitron px-3 py-1.5 border-2 rounded uppercase font-bold" style="border-color: ${style.color}; color: ${style.color}; background: ${style.color}22; box-shadow: 0 0 10px ${style.color}44">${event.eventType || 'EVENT'}</span>
                                     </div>
                                     <div class="flex gap-6 mb-4 border-y border-white/10 py-3">
                                         <div class="flex flex-col">
-                                            <span class="orbitron text-[10px] text-white/50 uppercase tracking-wider">Date</span>
-                                            <span class="orbitron text-[12px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.date || 'FEB 2026'}</span>
+                                            <span class="rajdhani text-[15px] text-white font-bold uppercase tracking-wider">Date</span>
+                                            <span class="rajdhani text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${dateDisplay}</span>
                                         </div>
                                         <div class="flex flex-col">
-                                            <span class="orbitron text-[10px] text-white/50 uppercase tracking-wider">Time</span>
-                                            <span class="orbitron text-[12px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.time || 'TBD'}</span>
+                                            <span class="rajdhani text-[15px] text-white font-bold uppercase tracking-wider">Time</span>
+                                            <span class="rajdhani text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.time || 'TBD'}</span>
                                         </div>
                                         <div class="flex flex-col">
-                                            <span class="orbitron text-[10px] text-white/50 uppercase tracking-wider">Venue</span>
-                                            <span class="orbitron text-[12px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.venue || 'TBD'}</span>
+                                            <span class="rajdhani text-[15px] text-white font-bold uppercase tracking-wider">Venue</span>
+                                            <span class="rajdhani text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.venue || 'TBD'}</span>
                                         </div>
                                     </div>
-                                    <p class="event-description mb-6 text-[17px] text-white">${event.description}</p>
-                                    <a href="${event.registrationLink || '#'}" target="_blank" class="register-btn-simple no-underline" style="border-color: ${style.color}; color: ${style.color};">
-                                        <i class="fa-solid fa-rocket mr-2"></i>Register Now
-                                    </a>
+                                  
                                 </div>
                             </div>
                             <div class="roadmap-card-wrapper"></div>
@@ -999,24 +1203,8 @@
   </script>
 </body>
 </html>
-<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mayukh 2026 | Chronos Terminal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@300;700&family=Monoton&family=Faster+One&display=swap" rel="stylesheet">
-  <style>
-    :root { --neon-blue: #00f2ff; --neon-pink: #ff00ff; --neon-red: #ff003c; --bg: #000103; }
-    
-    body { background-color: var(--bg); color: white; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; cursor: crosshair; }
-    .crazy-font { font-family: 'Faster One', cursive; }
-    .orbitron { font-family: 'Orbitron', sans-serif; }
-    .monoton { font-family: 'Monoton', cursive; }
-    #quantum-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
+<<<<<<< HEAD
     .terminal-frame {
       background: rgba(0, 5, 15, 0.75);
       backdrop-filter: blur(20px);
@@ -1228,3 +1416,5 @@
 </body>
 </html>
 */
+=======
+>>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c
