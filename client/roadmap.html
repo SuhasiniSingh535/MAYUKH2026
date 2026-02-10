@@ -206,7 +206,7 @@
       overflow: hidden;
     }
 
-    /* GRADIENT CALENDAR STYLES - INSPIRED BY REFERENCE */
+    /* GRADIENT CALENDAR STYLES - MOBILE RESPONSIVE */
     .calendar-container {
       background: linear-gradient(135deg, 
         rgba(0, 50, 80, 0.4) 0%,
@@ -222,7 +222,7 @@
     }
 
     .day-name {
-      padding: 0.75rem;
+      padding: 0.75rem 0.25rem;
       text-align: center;
       font-family: 'Orbitron', sans-serif;
       font-size: 0.7rem;
@@ -784,45 +784,147 @@
       transform: scale(1.1) rotate(5deg);
     }
 
-    /* Responsive improvements */
+    /* MOBILE RESPONSIVE FIXES */
     @media (max-width: 768px) {
+      /* Title adjustments */
+      .mayukh-title {
+        font-size: 2.5rem;
+        letter-spacing: 0.15em;
+        gap: 0.1em;
+      }
+      
+      .feb-title {
+        font-size: 1.5rem;
+        gap: 0.75rem;
+        flex-direction: column;
+      }
+      
+      /* Calendar header */
+      .day-name {
+        font-size: 0.5rem;
+        padding: 0.5rem 0.1rem;
+        letter-spacing: 0;
+      }
+      
+      /* Calendar cells */
+      .day-cell {
+        height: 10vh;
+        min-height: 70px;
+      }
+      
+      /* Date numbers */
+      .day-num {
+        font-size: 1.3rem !important;
+      }
+      
+      .fest-glow .day-num {
+        font-size: 1.8rem !important;
+      }
+      
+      .prefest-glow .day-num {
+        font-size: 1.6rem !important;
+      }
+      
+      /* Labels on calendar dates */
+      .fest-day-label, .prefest-day-label {
+        font-size: 0.4rem !important;
+        padding: 0.15rem 0.3rem !important;
+        margin-top: 0.25rem !important;
+        letter-spacing: 0.05em;
+      }
+      
+      /* Icons */
+      .day-icon {
+        font-size: 0.8rem;
+        bottom: 4px;
+        right: 4px;
+      }
+      
+      /* Roadmap section */
       .roadmap-item {
         flex-direction: column !important;
+        margin-bottom: 2rem;
       }
+      
       .roadmap-card-wrapper {
         width: 100%;
       }
+      
       .timeline-spine {
         left: 20px;
       }
+      
       .roadmap-node {
         left: 20px;
       }
+      
       .day-label {
-        font-size: 1.8rem;
-        padding: 0.6rem 2rem;
+        font-size: 1.2rem !important;
+        padding: 0.5rem 1.5rem !important;
       }
+      
+      .day-separator {
+        margin: 3rem 0 2rem;
+      }
+      
+      /* Event cards */
+      .event-title {
+        font-size: 0.95rem;
+      }
+      
+      .event-icon-container {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
+      }
+      
+      .terminal-frame.event-card {
+        padding: 1rem !important;
+      }
+      
+      /* Prevent animations on mobile for better performance */
+      .prefest-glow, .fest-glow {
+        animation: none !important;
+      }
+      
+      /* Reduce box shadows on mobile */
+      .prefest-glow {
+        box-shadow: 0 0 20px rgba(255, 204, 0, 0.4) !important;
+      }
+      
+      .fest-glow {
+        box-shadow: 0 0 25px rgba(0, 242, 255, 0.5) !important;
+      }
+    }
+
+    @media (max-width: 480px) {
       .mayukh-title {
-        font-size: 3rem;
-        letter-spacing: 0.2em;
+        font-size: 2rem;
+        letter-spacing: 0.1em;
       }
+      
       .feb-title {
-        font-size: 2rem;
-        gap: 1rem;
-        flex-direction: column;
+        font-size: 1.2rem;
       }
+      
       .day-num {
-        font-size: 2rem;
+        font-size: 1.1rem !important;
       }
+      
       .fest-glow .day-num {
-        font-size: 2.5rem !important;
+        font-size: 1.5rem !important;
       }
+      
       .prefest-glow .day-num {
-        font-size: 2.3rem !important;
+        font-size: 1.4rem !important;
       }
+      
+      .fest-day-label, .prefest-day-label {
+        font-size: 0.35rem !important;
+        padding: 0.1rem 0.25rem !important;
+      }
+      
       .day-cell {
-        height: 12vh;
-        min-height: 90px;
+        min-height: 60px;
       }
     }
   </style>
@@ -843,9 +945,9 @@
     <i class="fa-solid fa-ghost mr-2"></i> ESC_TERMINAL
   </a>
 
-  <main class="min-h-screen flex flex-col justify-center max-w-7xl mx-auto w-full px-6 pt-12 pb-8 relative z-10">
-    <div class="text-center mb-8">
-      <div class="title-section mb-8">
+  <main class="min-h-screen flex flex-col justify-center max-w-7xl mx-auto w-full px-3 md:px-6 pt-12 pb-8 relative z-10">
+    <div class="text-center mb-6 md:mb-8">
+      <div class="title-section mb-6 md:mb-8">
         <h1 class="mayukh-title">
           <span class="letter" style="--delay: 0s">M</span>
           <span class="letter" style="--delay: 0.1s">A</span>
@@ -875,10 +977,10 @@
     </div>
   </main>
 
-  <section id="roadmap-section" class="relative z-10 min-h-screen py-20 px-6">
+  <section id="roadmap-section" class="relative z-10 min-h-screen py-12 md:py-20 px-3 md:px-6">
     <div class="max-w-6xl mx-auto relative">
-        <div class="text-center mb-16">
-            <h2 class="orbitron text-4xl text-cyan-400 uppercase tracking-widest glow-text">Temporal Mission Map</h2>
+        <div class="text-center mb-12 md:mb-16">
+            <h2 class="orbitron text-2xl md:text-4xl text-cyan-400 uppercase tracking-widest glow-text">Temporal Mission Map</h2>
         </div>
         <div id="roadmap-root" class="relative">
             <div class="timeline-spine"></div>
@@ -887,6 +989,7 @@
     </div>
   </section>
 
+  <script src="api-config.js"></script>
   <script>
     // --- MINIMAL BACKGROUND ANIMATION ---
     const canvas = document.getElementById('quantum-canvas');
@@ -898,8 +1001,11 @@
         canvas.width = window.innerWidth; 
         canvas.height = window.innerHeight;
         nodes = [];
-        // More particles with varied colors
-        for (let i = 0; i < 80; i++) {
+        
+        // Reduce particles on mobile
+        const particleCount = window.innerWidth < 768 ? 30 : 80;
+        
+        for (let i = 0; i < particleCount; i++) {
             const colorChoice = Math.random();
             let color;
             if (colorChoice < 0.4) {
@@ -1103,7 +1209,8 @@
         const root = document.getElementById('roadmap-content-dynamic');
 
         try {
-            const response = await fetch('http://localhost:5001/api/events');
+           // Change to this:
+            const response = await fetch(API_CONFIG.eventsUrl);
             const data = await response.json();
             const eventsList = data.events || data;
 
@@ -1151,36 +1258,36 @@
                         <div class="roadmap-item">
                             <div class="roadmap-node" style="border-color: ${style.color}; box-shadow: 0 0 15px ${style.color}"></div>
                             <div class="roadmap-card-wrapper">
-                                <div class="terminal-frame event-card p-6 border-l-4 transition-all" style="border-color: ${style.color};">
+                                <div class="terminal-frame event-card p-4 md:p-6 border-l-4 transition-all" style="border-color: ${style.color};">
                                     <div class="event-card-corner corner-tl" style="border-color: ${style.color}"></div>
                                     <div class="event-card-corner corner-tr" style="border-color: ${style.color}"></div>
                                     <div class="event-card-corner corner-bl" style="border-color: ${style.color}"></div>
                                     <div class="event-card-corner corner-br" style="border-color: ${style.color}"></div>
                                     
-                                    <div class="flex justify-between items-start mb-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="event-icon-container w-14 h-14 bg-black/70 border-2 flex items-center justify-center overflow-hidden rounded-lg" style="border-color: ${style.color}; box-shadow: 0 0 15px ${style.color}44">
-                                                ${event.logoLink ? `<img src="${event.logoLink}" class="w-full h-full object-contain">` : `<i class="fa-solid fa-bolt text-2xl" style="color: ${style.color}"></i>`}
+                                    <div class="flex justify-between items-start mb-3 md:mb-4">
+                                        <div class="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+                                            <div class="event-icon-container w-10 h-10 md:w-14 md:h-14 bg-black/70 border-2 flex items-center justify-center overflow-hidden rounded-lg flex-shrink-0" style="border-color: ${style.color}; box-shadow: 0 0 15px ${style.color}44">
+                                                ${event.logoLink ? `<img src="${event.logoLink}" class="w-full h-full object-contain">` : `<i class="fa-solid fa-bolt text-lg md:text-2xl" style="color: ${style.color}"></i>`}
                                             </div>
-                                            <div>
-                                                <h2 class="event-title rajdhani uppercase leading-tight">${event.title}</h2>
-                                                <span class="orbitron text-[12px] tracking-widest font-semibold" style="color: ${style.color}">${style.label}_VERSE</span>
+                                            <div class="min-w-0">
+                                                <h2 class="event-title rajdhani uppercase leading-tight break-words">${event.title}</h2>
+                                                <span class="orbitron text-[10px] md:text-[12px] tracking-widest font-semibold" style="color: ${style.color}">${style.label}_VERSE</span>
                                             </div>
                                         </div>
-                                        <span class="text-[9px] orbitron px-3 py-1.5 border-2 rounded uppercase font-bold" style="border-color: ${style.color}; color: ${style.color}; background: ${style.color}22; box-shadow: 0 0 10px ${style.color}44">${event.eventType || 'EVENT'}</span>
+                                        <span class="text-[8px] md:text-[9px] orbitron px-2 md:px-3 py-1 md:py-1.5 border-2 rounded uppercase font-bold whitespace-nowrap flex-shrink-0 ml-2" style="border-color: ${style.color}; color: ${style.color}; background: ${style.color}22; box-shadow: 0 0 10px ${style.color}44">${event.eventType || 'EVENT'}</span>
                                     </div>
-                                    <div class="flex gap-6 mb-4 border-y border-white/10 py-3">
+                                    <div class="flex flex-wrap gap-3 md:gap-6 mb-3 md:mb-4 border-y border-white/10 py-2 md:py-3">
                                         <div class="flex flex-col">
-                                            <span class="rajdhani text-[15px] text-white font-bold uppercase tracking-wider">Date</span>
-                                            <span class="rajdhani text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${dateDisplay}</span>
+                                            <span class="rajdhani text-[13px] md:text-[15px] text-white font-bold uppercase tracking-wider">Date</span>
+                                            <span class="rajdhani text-[14px] md:text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${dateDisplay}</span>
                                         </div>
                                         <div class="flex flex-col">
-                                            <span class="rajdhani text-[15px] text-white font-bold uppercase tracking-wider">Time</span>
-                                            <span class="rajdhani text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.time || 'TBD'}</span>
+                                            <span class="rajdhani text-[13px] md:text-[15px] text-white font-bold uppercase tracking-wider">Time</span>
+                                            <span class="rajdhani text-[14px] md:text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.time || 'TBD'}</span>
                                         </div>
                                         <div class="flex flex-col">
-                                            <span class="rajdhani text-[15px] text-white font-bold uppercase tracking-wider">Venue</span>
-                                            <span class="rajdhani text-[17px] text-white font-semibold mt-1" style="text-shadow: 0 0 5px ${style.color}">${event.venue || 'TBD'}</span>
+                                            <span class="rajdhani text-[13px] md:text-[15px] text-white font-bold uppercase tracking-wider">Venue</span>
+                                            <span class="rajdhani text-[14px] md:text-[17px] text-white font-semibold mt-1 break-words" style="text-shadow: 0 0 5px ${style.color}">${event.venue || 'TBD'}</span>
                                         </div>
                                     </div>
                                   
@@ -1203,218 +1310,3 @@
   </script>
 </body>
 </html>
-
-<<<<<<< HEAD
-    .terminal-frame {
-      background: rgba(0, 5, 15, 0.75);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(0, 242, 255, 0.2);
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
-      border-radius: 20px;
-      position: relative;
-    }
-
-    /* CALENDAR STYLES */
-    .day-cell { height: 10vh; min-height: 80px; border: 0.5px solid rgba(0, 242, 255, 0.1); transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); background: rgba(255, 255, 255, 0.01); }
-    .day-cell:hover { background: rgba(0, 242, 255, 0.08); transform: scale(1.02); z-index: 10; }
-    .tuesday-off { opacity: 0.4; background-image: repeating-linear-gradient(45deg, rgba(255, 0, 60, 0.05), rgba(255, 0, 60, 0.05) 5px, transparent 5px, transparent 10px); }
-    .fest-glow { border: 2px solid var(--neon-blue) !important; background: radial-gradient(circle at center, rgba(0, 242, 255, 0.2) 0%, transparent 80%); animation: pulse-border 2s infinite; }
-    @keyframes pulse-border { 0%, 100% { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); } 50% { border-color: var(--neon-pink); box-shadow: 0 0 20px var(--neon-pink); } }
-    .day-num { font-family: 'Monoton'; font-size: 1.5rem; opacity: 0.2; }
-    .day-cell:hover .day-num { opacity: 0.8; color: var(--neon-blue); }
-
-    /* ROADMAP STYLES */
-    .timeline-spine { position: absolute; left: 50%; transform: translateX(-50%); width: 4px; height: 100%; background: linear-gradient(to bottom, var(--neon-blue), var(--neon-pink), var(--neon-red), var(--neon-blue)); box-shadow: 0 0 15px var(--neon-blue); }
-    .roadmap-item { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 4rem; position: relative; }
-    .roadmap-item:nth-child(even) { flex-direction: row-reverse; }
-    .roadmap-card-wrapper { width: 45%; }
-    .day-separator { width: 100%; text-align: center; margin: 5rem 0 3rem; position: relative; z-index: 20; }
-    .day-label { background: #000; border: 2px solid var(--neon-blue); color: var(--neon-blue); padding: 0.5rem 3rem; font-family: 'Monoton', cursive; font-size: 2.5rem; box-shadow: 0 0 25px var(--neon-blue); display: inline-block; }
-    .roadmap-node { position: absolute; left: 50%; transform: translateX(-50%); width: 18px; height: 18px; background: #000; border: 3px solid #fff; border-radius: 50%; z-index: 10; box-shadow: 0 0 15px #fff; }
-
-    .btn-cyber { background: transparent; border: 2px solid var(--neon-blue); color: var(--neon-blue); clip-path: polygon(0% 0%, 90% 0%, 100% 30%, 100% 100%, 10% 100%, 0% 70%); transition: 0.4s; }
-    .btn-cyber:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 30px var(--neon-blue); }
-    .register-btn-simple { display: inline-block; border: 1px solid var(--neon-blue); padding: 8px 20px; font-family: 'Orbitron'; font-size: 0.7rem; color: var(--neon-blue); text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; text-align: center; width: 100%; }
-    .register-btn-simple:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
-  </style>
-</head>
-<body class="flex flex-col">
-
-  <canvas id="quantum-canvas"></canvas>
-
-  <a href="index.html" class="fixed top-6 left-8 z-50 orbitron text-[10px] tracking-widest border-b border-cyan-500 pb-1 hover:text-cyan-400 transition-all uppercase">
-    <i class="fa-solid fa-ghost mr-2"></i> ESC_TERMINAL
-  </a>
-
-  <main class="min-h-screen flex flex-col justify-center max-w-6xl mx-auto w-full px-6 pt-16 pb-8 relative z-10">
-    <div class="text-center mb-6 pt-8">
-      <h1 class="crazy-font text-5xl md:text-7xl tracking-widest opacity-20 absolute top-12 left-1/2 -translate-x-1/2 pointer-events-none uppercase">MAYUKH</h1>
-      <h2 class="monoton text-4xl md:text-5xl text-cyan-400 mb-1 uppercase">Feb <span class="text-white">2026</span></h2>
-      <p class="orbitron text-[10px] tracking-[0.8em] opacity-60 uppercase">Quantum_Temporal_Map // Phase_03</p>
-    </div>
-
-    <div class="terminal-frame overflow-hidden flex flex-col">
-      <div class="grid grid-cols-7 bg-cyan-950/20 border-b border-cyan-500/20">
-        <div class="p-2 text-center orbitron text-[9px] tracking-widest opacity-40">MON</div>
-        <div class="p-2 text-center orbitron text-[9px] tracking-widest text-red-500">TUE_OFF</div>
-        <div class="p-2 text-center orbitron text-[9px] tracking-widest opacity-40">WED</div>
-        <div class="p-2 text-center orbitron text-[9px] tracking-widest opacity-40">THU</div>
-        <div class="p-2 text-center orbitron text-[9px] tracking-widest opacity-40">FRI</div>
-        <div class="p-2 text-center orbitron text-[9px] tracking-widest text-cyan-400">SAT</div>
-        <div class="p-2 text-center orbitron text-[9px] tracking-widest text-cyan-400">SUN</div>
-      </div>
-      <div class="grid grid-cols-7" id="calendar-grid"></div>
-      <div class="p-4 border-t border-cyan-500/20 flex justify-between items-center bg-black/40">
-        <div class="hidden md:block">
-          <h3 class="orbitron text-xl font-black uppercase tracking-tighter">Ready for the jump?</h3>
-          <p class="rajdhani text-cyan-400 uppercase tracking-[0.2em] text-[10px]">Synchronize biometrics now.</p>
-        </div>
-        <button class="btn-cyber px-8 py-3 text-sm font-bold italic tracking-widest orbitron" id="scroll-trigger">
-          SCROLL_DOWN <i class="fa-solid fa-arrow-down ml-2"></i>
-        </button>
-      </div>
-    </div>
-  </main>
-
-  <section id="roadmap-section" class="relative z-10 min-h-screen bg-black/95 backdrop-blur-3xl py-20 px-6 hidden">
-    <div class="max-w-6xl mx-auto relative">
-        <div class="text-center mb-16">
-            <h2 class="orbitron text-4xl text-cyan-400 uppercase tracking-widest glow-text">Temporal Mission Map</h2>
-        </div>
-        <div id="roadmap-root" class="relative">
-            <div class="timeline-spine"></div>
-            <div id="roadmap-content-dynamic"></div>
-        </div>
-    </div>
-  </section>
-
-  <script>
-    // --- BACKGROUND ---
-    const canvas = document.getElementById('quantum-canvas');
-    const ctx = canvas.getContext('2d');
-    let nodes = [];
-    function init() {
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        nodes = [];
-        for (let i = 0; i < 100; i++) {
-            nodes.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2 + 1, speedX: (Math.random() - 0.5) * 1.5, speedY: (Math.random() - 0.5) * 1.5 });
-        }
-    }
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        nodes.forEach((n, i) => {
-            n.x += n.speedX; n.y += n.speedY;
-            if (n.x > canvas.width || n.x < 0) n.speedX *= -1;
-            if (n.y > canvas.height || n.y < 0) n.speedY *= -1;
-            ctx.fillStyle = 'rgba(0, 242, 255, 0.5)';
-            ctx.beginPath(); ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2); ctx.fill();
-            for (let j = i; j < nodes.length; j++) {
-                const dx = n.x - nodes[j].x; const dy = n.y - nodes[j].y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 120) { ctx.strokeStyle = `rgba(0, 242, 255, ${1 - dist / 120})`; ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(nodes[j].x, nodes[j].y); ctx.stroke(); }
-            }
-        });
-        requestAnimationFrame(animate);
-    }
-    init(); animate(); window.addEventListener('resize', init);
-
-    // --- CALENDAR ---
-    const grid = document.getElementById('calendar-grid');
-    const verseIcons = [{ d: 5, icon: 'fa-user-secret', col: '#0f0' }, { d: 12, icon: 'fa-robot', col: '#00f2ff' }, { d: 14, icon: 'fa-skull', col: '#f00' }, { d: 18, icon: 'fa-wand-magic-sparkles', col: '#bc13fe' }];
-    let calHTML = '';
-    for(let empty=0; empty<6; empty++) calHTML += '<div class="day-cell opacity-5"></div>';
-    for(let day=1; day<=28; day++) {
-      let classList = 'day-cell relative p-2 group';
-      let inner = `<span class="day-num block text-xl">${day < 10 ? '0' + day : day}</span>`;
-      if([3, 10, 17, 24].includes(day)) classList += ' tuesday-off';
-      if(day >= 21 && day <= 23) { classList += ' fest-glow'; inner += `<div class="orbitron text-[8px] text-white mt-1">DAY_0${day-20}</div>`; }
-      const v = verseIcons.find(x => x.d === day);
-      if(v) inner += `<div class="absolute bottom-2 right-2" style="color: ${v.col}"><i class="fa-solid ${v.icon} text-lg"></i></div>`;
-      calHTML += `<div class="${classList}">${inner}</div>`;
-    }
-    grid.innerHTML = calHTML;
-
-    // --- ROADMAP LOGIC ---
-    const normalizationMap = {
-        "Day 1": "DAY_01", "2026-02-21": "DAY_01",
-        "Day 2": "DAY_02", "2026-02-22": "DAY_02",
-        "Day 3": "DAY_03", "2026-02-23": "DAY_03"
-    };
-
-    function getVerseStyle(category) {
-        const cat = (category || '').toLowerCase();
-        if (cat.includes('spy')) return { color: '#0f0', label: 'SPY' };
-        if (cat.includes('scifi')) return { color: '#00f2ff', label: 'SCI-FI' };
-        if (cat.includes('mythic')) return { color: '#ff8800', label: 'MYTHIC' };
-        if (cat.includes('carnival')) return { color: '#ff00ff', label: 'CARNIVAL' };
-        if (cat.includes('dark')) return { color: '#ff0000', label: 'DARK' };
-        return { color: '#ffffff', label: 'GENERAL' };
-    }
-
-    document.getElementById('scroll-trigger').addEventListener('click', async () => {
-        const section = document.getElementById('roadmap-section');
-        const root = document.getElementById('roadmap-content-dynamic');
-        section.classList.remove('hidden');
-        section.scrollIntoView({ behavior: 'smooth' });
-
-        try {
-            const response = await fetch('http://localhost:5001/api/events');
-            const data = await response.json();
-            const eventsList = data.events || data;
-
-            const groupedDays = eventsList.reduce((acc, event) => {
-                const dayKey = normalizationMap[event.day] || normalizationMap[event.date];
-                if (dayKey) {
-                    if (!acc[dayKey]) acc[dayKey] = [];
-                    acc[dayKey].push(event);
-                }
-                return acc;
-            }, {});
-
-            const sortedKeys = Object.keys(groupedDays).sort();
-            let roadmapHTML = '';
-
-            sortedKeys.forEach((dayKey) => {
-                roadmapHTML += `<div class="day-separator"><div class="day-label">${dayKey}</div></div>`;
-                const dayEvents = groupedDays[dayKey].sort((a, b) => (a.time || '').localeCompare(b.time || ''));
-
-                dayEvents.forEach((event) => {
-                    const style = getVerseStyle(event.category);
-                    roadmapHTML += `
-                        <div class="roadmap-item">
-                            <div class="roadmap-node" style="border-color: ${style.color}; box-shadow: 0 0 10px ${style.color}"></div>
-                            <div class="roadmap-card-wrapper">
-                                <div class="terminal-frame p-6 border-l-4 transition-all hover:bg-white/5" style="border-color: ${style.color};">
-                                    <div class="flex justify-between items-start mb-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 bg-black/40 border flex items-center justify-center overflow-hidden" style="border-color: ${style.color}44">
-                                                ${event.logoLink ? `<img src="${event.logoLink}" class="w-full h-full object-contain">` : `<i class="fa-solid fa-bolt" style="color: ${style.color}"></i>`}
-                                            </div>
-                                            <div>
-                                                <h3 class="orbitron text-lg font-bold text-white uppercase leading-tight">${event.title}</h3>
-                                                <span class="orbitron text-[9px] tracking-widest" style="color: ${style.color}">${style.label}_VERSE</span>
-                                            </div>
-                                        </div>
-                                        <span class="text-[9px] orbitron px-2 py-1 border rounded uppercase" style="border-color: ${style.color}66; color: ${style.color}">${event.eventType || 'EVENT'}</span>
-                                    </div>
-                                    <div class="flex gap-4 mb-4 border-y border-white/5 py-2">
-                                        <div class="flex flex-col"><span class="orbitron text-[8px] text-white/40">DATE</span><span class="orbitron text-[10px] text-white">${event.date || 'FEB 2026'}</span></div>
-                                        <div class="flex flex-col"><span class="orbitron text-[8px] text-white/40">TIME</span><span class="orbitron text-[10px] text-white">${event.time || 'TBD'}</span></div>
-                                    </div>
-                                    <p class="rajdhani text-gray-400 text-xs leading-relaxed mb-6">${event.description}</p>
-                                    <a href="${event.registrationLink || '#'}" target="_blank" class="register-btn-simple" style="border-color: ${style.color}; color: ${style.color};">Register Now</a>
-                                </div>
-                            </div>
-                            <div class="roadmap-card-wrapper"></div>
-                        </div>`;
-                });
-            });
-            root.innerHTML = roadmapHTML || `<p class="orbitron text-red-500 text-center">NO MISSION DATA FOUND</p>`;
-        } catch (error) { root.innerHTML = `<p class="orbitron text-red-500 text-center">DATABASE_OFFLINE</p>`; }
-    });
-  </script>
-</body>
-</html>
-*/
-=======
->>>>>>> cacb304b89ff9a7114f80afc0a20b2e02c8ac57c

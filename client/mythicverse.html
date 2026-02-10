@@ -28,6 +28,26 @@
     #mythic-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
     .glass { background: rgba(20, 15, 5, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 157, 0, 0.15); }
 
+    /* MOBILE RESPONSIVE FIXES */
+    @media (max-width: 768px) {
+      .mythic-glow {
+        text-shadow: 0 0 5px #ff9d00, 0 0 10px #ff6a00;
+      }
+      
+      /* Prevent text overflow */
+      .cinzel {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+      }
+
+      .artifact-card h3 {
+        font-size: 1.1rem !important;
+        line-height: 1.2;
+        word-wrap: break-word;
+      }
+    }
+
     /* Modal Styles */
     .modal-overlay {
         display: none;
@@ -43,6 +63,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 1rem;
     }
 
     @keyframes fadeIn {
@@ -67,6 +88,10 @@
         position: relative;
     }
 
+    .poster-clickable:hover .poster-zoom-hint {
+        opacity: 1;
+    }
+
     .poster-zoom-hint {
         position: absolute;
         bottom: 0.5rem;
@@ -82,8 +107,13 @@
         clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
     }
 
-    .poster-clickable:hover .poster-zoom-hint {
-        opacity: 1;
+    /* Mobile: Always show zoom hint */
+    @media (max-width: 768px) {
+      .poster-zoom-hint {
+        opacity: 0.8;
+        font-size: 0.55rem;
+        padding: 0.2rem 0.4rem;
+      }
     }
 
     /* Centered Detail Panel */
@@ -94,7 +124,7 @@
         background: rgba(0, 0, 0, 0.95);
         z-index: 1000;
         backdrop-filter: blur(10px);
-        padding: 2rem;
+        padding: 1rem;
         overflow-y: auto;
     }
 
@@ -103,6 +133,18 @@
         align-items: center;
         justify-content: center;
         animation: fadeIn 0.3s ease;
+    }
+
+    /* Mobile adjustments for detail panel */
+    @media (max-width: 768px) {
+      .detail-panel {
+        padding: 0.5rem;
+        align-items: flex-start;
+      }
+      
+      .detail-panel.active {
+        padding-top: 3rem;
+      }
     }
 
     .panel-content {
@@ -118,10 +160,19 @@
         position: relative;
     }
 
+    /* Mobile panel content */
+    @media (max-width: 768px) {
+      .panel-content {
+        border-radius: 12px;
+        max-height: 95vh;
+        margin: 0;
+      }
+    }
+
     .close-btn {
         position: absolute;
-        top: 1.5rem;
-        right: 1.5rem;
+        top: 1rem;
+        right: 1rem;
         width: 45px;
         height: 45px;
         background: linear-gradient(45deg, #ff9d00, #ff4500);
@@ -134,6 +185,15 @@
         z-index: 10;
         clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
         font-weight: 900;
+    }
+
+    @media (max-width: 768px) {
+      .close-btn {
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 38px;
+        height: 38px;
+      }
     }
 
     .close-btn:hover {
@@ -162,12 +222,29 @@
         box-shadow: 0 0 20px rgba(255, 157, 0, 0.5);
     }
 
+    /* Mobile button adjustments */
+    @media (max-width: 768px) {
+      .btn-see-more, .btn-mythic {
+        padding: 10px 12px;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+      }
+    }
+
     .detail-section {
         background: rgba(255, 157, 0, 0.05);
         border: 1px solid rgba(255, 157, 0, 0.2);
         border-radius: 10px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .detail-section {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+      }
     }
 
     .detail-section h3 {
@@ -177,6 +254,13 @@
         margin-bottom: 1rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 768px) {
+      .detail-section h3 {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
     }
 
     .round-item {
@@ -208,10 +292,22 @@
         color: #ff9d00;
     }
 
+    @media (max-width: 768px) {
+      .info-label {
+        font-size: 0.55rem;
+      }
+    }
+
     .info-value {
         font-size: 1rem;
         font-weight: 700;
         color: #ffd384;
+    }
+
+    @media (max-width: 768px) {
+      .info-value {
+        font-size: 0.85rem;
+      }
     }
 
     .panel-content::-webkit-scrollbar {
@@ -227,25 +323,35 @@
         background: linear-gradient(to bottom, #ff9d00, #ff4500);
         border-radius: 10px;
     }
+
+    /* Back button mobile fix */
+    @media (max-width: 768px) {
+      .back-button {
+        top: 1rem !important;
+        left: 1rem !important;
+        padding: 0.5rem 1rem !important;
+        font-size: 0.65rem !important;
+      }
+    }
   </style>
 </head>
 <body class="overflow-x-hidden">
-  <a href="theme2.html#mythic-verse" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-orange-900/40 flex items-center gap-2 hover:border-orange-600 hover:text-orange-500 transition-all group">
+  <a href="theme2.html#mythic-verse" class="back-button fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-orange-900/40 flex items-center gap-2 hover:border-orange-600 hover:text-orange-500 transition-all group">
       <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
       <span class="text-xs tracking-widest">THEME</span>
   </a>
   <canvas id="mythic-particles"></canvas>
 
-  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
-    <div class="text-center mb-16">
-      <p class="text-xs orbitron tracking-[0.6em] mb-2 opacity-60 text-orange-400">WHERE ANCIENT WISDOM MEETS FUTURE CODE</p>
-      <h1 class="cinzel text-6xl md:text-8xl font-black mythic-glow mb-4">MYTHICVERSE</h1>
-      <div class="h-1 w-64 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto"></div>
-      <p class="mt-6 text-xl max-w-3xl text-orange-200/70 font-medium italic">"Bridges ancient algorithms with modern tech to shape the civilization of tomorrow."</p>
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-20 md:pt-24 pb-12 md:pb-20 px-3 md:px-4">
+    <div class="text-center mb-10 md:mb-16 max-w-full overflow-hidden px-2">
+      <p class="text-[0.5rem] md:text-xs orbitron tracking-[0.3em] md:tracking-[0.6em] mb-2 opacity-60 text-orange-400 uppercase">Where Ancient Wisdom Meets Future Code</p>
+      <h1 class="cinzel text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black mythic-glow mb-3 md:mb-4 leading-tight px-2">MYTHICVERSE</h1>
+      <div class="h-1 w-48 sm:w-56 md:w-64 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto"></div>
+      <p class="mt-4 md:mt-6 text-sm md:text-xl max-w-3xl text-orange-200/70 font-medium italic px-4">"Bridges ancient algorithms with modern tech to shape the civilization of tomorrow."</p>
     </div>
 
-    <div id="mythic-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl w-full px-6">
-        <p class="col-span-full text-center text-orange-500 animate-pulse">Unearthing Artifacts...</p>
+    <div id="mythic-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 max-w-7xl w-full px-3 sm:px-4 md:px-6">
+        <p class="col-span-full text-center text-orange-500 animate-pulse text-sm md:text-base">Unearthing Artifacts...</p>
     </div>
   </main>
 
@@ -259,19 +365,19 @@
 
   <!-- Centered Detail Panel -->
   <div id="detail-panel" class="detail-panel">
-    <div class="panel-content p-8">
+    <div class="panel-content p-4 md:p-8">
       <button class="close-btn" onclick="closeDetailPanel()">
         <i class="fas fa-times"></i>
       </button>
       
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mt-12 md:mt-0">
         <!-- Left: Poster -->
         <div class="flex items-start justify-center">
-          <img id="panel-poster" src="" class="w-full max-w-md border-4 border-orange-500 shadow-2xl rounded-lg sticky top-4" style="box-shadow: 0 0 30px rgba(255, 157, 0, 0.4);">
+          <img id="panel-poster" src="" class="w-full max-w-md border-4 border-orange-500 shadow-2xl rounded-lg lg:sticky lg:top-4" style="box-shadow: 0 0 30px rgba(255, 157, 0, 0.4);">
         </div>
 
         <!-- Right: Details -->
-        <div id="panel-details" class="space-y-6">
+        <div id="panel-details" class="space-y-4 md:space-y-6">
           <!-- Content will be populated dynamically -->
         </div>
       </div>
@@ -283,8 +389,12 @@
     // --- PARTICLES ---
     const canvas = document.getElementById('mythic-particles'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     let particles = [];
+    
+    // Reduce particles on mobile
+    const particleCount = window.innerWidth < 768 ? 40 : 100;
+    
     class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.1; this.speedX = Math.random() * 1 - 0.5; this.speedY = Math.random() * 1 - 0.5; this.color = `rgba(255, ${150 + Math.random() * 100}, 0, ${Math.random() * 0.5})`; } update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width; if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height; } draw() { ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
-    function init() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
+    function init() { for (let i = 0; i < particleCount; i++) particles.push(new Particle()); }
     function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
     init(); animate(); window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
@@ -320,60 +430,60 @@
         
         const detailsContainer = document.getElementById('panel-details');
         detailsContainer.innerHTML = `
-            <div class="mb-8">
-                <div class="flex items-center gap-4 mb-4">
-                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-16 h-16 object-contain border-2 border-orange-500/30 p-2 rounded-lg bg-orange-950/40">` : ''}
-                    <div>
-                        <h2 class="cinzel text-3xl font-black text-orange-300 uppercase tracking-tight">${event.title || 'Quest'}</h2>
-                        <p class="text-orange-400 text-sm orbitron tracking-widest mt-1">${event.eventType ? event.eventType.toUpperCase().replace(/-/g, ' ') : 'QUEST'}</p>
+            <div class="mb-6 md:mb-8">
+                <div class="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-12 h-12 md:w-16 md:h-16 object-contain border-2 border-orange-500/30 p-2 rounded-lg bg-orange-950/40 flex-shrink-0">` : ''}
+                    <div class="min-w-0 flex-1">
+                        <h2 class="cinzel text-xl md:text-3xl font-black text-orange-300 uppercase tracking-tight break-words leading-tight">${event.title || 'Quest'}</h2>
+                        <p class="text-orange-400 text-xs md:text-sm orbitron tracking-widest mt-1">${event.eventType ? event.eventType.toUpperCase().replace(/-/g, ' ') : 'QUEST'}</p>
                     </div>
                 </div>
-                ${event.description ? `<p class="text-orange-200/80 text-base leading-relaxed rajdhani">${event.description}</p>` : ''}
+                ${event.description ? `<p class="text-orange-200/80 text-sm md:text-base leading-relaxed rajdhani">${event.description}</p>` : ''}
             </div>
 
             <div class="detail-section">
                 <h3 class="cinzel">Quest Information</h3>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                     ${event.day ? `
                     <div>
                         <span class="info-label">DATE</span>
-                        <p class="info-value text-lg">${event.day}</p>
+                        <p class="info-value text-base md:text-lg">${event.day}</p>
                     </div>
                     ` : ''}
                     ${event.time ? `
                     <div>
                         <span class="info-label">TIME</span>
-                        <p class="info-value text-lg">${event.time}</p>
+                        <p class="info-value text-base md:text-lg">${event.time}</p>
                     </div>
                     ` : ''}
                     ${event.venue ? `
-                    <div class="col-span-2">
+                    <div class="col-span-1 sm:col-span-2">
                         <span class="info-label">VENUE</span>
-                        <p class="info-value text-lg">${event.venue}</p>
+                        <p class="info-value text-base md:text-lg break-words">${event.venue}</p>
                     </div>
                     ` : ''}
                     ${event.duration ? `
                     <div>
                         <span class="info-label">DURATION</span>
-                        <p class="info-value text-lg">${event.duration}</p>
+                        <p class="info-value text-base md:text-lg">${event.duration}</p>
                     </div>
                     ` : ''}
                     ${event.teamSize ? `
                     <div>
                         <span class="info-label">TEAM SIZE</span>
-                        <p class="info-value text-lg">${event.teamSize}</p>
+                        <p class="info-value text-base md:text-lg">${event.teamSize}</p>
                     </div>
                     ` : ''}
                     ${event.registrationFee ? `
                     <div>
                         <span class="info-label">ENTRY FEE</span>
-                        <p class="info-value text-lg">${event.registrationFee}</p>
+                        <p class="info-value text-base md:text-lg">${event.registrationFee}</p>
                     </div>
                     ` : ''}
                     ${event.prizePool ? `
-                    <div class="col-span-2">
+                    <div class="col-span-1 sm:col-span-2">
                         <span class="info-label">TREASURE POOL</span>
-                        <p class="info-value text-lg">${event.prizePool}</p>
+                        <p class="info-value text-base md:text-lg">${event.prizePool}</p>
                     </div>
                     ` : ''}
                 </div>
@@ -382,7 +492,7 @@
             ${event.rounds && event.rounds.trim() ? `
             <div class="detail-section">
                 <h3 class="cinzel">Quest Phases</h3>
-                <div class="text-orange-200/80 leading-relaxed whitespace-pre-line">
+                <div class="text-orange-200/80 text-sm md:text-base leading-relaxed whitespace-pre-line">
                     ${event.rounds}
                 </div>
             </div>
@@ -391,7 +501,7 @@
             ${event.requirements && event.requirements.trim() ? `
             <div class="detail-section">
                 <h3 class="cinzel">Requirements</h3>
-                <div class="text-orange-200/80 leading-relaxed whitespace-pre-line">
+                <div class="text-orange-200/80 text-sm md:text-base leading-relaxed whitespace-pre-line">
                     ${event.requirements}
                 </div>
             </div>
@@ -401,7 +511,7 @@
             <div class="detail-section">
                 <h3 class="cinzel">Treasures</h3>
                 <div class="space-y-2">
-                    ${event.prizes.map(prize => `<div class="text-orange-200/80 flex items-center gap-2"><i class="fas fa-trophy text-yellow-400"></i><span>${prize}</span></div>`).join('')}
+                    ${event.prizes.map(prize => `<div class="text-orange-200/80 text-sm md:text-base flex items-center gap-2"><i class="fas fa-trophy text-yellow-400 flex-shrink-0"></i><span>${prize}</span></div>`).join('')}
                 </div>
             </div>
             ` : ''}
@@ -409,13 +519,13 @@
             ${event.coordinators && event.coordinators.length > 0 ? `
             <div class="detail-section">
                 <h3 class="cinzel">Quest Masters</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 gap-3">
                     ${event.coordinators.map(coord => `
                         <div class="flex items-center gap-3 text-orange-200/80">
-                            <i class="fas fa-user-circle text-2xl text-orange-400"></i>
-                            <div>
-                                <div class="font-semibold">${coord.name}</div>
-                                ${coord.phone ? `<div class="text-sm opacity-70">${coord.phone}</div>` : ''}
+                            <i class="fas fa-user-circle text-2xl text-orange-400 flex-shrink-0"></i>
+                            <div class="min-w-0">
+                                <div class="font-semibold text-sm md:text-base break-words">${coord.name}</div>
+                                ${coord.phone ? `<div class="text-xs md:text-sm opacity-70">${coord.phone}</div>` : ''}
                             </div>
                         </div>
                     `).join('')}
@@ -423,7 +533,7 @@
             </div>
             ` : ''}
 
-            <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic w-full py-3 orbitron text-sm font-black tracking-widest mt-8 block text-center">
+            <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic w-full py-2.5 md:py-3 orbitron text-xs md:text-sm font-black tracking-widest mt-6 md:mt-8 block text-center">
                 COMMENCE RITUAL
             </a>
         `;
@@ -462,31 +572,31 @@
         const eventId = event._id || event.id || event.title.replace(/\s+/g, '-');
 
         return `
-          <div class="artifact-card rounded-xl p-4" data-event-id="${eventId}">
-            <div class="w-full h-56 bg-orange-900/30 border border-orange-500/20 rounded-lg mb-4 overflow-hidden relative group poster-clickable flex-shrink-0" onclick="event.stopPropagation(); openPosterModal('${event.posterLink}')">
+          <div class="artifact-card rounded-xl p-3 md:p-4" data-event-id="${eventId}">
+            <div class="w-full h-48 md:h-56 bg-orange-900/30 border border-orange-500/20 rounded-lg mb-3 md:mb-4 overflow-hidden relative group poster-clickable flex-shrink-0" onclick="event.stopPropagation(); openPosterModal('${event.posterLink}')">
               <img src="${event.posterLink}" class="w-full h-full object-cover mix-blend-overlay transition-transform duration-500 group-hover:scale-110 group-hover:mix-blend-normal">
               <span class="poster-zoom-hint orbitron">ENLARGE</span>
             </div>
             <div class="px-2 flex-grow">
-              <div class="flex justify-between items-center mb-2">
-                <h3 class="cinzel text-2xl font-bold text-orange-300 leading-tight">${event.title || 'Quest'}</h3>
-                <span class="text-[10px] orbitron border border-orange-500/50 px-2 py-0.5 text-orange-400">${label}</span>
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <h3 class="cinzel text-lg md:text-2xl font-bold text-orange-300 leading-tight break-words flex-1 min-w-0">${event.title || 'Quest'}</h3>
+                <span class="text-[9px] md:text-[10px] orbitron border border-orange-500/50 px-2 py-0.5 text-orange-400 whitespace-nowrap flex-shrink-0">${label}</span>
               </div>
-              <p class="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
+              <p class="text-gray-400 text-xs md:text-sm leading-relaxed mb-3 md:mb-4 line-clamp-3">
                 ${event.description || 'Ancient secrets await discovery...'}
               </p>
               ${event.day && event.time ? `
-              <div class="text-xs text-orange-500 mb-4 flex gap-3">
+              <div class="text-[10px] md:text-xs text-orange-500 mb-3 md:mb-4 flex flex-wrap gap-2 md:gap-3">
                  <span><i class="fa-solid fa-calendar"></i> ${event.day}</span>
                  <span><i class="fa-solid fa-clock"></i> ${event.time}</span>
               </div>
               ` : ''}
             </div>
-            <div class="flex gap-3 flex-shrink-0">
-                <button onclick="event.stopPropagation(); openDetailPanel('${eventId}')" class="btn-see-more orbitron text-xs flex-1">
+            <div class="flex gap-2 md:gap-3 flex-shrink-0">
+                <button onclick="event.stopPropagation(); openDetailPanel('${eventId}')" class="btn-see-more orbitron text-[10px] md:text-xs flex-1">
                     SEE MORE
                 </button>
-                <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic flex-1 py-3 orbitron text-xs font-black tracking-widest text-center">
+                <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic flex-1 py-2.5 md:py-3 orbitron text-[10px] md:text-xs font-black tracking-widest text-center">
                     JOIN
                 </a>
             </div>
@@ -512,7 +622,7 @@
             if(events.length > 0) {
                 container.innerHTML = events.map(createCardHTML).join('');
             } else {
-                container.innerHTML = `<p class="col-span-full text-center text-orange-500/50 cinzel">Prophecy awaits data...</p>`;
+                container.innerHTML = `<p class="col-span-full text-center text-base md:text-xl text-orange-500/50 cinzel">Prophecy awaits data...</p>`;
             }
         } catch(err) { console.error(err); }
     }
@@ -520,4 +630,3 @@
   </script>
 </body>
 </html>
-

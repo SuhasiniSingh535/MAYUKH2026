@@ -1,63 +1,98 @@
 const express = require('express');
 const router = express.Router();
 const Event = require('../models/Event');
-const { upload, uploadToCloudinary } = require('../config/cloudinary');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+require('dotenv').config();
 
-// --- 1. GET ALL EVENTS ---
-// Actual URL: http://localhost:5001/api/events
-router.get('/', async (req, res) => {
-  try {
-    const events = await Event.find().sort({ createdAt: -1 });
-    console.log(`📤 Sending ${events.length} events to frontend`);
-    res.json({ events }); 
-  } catch (err) {
-    console.error("❌ Error fetching events:", err.message);
-    res.status(500).json({ message: err.message });
-  }
+// --- 1. INDEPENDENT CONFIGURATION (Fixes the conflict) ---
+// We configure Cloudinary manually here so we don't break teams.js
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// --- 2. CREATE EVENT (With Images) ---
-// Actual URL: http://localhost:5001/api/events
-router.post('/', upload.fields([{ name: 'poster', maxCount: 1 }, { name: 'logo', maxCount: 1 }]), async (req, res) => {
-  try {
-    let posterUrl = 'https://via.placeholder.com/400x200';
-    let logoUrl = 'https://via.placeholder.com/50';
-
-    // Handle Image Uploads
-    if (req.files) {
-        if (req.files['poster']) {
-            const posterRes = await uploadToCloudinary(req.files['poster'][0].buffer, 'mayukh-events');
-            posterUrl = posterRes.secure_url;
-        }
-        if (req.files['logo']) {
-            const logoRes = await uploadToCloudinary(req.files['logo'][0].buffer, 'mayukh-events');
-            logoUrl = logoRes.secure_url;
-        }
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'mayukh_events', // Events go to their own folder
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
     }
+});
+const upload = multer({ storage: storage });
 
-    const newEvent = new Event({
-      ...req.body,
-      posterLink: posterUrl,
-      logoLink: logoUrl
-    });
-
-    await newEvent.save();
-    console.log("✅ Event Saved:", newEvent.title);
-    res.status(201).json(newEvent);
-  } catch (err) {
-    console.error("❌ Error saving event:", err);
-    res.status(500).json({ message: err.message });
-  }
+// --- 2. GET ALL EVENTS ---
+router.get('/', async (req, res) => {
+    try {
+        const events = await Event.find().sort({ createdAt: -1 });
+        res.json(events);
+    } catch (err) {
+        console.error("GET Error:", err);
+        res.status(500).json({ message: 'Server Error', error: err.message });
+    }
 });
 
-// --- 3. DELETE EVENT ---
+// --- 3. CREATE EVENT ---
+const cpUpload = upload.fields([{ name: 'poster', maxCount: 1 }, { name: 'logo', maxCount: 1 }]);
+
+router.post('/', cpUpload, async (req, res) => {
+    try {
+        // Extract text fields
+        const { 
+            title, category, eventType, description, 
+            day, date, venue, time, duration, teamSize, 
+            prizePool, registrationFee, registrationLink 
+        } = req.body;
+
+        // Extract image links
+        let posterLink = '', posterPublicId = '';
+        let logoLink = '', logoPublicId = '';
+
+        if (req.files['poster']) {
+            posterLink = req.files['poster'][0].path;
+            posterPublicId = req.files['poster'][0].filename;
+        }
+
+        if (req.files['logo']) {
+            logoLink = req.files['logo'][0].path;
+            logoPublicId = req.files['logo'][0].filename;
+        }
+
+        const newEvent = new Event({
+            title, category, eventType, description,
+            day, date, venue, time, duration, teamSize,
+            prizePool, registrationFee, registrationLink,
+            posterLink, posterPublicId,
+            logoLink, logoPublicId
+        });
+
+        await newEvent.save();
+        res.status(201).json(newEvent);
+
+    } catch (err) {
+        console.error("POST Error:", err);
+        res.status(500).json({ message: 'Error saving event', error: err.message });
+    }
+});
+
+// --- 4. DELETE EVENT ---
 router.delete('/:id', async (req, res) => {
-  try {
-    await Event.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Event deleted' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+    try {
+        const event = await Event.findById(req.params.id);
+        if (!event) return res.status(404).json({ message: 'Event not found' });
+
+        // Cleanup images
+        if (event.posterPublicId) await cloudinary.uploader.destroy(event.posterPublicId);
+        if (event.logoPublicId) await cloudinary.uploader.destroy(event.logoPublicId);
+
+        await Event.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Event deleted' });
+    } catch (err) {
+        console.error("DELETE Error:", err);
+        res.status(500).json({ message: 'Server Error', error: err.message });
+    }
 });
 
 module.exports = router;

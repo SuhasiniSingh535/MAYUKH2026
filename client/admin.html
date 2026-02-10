@@ -9,40 +9,35 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
-        .hidden-tab { display: none; }
-        .active-nav { background-color: #1f2937; color: white; border-left: 4px solid #06b6d4; }
-        .inactive-nav { color: #9ca3af; border-left: 4px solid transparent; }
-        .inactive-nav:hover { background-color: #111827; color: white; }
     </style>
 </head>
 <body class="bg-gray-900 text-white h-screen flex overflow-hidden font-sans">
 
     <script>
         (function checkAuth() {
-            const SECRET_PASS = "Mayukh@2026"; // Yahan apna password set karein
-            
             if (sessionStorage.getItem("admin_logged_in") === "true") return;
-
-            const userPass = prompt("🔒 ADMIN ACCESS REQUIRED.\nEnter Password:");
-
-            if (userPass === SECRET_PASS) {
+            const pass = prompt("🔒 ADMIN ACCESS REQUIRED:\nEnter Password:");
+            if (pass === "Mayukh@2026") {
                 sessionStorage.setItem("admin_logged_in", "true");
             } else {
                 alert("❌ Access Denied!");
-                document.body.innerHTML = "<h1 style='color:white;text-align:center;margin-top:20%'>ACCESS DENIED</h1>";
                 window.location.href = "index.html"; 
             }
         })();
     </script>
 
     <div class="flex-1 flex flex-col h-screen overflow-hidden bg-gray-900 relative">
-        <a href="media.html" class="absolute top-5 right-6 z-50 bg-gray-800 border border-gray-700 text-[10px] font-bold text-purple-400 px-4 py-2 rounded-full hover:bg-purple-600 hover:text-white hover:border-purple-500 transition-all shadow-lg flex items-center gap-2">
-            <i class="fa-solid fa-images"></i>
-            GO TO MEDIA MANAGER &rarr;
+        <a href="media.html" class="absolute top-5 right-6 z-50 bg-gray-800 border border-gray-700 text-[10px] text-purple-400 px-4 py-2 rounded-full hover:bg-purple-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-images"></i> MEDIA MANAGER &rarr;
         </a>
-        <div id="tab-events" class="flex h-full w-full">
+
+        <div class="flex h-full w-full">
             <div id="formContainer" class="w-1/3 bg-gray-800 p-6 overflow-y-auto border-r border-gray-700 shadow-xl z-10">
-                <h2 class="text-xl font-bold text-cyan-400 mb-6 flex justify-between">ADD EVENT <button onclick="resetForm()" class="text-xs bg-gray-700 px-2 py-1 rounded text-white">Reset</button></h2>
+                <h2 class="text-xl font-bold text-cyan-400 mb-6 flex justify-between">
+                    <span id="formTitle">ADD NEW EVENT</span> 
+                    <button onclick="resetForm()" class="text-xs bg-gray-700 px-2 py-1 rounded text-white">Reset</button>
+                </h2>
+                
                 <form id="eventForm" class="space-y-4">
                     <input type="hidden" name="id" id="eventId">
                     
@@ -51,11 +46,11 @@
                         <div class="bg-gray-700 p-3 rounded"><label class="text-[10px] text-purple-300 font-bold block mb-1">LOGO</label><input type="file" name="logo" class="text-xs w-full text-gray-400"></div>
                     </div>
 
-                    <input type="text" name="title" placeholder="Event Title" class="w-full bg-gray-700 p-3 rounded border border-gray-600 outline-none text-white font-bold">
+                    <input type="text" name="title" placeholder="Event Title" required class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-white font-bold">
                     
                     <div class="grid grid-cols-2 gap-2">
-                        <select name="category" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600"><option value="" disabled selected>Select Verse</option><option value="all-verses">All Verses</option><option value="spy-verse">Spy</option><option value="scifi-verse">SciFi</option><option value="carnival-verse">Carnival</option><option value="dark-verse">Dark</option><option value="mythic-verse">Mythic</option></select>
-                        <select name="eventType" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600"><option value="" disabled selected>Select Type</option><option value="tech-event">Tech Event</option><option value="non-tech-event">Non-Tech</option><option value="tech-workshop">Tech Workshop</option><option value="fun-event">Fun Event</option></select>
+                        <select name="category" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600"><option value="all-verses">All Verses</option><option value="spy-verse">Spy</option><option value="scifi-verse">SciFi</option><option value="carnival-verse">Carnival</option><option value="dark-verse">Dark</option><option value="mythic-verse">Mythic</option></select>
+                        <select name="eventType" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600"><option value="tech-event">Tech Event</option><option value="non-tech-event">Non-Tech</option><option value="tech-workshop">Tech Workshop</option><option value="fun-event">Fun Event</option></select>
                     </div>
 
                     <textarea name="description" placeholder="Description" rows="2" class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-sm"></textarea>
@@ -71,20 +66,21 @@
                         <input type="text" name="teamSize" placeholder="Team Size" class="bg-gray-700 p-2 rounded text-xs">
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <input type="text" name="prizePool" placeholder="Prize ₹" class="bg-gray-700 p-2 rounded text-xs">
-                        <input type="text" name="registrationFee" placeholder="Fee ₹" class="bg-gray-700 p-2 rounded text-xs">
+                        <input type="text" name="prizePool" placeholder="Prize" class="bg-gray-700 p-2 rounded text-xs">
+                        <input type="text" name="registrationFee" placeholder="Fee" class="bg-gray-700 p-2 rounded text-xs">
                     </div>
-                    <input type="text" name="registrationLink" placeholder="Form Link (Optional)" class="w-full bg-gray-700 p-2 rounded text-xs border border-gray-600">
+                    <input type="text" name="registrationLink" placeholder="Form Link" class="w-full bg-gray-700 p-2 rounded text-xs border border-gray-600">
+
+                    <div id="globalStatus" class="text-center text-xs font-mono"></div>
 
                     <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded mt-2 transition">SAVE EVENT</button>
                 </form>
             </div>
+
             <div class="w-2/3 p-8 overflow-y-auto bg-black">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-3xl font-bold text-white">Events Database</h1>
-                    <input type="text" id="searchInput" onkeyup="filterEvents()" 
-                        placeholder="Search by name..." 
-                        class="bg-gray-800 text-white px-4 py-2 rounded-full border border-gray-700 focus:border-cyan-500 outline-none w-64 transition-all focus:w-80">
+                    <input type="text" id="searchInput" onkeyup="filterEvents()" placeholder="Search..." class="bg-gray-800 text-white px-4 py-2 rounded-full border border-gray-700 outline-none w-64">
                 </div>
                 <div id="eventsList" class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-20"></div>
             </div>
@@ -92,206 +88,119 @@
     </div>
 
     <script>
-        
         const API_BASE = 'http://localhost:5001';
-        let allEventsData = []; // Data store karne ke liye
-        // --- EVENTS ---
+        let allEventsData = [];
+
         async function loadEvents() {
             try {
                 const res = await fetch(`${API_BASE}/api/events`);
+                if(!res.ok) throw new Error("Failed to load");
                 const data = await res.json();
-                allEventsData = data.events || data; // Global variable mein save karo
-                renderEvents(allEventsData); // Screen par dikhao
-            } catch(e) { console.error(e); }
+                allEventsData = data.events || data;
+                renderEvents(allEventsData);
+            } catch(e) {
+                console.error(e);
+                document.getElementById('eventsList').innerHTML = `<p class="text-red-500">Server Error: Check console</p>`;
+            }
         }
-        // HTML Banane wala function
-        // ✅ UPDATED RENDER FUNCTION (Smart Logo Logic)
+
         function renderEvents(events) {
             const container = document.getElementById('eventsList');
-            
-            // Agar list khali hai
             if(events.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-gray-500 text-center py-10">No events found.</p>`;
+                container.innerHTML = `<p class="text-gray-500">No events found.</p>`;
                 return;
             }
-
-            container.innerHTML = events.map(e => {
-                // LOGIC: Logo tabhi dikhao jab wo exist kare aur Placeholder na ho
-                // (Backend default placeholder bhejta hai agar file na ho, hum use hide kar denge)
-                const hasLogo = e.logoLink && !e.logoLink.includes('placeholder');
-                
-                // Agar logo hai toh HTML banao, warna khali string
-                const logoHTML = hasLogo 
-                    ? `<img src="${e.logoLink}" class="w-6 h-6 object-contain rounded-full border border-purple-500/50" title="Event Logo">` 
-                    : '';
-
-                return `
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-4 flex gap-4 items-center relative group hover:border-cyan-500 transition-all">
-                        <div class="w-16 h-16 shrink-0 bg-gray-700 rounded overflow-hidden">
-                            <img src="${e.posterLink || 'https://via.placeholder.com/150'}" class="w-full h-full object-cover">
-                        </div>
-
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2">
-                                <h3 class="font-bold text-cyan-400 truncate">${e.title}</h3>
-                                ${logoHTML} </div>
-                            
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider mb-1">
-                                <span class="text-purple-400">${e.category}</span> • ${e.eventType}
-                            </p>
-                        </div>
-                        
-                        <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition">
-                            <button onclick="editEvent('${e._id}')" class="text-xs bg-yellow-600 hover:bg-yellow-500 px-3 py-1 rounded text-white shadow-md">Edit</button>
-                            <button onclick="deleteEvent('${e._id}')" class="text-xs bg-red-600 hover:bg-red-500 px-3 py-1 rounded text-white shadow-md">Delete</button>
-                        </div>
+            container.innerHTML = events.map(e => `
+                <div class="bg-gray-800 rounded-xl border border-gray-700 p-4 flex gap-4 items-center relative group hover:border-cyan-500 transition-all">
+                    <div class="w-16 h-16 shrink-0 bg-gray-700 rounded overflow-hidden">
+                        <img src="${e.posterLink || '#'}" class="w-full h-full object-cover">
                     </div>
-                `;
-            }).join('');
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-cyan-400 truncate">${e.title}</h3>
+                        <p class="text-[10px] text-gray-400 uppercase"><span class="text-purple-400">${e.category}</span> • ${e.eventType}</p>
+                    </div>
+                    <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                        <button onclick="editEvent('${e._id}')" class="text-xs bg-yellow-600 px-3 py-1 rounded text-white">Edit</button>
+                        <button onclick="deleteEvent('${e._id}')" class="text-xs bg-red-600 px-3 py-1 rounded text-white">Delete</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Search Logic
         function filterEvents() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allEventsData.filter(e => e.title.toLowerCase().includes(query));
-            renderEvents(filtered);
+            renderEvents(allEventsData.filter(e => e.title.toLowerCase().includes(query)));
         }
 
-
-                // ✅ 1. RESET FORM FUNCTION (Jo missing tha)
         function resetForm() {
             document.getElementById('eventForm').reset();
-            document.getElementById('eventId').value = ''; // ID saaf karein
-            
-            // Title wapas normal karein
+            document.getElementById('eventId').value = '';
             document.getElementById('formTitle').innerText = "ADD NEW EVENT";
-            
-            // Button wapas 'Save' karein
             const btn = document.querySelector('#eventForm button[type="submit"]');
             btn.innerText = "SAVE EVENT";
-            btn.classList.remove('bg-yellow-600');
-            btn.classList.add('bg-cyan-600');
+            btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded mt-2 transition";
         }
 
-        // ✅ 2. FIXED EDIT FUNCTION (Slash '/' error fix)
         function editEvent(id) {
             const event = allEventsData.find(e => e._id === id);
             if(!event) return;
-
-            // Data Fill Karein
+            
+            // Fill Fields
             document.getElementById('eventId').value = event._id;
-            document.querySelector('[name="title"]').value = event.title;
-            document.querySelector('[name="category"]').value = event.category;
-            document.querySelector('[name="eventType"]').value = event.eventType;
-            document.querySelector('[name="description"]').value = event.description;
-            
-            // Optional Fields (Error se bachne ke liye checks)
-            if(document.querySelector('[name="day"]')) document.querySelector('[name="day"]').value = event.day || 'Day 1';
-            if(document.querySelector('[name="date"]')) document.querySelector('[name="date"]').value = event.date || '';
-            if(document.querySelector('[name="venue"]')) document.querySelector('[name="venue"]').value = event.venue || '';
-            if(document.querySelector('[name="time"]')) document.querySelector('[name="time"]').value = event.time || '';
-            
-            // UI Update
-            document.getElementById('formTitle').innerText = "EDITING: " + event.title.toUpperCase();
+            const fields = ['title','category','eventType','description','day','date','venue','time','duration','teamSize','prizePool','registrationFee','registrationLink'];
+            fields.forEach(f => {
+                if(document.querySelector(`[name="${f}"]`)) document.querySelector(`[name="${f}"]`).value = event[f] || '';
+            });
+
+            // Update UI
+            document.getElementById('formTitle').innerText = "EDIT: " + event.title;
             const btn = document.querySelector('#eventForm button[type="submit"]');
             btn.innerText = "UPDATE EVENT";
-            btn.classList.remove('bg-cyan-600');
-            btn.classList.add('bg-yellow-600');
-            
-            // ✅ FIX: Ab hum ID use kar rahe hain, class nahi
-            document.getElementById('formContainer').scrollTop = 0;
+            btn.className = "w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded mt-2 transition";
         }
 
         // --- SUBMIT HANDLER ---
-        async function handleFormSubmit(e, type) {
-            const formData = new FormData(e.target);
+        document.getElementById('eventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
             const status = document.getElementById('globalStatus');
-            
+            const id = document.getElementById('eventId').value;
+            const formData = new FormData(e.target);
+
             btn.disabled = true;
             btn.innerText = "Processing...";
-            status.innerText = "Uploading to Cloudinary...";
-            status.className = "p-4 text-center text-xs text-yellow-400 font-mono uppercase animate-pulse";
+            status.innerText = "Uploading...";
+            status.className = "text-center text-xs text-yellow-400 font-mono animate-pulse";
 
             try {
-                const res = await fetch(`${API_BASE}/api/${type}`, { method: 'POST', body: formData });
+                // If editing, delete old one first (simple way to handle image updates)
+                if(id) await fetch(`${API_BASE}/api/events/${id}`, { method: 'DELETE' });
+
+                const res = await fetch(`${API_BASE}/api/events`, { method: 'POST', body: formData });
                 if(res.ok) {
                     status.innerText = "Success!";
-                    status.className = "p-4 text-center text-xs text-green-400 font-mono uppercase";
-                    e.target.reset();
-                    if(type === 'events') loadEvents();
-                    
+                    status.className = "text-center text-xs text-green-400 font-mono";
+                    resetForm();
+                    loadEvents();
                 } else {
                     const err = await res.json();
                     alert("Error: " + err.message);
                 }
-            } catch(err) { console.error(err); alert("Network Error"); }
-            finally { btn.disabled = false; btn.innerText = "SAVE"; }
-        }
-
-        // ✅ YEH NAYA CODE PASTE KAREIN
-        document.getElementById('eventForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // UI Elements pakadna
-            const formData = new FormData(e.target);
-            const id = document.getElementById('eventId').value; // Hidden ID
-            const btn = e.target.querySelector('button[type="submit"]');
-            const status = document.getElementById('globalStatus');
-
-            // Button ko loading state mein daalna
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-            status.innerText = "Uploading...";
-            status.className = "p-4 text-center text-xs text-yellow-400 font-mono uppercase animate-pulse";
-
-            try {
-                // STEP 1: Agar ID hai (matlab Edit ho raha hai), toh purana delete karo
-                if (id) {
-                    await fetch(`${API_BASE}/api/events/${id}`, { method: 'DELETE' });
-                }
-
-                // STEP 2: Naya data create karo
-                const res = await fetch(`${API_BASE}/api/events`, { method: 'POST', body: formData });
-                
-                if (res.ok) {
-                    // Success! Form reset karo
-                    e.target.reset();
-                    document.getElementById('eventId').value = ''; // ID saaf karna zaroori hai
-                    
-                    // Button wapas normal karo
-                    btn.innerText = "SAVE EVENT";
-                    btn.classList.remove('bg-yellow-600');
-                    btn.classList.add('bg-cyan-600');
-                    document.getElementById('formTitle').innerText = "ADD NEW EVENT";
-                    
-                    // Status update
-                    status.innerText = "Success!";
-                    status.className = "p-4 text-center text-xs text-green-400 font-mono uppercase";
-                    
-                    // List refresh karo
-                    loadEvents();
-                } else {
-                    const err = await res.json();
-                    alert("Error: " + (err.message || "Something went wrong"));
-                }
-            } catch (err) {
+            } catch(err) {
                 console.error(err);
                 alert("Network Error");
             } finally {
                 btn.disabled = false;
             }
         });
-        
 
-        async function deleteItem(type, id) {
-            if(!confirm("Delete this?")) return;
-            await fetch(`${API_BASE}/api/${type}/${id}`, { method: 'DELETE' });
-            if(type === 'events') loadEvents();
-            
+        // --- DELETE HANDLER ---
+        async function deleteEvent(id) {
+            if(!confirm("Delete this event?")) return;
+            await fetch(`${API_BASE}/api/events/${id}`, { method: 'DELETE' });
+            loadEvents();
         }
 
-        // Init
         loadEvents();
     </script>
 </body>

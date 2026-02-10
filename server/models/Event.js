@@ -1,71 +1,87 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+const Event = require('../models/Event');
+const cloudinary = require('../config/cloudinary');
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// PRO TIP: Enums use karne se database mein 'spelling mistakes' nahi hoti.
-const VALID_VERSES = ['spy-verse', 'scifi-verse', 'carnival-verse', 'dark-verse', 'mythic-verse'];
-const VALID_TYPES = ['tech-event', 'non-tech-event', 'tech-workshop', 'non-tech-workshop', 'fun-event'];
+// 1. Storage Setup
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'mayukh_events',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
+    }
+});
+const upload = multer({ storage: storage });
 
-const eventSchema = new mongoose.Schema(
-  {
-    title: { 
-        type: String, 
-        required: [true, 'Event title is required'], 
-        trim: true 
-    },
-    description: { 
-        type: String, 
-        required: [true, 'Description is required'] 
-    },
-    posterLink: { 
-        type: String, 
-        required: [true, 'Poster image is required'] 
-    }, 
-    logoLink: { 
-        type: String, 
-        required: [true, 'Event logo is required'] 
-    }, 
-    
-    registrationLink: {
-      type: String,
-      default: 'https://docs.google.com/forms/d/e/1FAIpQLScgtiypem-sFFfbdoAOOUBprF1drgcocTMlpe9ESd_c8EuErA/viewform?usp=sharing&ouid=109706187660263354341', 
-      trim: true
-    },
+// 2. GET ALL EVENTS (This fixes your 500 error)
+router.get('/', async (req, res) => {
+    try {
+        const events = await Event.find().sort({ createdAt: -1 });
+        res.json(events);
+    } catch (err) {
+        console.error("GET Error:", err);
+        res.status(500).json({ message: 'Server Error fetching events', error: err.message });
+    }
+});
 
-    // --- CATEGORIZATION (NO REDUNDANCY LOGIC) ---
-    
-    // 1. THE VERSE (Category)
-    category: {
-      type: String,
-      required: [true, 'Verse category is required'],
-      enum: {
-        values: VALID_VERSES,
-        message: '{VALUE} is not a valid verse.'
-      }
-    },
+// 3. CREATE/SAVE EVENT
+const cpUpload = upload.fields([{ name: 'poster', maxCount: 1 }, { name: 'logo', maxCount: 1 }]);
 
-    // 2. THE TYPE (Event Nature)
-    eventType: {
-      type: String,
-      required: [true, 'Event Type is required'],
-      enum: {
-        values: VALID_TYPES,
-        message: '{VALUE} is not a valid event type.'
-      }
-    },
+router.post('/', cpUpload, async (req, res) => {
+    try {
+        const { 
+            title, category, eventType, description, 
+            day, date, venue, time, duration, teamSize, 
+            prizePool, registrationFee, registrationLink 
+        } = req.body;
 
-    // --- LOGISTICS ---
-    day: { 
-        type: String, 
-        enum: ['Pre-Fest', 'Day 1', 'Day 2', 'Day 3'], 
-        required: [true, 'Day is required'] 
-    },
-    date: { type: String }, // Flexible string for date
-    time: { type: String, required: true },
-    duration: { type: String, required: true },
-    teamSize: { type: String, required: true },
-    prizePool: { type: String },
-    registrationFee: { type: String }
-  },
-  { timestamps: true } // Auto-manage createdAt and updatedAt
-);
+        let posterLink = '', posterPublicId = '';
+        let logoLink = '', logoPublicId = '';
 
-module.exports = mongoose.model('Event', eventSchema);
+        if (req.files['poster']) {
+            posterLink = req.files['poster'][0].path;
+            posterPublicId = req.files['poster'][0].filename;
+        }
+
+        if (req.files['logo']) {
+            logoLink = req.files['logo'][0].path;
+            logoPublicId = req.files['logo'][0].filename;
+        }
+
+        const newEvent = new Event({
+            title, category, eventType, description,
+            day, date, venue, time, duration, teamSize,
+            prizePool, registrationFee, registrationLink,
+            posterLink, posterPublicId,
+            logoLink, logoPublicId
+        });
+
+        await newEvent.save();
+        res.status(201).json(newEvent);
+
+    } catch (err) {
+        console.error("POST Error:", err);
+        res.status(500).json({ message: 'Error saving event', error: err.message });
+    }
+});
+
+// 4. DELETE EVENT
+router.delete('/:id', async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.id);
+        if (!event) return res.status(404).json({ message: 'Event not found' });
+
+        if (event.posterPublicId) await cloudinary.uploader.destroy(event.posterPublicId);
+        if (event.logoPublicId) await cloudinary.uploader.destroy(event.logoPublicId);
+
+        await Event.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Event deleted successfully' });
+    } catch (err) {
+        console.error("DELETE Error:", err);
+        res.status(500).json({ message: 'Server Error', error: err.message });
+    }
+});
+
+module.exports = router;
