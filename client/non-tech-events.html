@@ -8,7 +8,20 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Rajdhani', sans-serif; background-color: black; color: white; overflow-x: hidden; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: 'Rajdhani', sans-serif; 
+      background-color: black; 
+      color: white; 
+      overflow-x: hidden; 
+      width: 100%;
+    }
+    
     .orbitron { font-family: 'Orbitron', sans-serif; }
     .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff; }
     .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
@@ -17,6 +30,155 @@
     ::-webkit-scrollbar { width: 8px; } 
     ::-webkit-scrollbar-track { background: #000; } 
     ::-webkit-scrollbar-thumb { background: #3bc4ff; border-radius: 4px; }
+    
+    /* Home Button */
+    .home-button {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 60;
+    }
+    
+    @media (min-width: 768px) {
+      .home-button {
+        top: 1.5rem;
+        left: 1.5rem;
+      }
+    }
+    
+    /* Navigation */
+    .main-nav {
+      position: fixed;
+      top: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      width: calc(100% - 2rem);
+      max-width: 95vw;
+    }
+    
+    @media (min-width: 768px) {
+      .main-nav {
+        top: 1.5rem;
+        width: auto;
+        max-width: none;
+      }
+    }
+    
+    .nav-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      padding: 0.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .nav-container {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.5rem;
+      }
+    }
+    
+    .nav-link {
+      white-space: nowrap;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+    
+    @media (min-width: 640px) {
+      .nav-link {
+        font-size: 0.75rem;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .nav-link {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.75rem;
+      }
+    }
+    
+    /* Main content padding */
+    main {
+      padding-top: 11rem;
+    }
+    
+    @media (min-width: 768px) {
+      main {
+        padding-top: 5rem;
+      }
+    }
+    
+    /* Hero title responsive sizing */
+    .hero-title {
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+    
+    @media (min-width: 640px) {
+      .hero-title {
+        font-size: 3.5rem;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 5rem;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .hero-title {
+        font-size: 7rem;
+      }
+    }
+    
+    /* Verse titles responsive */
+    .verse-title {
+      font-size: 2rem;
+    }
+    
+    @media (min-width: 640px) {
+      .verse-title {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .verse-title {
+        font-size: 3rem;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .verse-title {
+        font-size: 3.5rem;
+      }
+    }
+    
+    /* Event Cards Grid */
+    .events-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 640px) {
+      .events-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .events-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
     
     /* Poster Zoom Modal */
     .poster-modal {
@@ -33,6 +195,7 @@
       justify-content: center;
       opacity: 0;
       transition: opacity 0.3s ease;
+      padding: 1rem;
     }
     
     .poster-modal.active {
@@ -62,10 +225,10 @@
     
     .close-modal {
       position: absolute;
-      top: 2rem;
-      right: 2rem;
-      width: 50px;
-      height: 50px;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid rgba(255, 255, 255, 0.3);
@@ -75,6 +238,15 @@
       cursor: pointer;
       transition: all 0.3s ease;
       z-index: 10000;
+    }
+    
+    @media (min-width: 768px) {
+      .close-modal {
+        top: 2rem;
+        right: 2rem;
+        width: 50px;
+        height: 50px;
+      }
     }
     
     .close-modal:hover {
@@ -98,7 +270,13 @@
       justify-content: center;
       opacity: 0;
       transition: opacity 0.4s ease;
-      padding: 2rem;
+      padding: 1rem;
+    }
+    
+    @media (min-width: 768px) {
+      .detail-modal {
+        padding: 2rem;
+      }
     }
     
     .detail-modal.active {
@@ -108,16 +286,27 @@
     
     .detail-content {
       display: flex;
-      gap: 3rem;
+      flex-direction: column;
+      gap: 2rem;
       max-width: 1400px;
       width: 100%;
       max-height: 90vh;
       background: rgba(15, 23, 42, 0.8);
       border: 1px solid rgba(168, 85, 247, 0.3);
-      border-radius: 30px;
-      padding: 3rem;
-      overflow: hidden;
+      border-radius: 20px;
+      padding: 1.5rem;
+      overflow-y: auto;
       animation: slideUp 0.4s ease-out;
+    }
+    
+    @media (min-width: 768px) {
+      .detail-content {
+        flex-direction: row;
+        padding: 2.5rem;
+        border-radius: 30px;
+        gap: 3rem;
+        overflow: hidden;
+      }
     }
     
     @keyframes slideUp {
@@ -132,25 +321,43 @@
     }
     
     .detail-left {
-      flex: 0 0 45%;
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     
+    @media (min-width: 768px) {
+      .detail-left {
+        flex: 0 0 45%;
+      }
+    }
+    
     .detail-left img {
       width: 100%;
       height: auto;
-      max-height: 75vh;
+      max-height: 40vh;
       object-fit: contain;
       border-radius: 20px;
       box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
     }
     
+    @media (min-width: 768px) {
+      .detail-left img {
+        max-height: 75vh;
+      }
+    }
+    
     .detail-right {
       flex: 1;
       overflow-y: auto;
-      padding-right: 1rem;
+      padding-right: 0.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .detail-right {
+        padding-right: 1rem;
+      }
     }
     
     .detail-right::-webkit-scrollbar {
@@ -167,6 +374,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      min-height: 480px;
     }
     
     .event-card-content {
@@ -177,12 +385,18 @@
     
     .event-card-poster {
       width: 100%;
-      height: 250px;
+      height: 200px;
       object-fit: cover;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.3s ease;
       border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    @media (min-width: 768px) {
+      .event-card-poster {
+        height: 250px;
+      }
     }
     
     .event-card-poster:hover {
@@ -202,8 +416,16 @@
     
     .card-actions {
       display: flex;
-      gap: 0.75rem;
+      flex-direction: column;
+      gap: 0.5rem;
       margin-top: 1rem;
+    }
+    
+    @media (min-width: 640px) {
+      .card-actions {
+        flex-direction: row;
+        gap: 0.75rem;
+      }
     }
     
     .see-more-card-btn {
@@ -218,8 +440,14 @@
       transition: all 0.3s ease;
       cursor: pointer;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       letter-spacing: 0.05em;
+    }
+    
+    @media (min-width: 768px) {
+      .see-more-card-btn {
+        font-size: 0.75rem;
+      }
     }
     
     .see-more-card-btn:hover {
@@ -227,50 +455,39 @@
       box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
       transform: translateY(-2px);
     }
-    
-    @media (max-width: 768px) {
-      .detail-content {
-        flex-direction: column;
-        padding: 2rem;
-        overflow-y: auto;
-      }
-      
-      .detail-left {
-        flex: 0 0 auto;
-      }
-      
-      .detail-left img {
-        max-height: 50vh;
-      }
-      
-      .card-actions {
-        flex-direction: column;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="fixed inset-0 -z-10"><img src="assests/p1.png" class="w-full h-full object-cover opacity-30"></div>
   
-  <a href="index.html" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:text-cyan-400 transition-all">
-    <i class="fa-solid fa-chevron-left"></i> 
+  <!-- Home Button -->
+  <a href="index.html" class="home-button glass px-4 py-2 md:px-6 md:py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:text-cyan-400 transition-all">
+    <i class="fa-solid fa-chevron-left text-sm md:text-base"></i> 
     <span class="orbitron text-xs font-bold tracking-widest">HOME</span>
   </a>
 
-  <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex glass rounded-xl border border-white/10 p-1 md:p-2 items-center gap-1 md:gap-4 overflow-x-auto max-w-[90vw] md:max-w-none no-scrollbar">
-    <a href="tech-events.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">TECH EVENTS</a>
-    
-    <a href="non-tech-events.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-400/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]">NON-TECH EVENTS</a>
-    
-    <a href="tech-workshops.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">TECH WORKSHOPS</a>
-    
-    <a href="non-tech-workshops.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">NON-TECH WORKSHOPS</a>
+  <!-- Navigation -->
+  <nav class="main-nav glass rounded-xl border border-white/10">
+    <div class="nav-container">
+      <a href="tech-event.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
+        TECH EVENTS
+      </a>
+      <a href="non-tech-events.html" class="nav-link orbitron font-bold bg-purple-500/20 text-purple-400 border border-purple-400/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]">
+        NON-TECH EVENTS
+      </a>
+      <a href="tech-workshops.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
+        TECH WORKSHOPS
+      </a>
+      <a href="non-tech-workshops.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
+        NON-TECH WORKSHOPS
+      </a>
+    </div>
   </nav>
 
   <!-- Poster Zoom Modal -->
   <div id="posterModal" class="poster-modal">
     <div class="close-modal" onclick="closePosterModal()">
-      <i class="fa-solid fa-xmark text-white text-2xl"></i>
+      <i class="fa-solid fa-xmark text-white text-xl md:text-2xl"></i>
     </div>
     <img id="posterModalImg" src="" alt="Event Poster">
   </div>
@@ -278,62 +495,70 @@
   <!-- Detail Modal -->
   <div id="detailModal" class="detail-modal">
     <div class="close-modal" onclick="closeDetailModal()">
-      <i class="fa-solid fa-xmark text-white text-2xl"></i>
+      <i class="fa-solid fa-xmark text-white text-xl md:text-2xl"></i>
     </div>
     <div class="detail-content">
       <div class="detail-left">
         <img id="detailPosterImg" src="" alt="Event Poster">
       </div>
       <div class="detail-right">
-        <div class="mb-6">
-          <div class="flex items-center gap-4 mb-4">
-            <img id="detailLogo" src="" class="w-16 h-16 object-contain" alt="Event Logo">
+        <div class="mb-4 md:mb-6">
+          <div class="flex items-center gap-3 md:gap-4 mb-4">
+            <img id="detailLogo" src="" class="w-12 h-12 md:w-16 md:h-16 object-contain" alt="Event Logo">
             <div>
-              <h2 id="detailTitle" class="text-4xl font-black orbitron text-purple-400 uppercase"></h2>
-              <p id="detailCategory" class="text-purple-300 text-sm mt-1 uppercase tracking-wider"></p>
+              <h2 id="detailTitle" class="text-2xl md:text-4xl font-black orbitron text-purple-400 uppercase"></h2>
+              <p id="detailCategory" class="text-purple-300 text-xs md:text-sm mt-1 uppercase tracking-wider"></p>
             </div>
           </div>
         </div>
         
-        <div class="space-y-6">
-          <div class="glass rounded-xl p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-lg mb-3 flex items-center gap-2">
+        <div class="space-y-4 md:space-y-6">
+          <div class="glass rounded-xl p-4 md:p-5 border border-purple-400/20">
+            <h3 class="orbitron text-purple-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
               <i class="fa-solid fa-clock"></i> Event Schedule
             </h3>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-gray-400 text-sm">Day</p>
-                <p id="detailDay" class="text-white font-semibold text-lg"></p>
+                <p class="text-gray-400 text-xs md:text-sm">Day</p>
+                <p id="detailDay" class="text-white font-semibold text-base md:text-lg"></p>
               </div>
               <div>
-                <p class="text-gray-400 text-sm">Time</p>
-                <p id="detailTime" class="text-white font-semibold text-lg"></p>
+                <p class="text-gray-400 text-xs md:text-sm">Time</p>
+                <p id="detailTime" class="text-white font-semibold text-base md:text-lg"></p>
               </div>
             </div>
           </div>
           
-          <div class="glass rounded-xl p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-lg mb-3 flex items-center gap-2">
+          <div class="glass rounded-xl p-4 md:p-5 border border-purple-400/20">
+            <h3 class="orbitron text-purple-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
               <i class="fa-solid fa-info-circle"></i> Description
             </h3>
-            <p id="detailDescription" class="text-gray-300 leading-relaxed"></p>
+            <p id="detailDescription" class="text-gray-300 leading-relaxed text-sm md:text-base"></p>
           </div>
           
-          <div class="glass rounded-xl p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-lg mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-trophy"></i> Prize Pool
+          <div class="glass rounded-xl p-4 md:p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-info-circle"></i> Rounds
             </h3>
-            <p id="detailPrize" class="text-white font-bold text-2xl"></p>
+            <p id="detailRounds" class="text-gray-300 leading-relaxed text-sm md:text-base"></p>
           </div>
+
+          <div class="glass rounded-xl p-4 md:p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-laptop"></i> Requirements
+            </h3>
+            <p id="detailRequirement" class="text-gray-300 leading-relaxed text-sm md:text-base"></p>
+          </div>
+
           
-          <div class="glass rounded-xl p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-lg mb-3 flex items-center gap-2">
+          <div class="glass rounded-xl p-4 md:p-5 border border-purple-400/20">
+            <h3 class="orbitron text-purple-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
               <i class="fa-solid fa-users"></i> Team Size
             </h3>
-            <p id="detailTeamSize" class="text-white font-semibold text-lg"></p>
+            <p id="detailTeamSize" class="text-white font-semibold text-base md:text-lg"></p>
           </div>
           
-          <a id="detailRegisterBtn" href="#" target="_blank" class="block w-full text-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all orbitron text-lg shadow-lg shadow-purple-500/50">
+          <a id="detailRegisterBtn" href="#" target="_blank" class="block w-full text-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 md:py-4 rounded-xl transition-all orbitron text-base md:text-lg shadow-lg shadow-purple-500/50">
             REGISTER NOW
             <i class="fa-solid fa-arrow-right ml-2"></i>
           </a>
@@ -342,35 +567,45 @@
     </div>
   </div>
 
-  <main class="relative z-10 pt-20">
-    <section class="min-h-[50vh] flex flex-col justify-center items-center text-center px-6">
-      <h1 class="text-7xl md:text-8xl font-black orbitron glow mb-4 tracking-wider">NON-TECH EVENTS</h1>
-      <p class="text-2xl text-cyan-300 font-medium">Creativity & Fun Across The Verses</p>
+  <main class="relative z-10">
+    <section class="min-h-[40vh] md:min-h-[50vh] flex flex-col justify-center items-center text-center px-4 md:px-6">
+      <h1 class="hero-title font-black orbitron glow mb-3 md:mb-4 tracking-wider">NON-TECH EVENTS</h1>
+      <p class="text-lg md:text-2xl text-cyan-300 font-medium">Creativity & Fun Across The Verses</p>
     </section>
 
-    <section id="spy-verse" class="py-20 px-6 reveal">
-      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-cyan-400">SPY VERSE</h2></div>
-      <div id="spy-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    <section id="spy-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-8 md:mb-10">
+        <h2 class="verse-title font-black orbitron text-cyan-400">SPY VERSE</h2>
+      </div>
+      <div id="spy-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="scifi-verse" class="py-20 px-6 reveal">
-      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-purple-400">SCI-FI VERSE</h2></div>
-      <div id="scifi-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    <section id="scifi-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-8 md:mb-10">
+        <h2 class="verse-title font-black orbitron text-purple-400">SCI-FI VERSE</h2>
+      </div>
+      <div id="scifi-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="carnival-verse" class="py-20 px-6 reveal">
-      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-red-400">CARNIVAL VERSE</h2></div>
-      <div id="carnival-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    <section id="carnival-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-8 md:mb-10">
+        <h2 class="verse-title font-black orbitron text-red-400">CARNIVAL VERSE</h2>
+      </div>
+      <div id="carnival-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="dark-verse" class="py-20 px-6 reveal">
-      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-slate-400">DARK VERSE</h2></div>
-      <div id="dark-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    <section id="dark-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-8 md:mb-10">
+        <h2 class="verse-title font-black orbitron text-slate-400">DARK VERSE</h2>
+      </div>
+      <div id="dark-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="mythic-verse" class="py-20 px-6 reveal">
-      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-orange-400">MYTHIC VERSE</h2></div>
-      <div id="mythic-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    <section id="mythic-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-8 md:mb-10">
+        <h2 class="verse-title font-black orbitron text-orange-400">MYTHIC VERSE</h2>
+      </div>
+      <div id="mythic-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
   </main>
 
@@ -401,7 +636,8 @@
       document.getElementById('detailDay').textContent = eventData.day;
       document.getElementById('detailTime').textContent = eventData.time;
       document.getElementById('detailDescription').textContent = eventData.description;
-      document.getElementById('detailPrize').textContent = eventData.prizePool || 'TBA';
+      document.getElementById('detailRounds').textContent = eventData.rounds || 'TBA';
+      document.getElementById('detailRequirement').textContent = eventData.requirements || 'TBA';
       document.getElementById('detailTeamSize').textContent = eventData.teamSize || 'Individual/Team';
       document.getElementById('detailRegisterBtn').href = eventData.registrationLink;
       
@@ -414,7 +650,6 @@
       document.body.style.overflow = 'auto';
     }
 
-    // Close modals on outside click
     document.getElementById('posterModal').addEventListener('click', function(e) {
       if (e.target === this) closePosterModal();
     });
@@ -423,7 +658,6 @@
       if (e.target === this) closeDetailModal();
     });
 
-    // Close modals on ESC key
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closePosterModal();
@@ -432,26 +666,26 @@
     });
 
     function createCardHTML(event) {
-        const eventDataStr = JSON.stringify(event).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+        const eventDataStr = encodeURIComponent(JSON.stringify(event));
         return `
           <div class="event-card glass rounded-2xl border border-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-            <div class="event-card-content p-6">
-              <div class="flex justify-between items-center mb-4">
-                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain">` : `<i class="fa-solid fa-paintbrush text-2xl text-purple-400"></i>`}
-                 <span class="text-xs bg-white/10 px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
+            <div class="event-card-content p-4 md:p-6">
+              <div class="flex justify-between items-center mb-3 md:mb-4">
+                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-8 h-8 md:w-10 md:h-10 object-contain">` : `<i class="fa-solid fa-paintbrush text-xl md:text-2xl text-purple-400"></i>`}
+                 <span class="text-xs bg-white/10 px-2 md:px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
               </div>
               <img src="${event.posterLink}" 
-                   class="event-card-poster mb-4" 
-                   onclick='openPosterModal("${event.posterLink}", JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify(event))}")))' 
+                   class="event-card-poster mb-3 md:mb-4" 
+                   onclick='openPosterModal("${event.posterLink}", JSON.parse(decodeURIComponent("${eventDataStr}")))' 
                    alt="${event.title}">
-              <h3 class="text-xl font-bold orbitron text-purple-400 mb-2 uppercase">${event.title}</h3>
-              <p class="event-card-description text-gray-400 text-sm mb-4">${event.description}</p>
+              <h3 class="text-lg md:text-xl font-bold orbitron text-purple-400 mb-2 uppercase">${event.title}</h3>
+              <p class="event-card-description text-gray-400 text-xs md:text-sm mb-3 md:mb-4">${event.description}</p>
               
               <div class="card-actions">
-                <button onclick='openDetailModal(JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify(event))}")))' class="see-more-card-btn">
+                <button onclick='openDetailModal(JSON.parse(decodeURIComponent("${eventDataStr}")))' class="see-more-card-btn">
                   <i class="fa-solid fa-circle-info mr-1"></i> SEE MORE
                 </button>
-                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 rounded-lg transition-all">
+                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-2 md:py-3 rounded-lg transition-all text-xs md:text-sm">
                   REGISTER
                 </a>
               </div>

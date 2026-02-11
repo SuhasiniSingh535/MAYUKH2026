@@ -26,6 +26,66 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* --- RIGHT PANEL STYLES --- */
+        #right-panel {
+            position: fixed;
+            top: 50%;
+            right: 1.5rem; /* Right side positioning */
+            transform: translateY(-50%);
+            z-index: 50;
+            width: 5rem;
+            height: 50vh;
+            border-right: 4px solid rgba(59, 196, 255, 0.5); /* Blue border matched from Home */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        /* Hide on mobile devices just like Home page */
+        @media (max-width: 1024px) {
+            #right-panel { display: none; }
+        }
+
+        .social-icon {
+            color: #9ca3af;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            display: block;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icon:hover {
+            color: #3bc4ff;
+            transform: scale(1.2);
+            text-shadow: 0 0 15px #3bc4ff;
+        }
+
+        .about-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #9ca3af;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .about-link i { font-size: 1.2rem; margin-bottom: 5px; }
+        
+        .about-link span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .about-link:hover {
+            color: #3bc4ff;
+            text-shadow: 0 0 10px #3bc4ff;
+        }
         .verse-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(15px);
@@ -73,6 +133,31 @@
     <a href="index.html" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:border-cyan-400 hover:text-cyan-400 transition-all">
         <i class="fa-solid fa-chevron-left"></i> <span class="orbitron text-xs font-bold tracking-widest">HOME</span>
     </a>
+
+    <!-- RIGHT PANEL -->
+    <div id="right-panel" class="fixed top-1/2 right-6 flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[50vh] border-r-4 border-blue-500/50 z-50 transform -translate-y-1/2">
+      <div class="flex flex-col items-center space-y-8 w-full">
+        <!-- Social Icons -->
+        <a href="https://www.instagram.com/mayukh_bv/" target="_blank" class="social-icon">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/channel/UCelIKNgiLt_IP4aT2QmZ7WA" target="_blank" class="social-icon">
+          <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="https://www.linkedin.com/company/mayukh-banasthali/" target="_blank" class="social-icon">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+        <a href="mailto:mayukh@banasthali.in" class="social-icon">
+          <i class="fa-solid fa-envelope"></i>
+        </a>
+        
+        <!-- About Link -->
+        <a href="about.html" class="about-link">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>About</span>
+        </a>
+      </div>
+    </div>
 
     <div class="fixed inset-0 -z-10">
         <img src="assests/p1.png" class="w-full h-full object-cover opacity-30" />

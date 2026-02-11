@@ -71,9 +71,9 @@ const Event = mongoose.model('Event', new mongoose.Schema({
 
 // 🔥 FIXED: 'name' ab required nahi hai. Default value 'Member' hai agar khali chhoda toh.
 const Team = mongoose.model('Team', new mongoose.Schema({
-    name: { type: String, default: "Member" }, 
+    name: { type: String, default: "" }, 
     teamName: { type: String, required: true },
-    memberType: { type: String, required: true },
+    memberType: { type: String, default: "Member" },
     imageUrl: String,
     linkedin: String
 }, { timestamps: true }));
@@ -161,7 +161,7 @@ app.post('/api/teams', upload.single('image'), async (req, res) => {
         const newMember = await new Team({
             name: req.body.name, // Required removed
             teamName: req.body.teamName,
-            memberType: req.body.memberType,
+            memberType: req.body.memberType || "Member", // Default to "Member" if not provided
             linkedin: req.body.linkedin,
             imageUrl: imgUrl
         }).save();
@@ -222,6 +222,76 @@ app.delete('/api/gallery/:id', async (req, res) => {
         res.json({ success: true }); 
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
+
+// ==========================================
+// 4. EVENT ALERT SYSTEM (ADVANCED)
+// ==========================================
+
+const EventAlert = mongoose.model('EventAlert', new mongoose.Schema({
+    eventName: { type: String, required: true },
+    changes: {
+        venue: String,
+        time: String,
+        date: String,
+        fees: String,
+        note: String
+    }
+}, { timestamps: true }));
+
+// Get all active alerts
+app.get('/api/event-alerts', async (req, res) => {
+    try {
+        const alerts = await EventAlert.find().sort({ createdAt: -1 });
+        res.json(alerts);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Create a new Alert
+app.post('/api/event-alerts', async (req, res) => {
+    try {
+        const newAlert = await new EventAlert({
+            eventName: req.body.eventName,
+            changes: {
+                venue: req.body.venue,
+                time: req.body.time,
+                date: req.body.date,
+                fees: req.body.fees,
+                note: req.body.note
+            }
+        }).save();
+        res.json(newAlert);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Delete an Alert
+app.delete('/api/event-alerts/:id', async (req, res) => {
+    try {
+        await EventAlert.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Update/Edit an existing Alert
+app.put('/api/event-alerts/:id', async (req, res) => {
+    try {
+        const updatedAlert = await EventAlert.findByIdAndUpdate(
+            req.params.id,
+            {
+                eventName: req.body.eventName,
+                changes: {
+                    venue: req.body.venue,
+                    time: req.body.time,
+                    date: req.body.date,
+                    fees: req.body.fees,
+                    note: req.body.note
+                }
+            },
+            { new: true } // Return the updated document
+        );
+        res.json(updatedAlert);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 
 // --- SERVER START ---
 app.listen(PORT, () => {

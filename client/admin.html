@@ -15,21 +15,57 @@
 
     <script>
         (function checkAuth() {
-            if (sessionStorage.getItem("admin_logged_in") === "true") return;
-            const pass = prompt("🔒 ADMIN ACCESS REQUIRED:\nEnter Password:");
-            if (pass === "Mayukh@2026") {
-                sessionStorage.setItem("admin_logged_in", "true");
-            } else {
-                alert("❌ Access Denied!");
-                window.location.href = "index.html"; 
+            const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 Minutes (in milliseconds)
+            const lastLogin = localStorage.getItem("admin_login_time");
+            const currentTime = new Date().getTime();
+
+            // 1. Check if user is logged in AND session is valid
+            if (localStorage.getItem("admin_logged_in") === "true" && lastLogin) {
+                
+                // Check if time expired
+                if (currentTime - lastLogin > SESSION_TIMEOUT) {
+                    alert("⏳ Session Expired. Please login again.");
+                    logout();
+                    return;
+                } else {
+                    // User is active, EXTEND the session time
+                    localStorage.setItem("admin_login_time", currentTime);
+                    return; // Access Granted
+                }
+            }
+
+            // // 2. If not logged in, Ask for Password
+            // const pass = prompt("🔒 ADMIN ACCESS REQUIRED:\nEnter Password:");
+            // if (pass === "Mayukh@2026") {
+            //     localStorage.setItem("admin_logged_in", "true");
+            //     localStorage.setItem("admin_login_time", new Date().getTime()); // Set Start Time
+            // } else {
+            //     alert("❌ Access Denied!");
+            //     window.location.href = "index.html"; 
+            // }
+
+            function logout() {
+                localStorage.removeItem("admin_logged_in");
+                localStorage.removeItem("admin_login_time");
+                window.location.href = "index.html";
             }
         })();
     </script>
 
     <div class="flex-1 flex flex-col h-screen overflow-hidden bg-gray-900 relative">
-        <a href="media.html" class="absolute top-5 right-6 z-50 bg-gray-800 border border-gray-700 text-[10px] text-purple-400 px-4 py-2 rounded-full hover:bg-purple-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
-            <i class="fa-solid fa-images"></i> MEDIA MANAGER &rarr;
+        <div class="absolute top-5 right-6 z-50 flex gap-3">
+        <a href="media.html" class="bg-gray-800 border border-gray-700 text-[10px] text-purple-400 px-4 py-2 rounded-full hover:bg-purple-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-images"></i> MEDIA
         </a>
+        
+        <a href="alert.html" class="bg-gray-800 border border-gray-700 text-[10px] text-red-400 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-bell"></i> ALERTS
+        </a>
+
+        <a href="index.html" onclick="localStorage.removeItem('admin_logged_in'); localStorage.removeItem('admin_login_time');" class="bg-red-900/80 border border-red-700 text-[10px] text-white px-4 py-2 rounded-full hover:bg-red-600 transition-all shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-power-off"></i> LOGOUT
+        </a>
+    </div>
 
         <div class="flex h-full w-full">
             <div id="formContainer" class="w-1/3 bg-gray-800 p-6 overflow-y-auto border-r border-gray-700 shadow-xl z-10">

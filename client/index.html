@@ -117,10 +117,10 @@
       .video-overlay {
         background: radial-gradient(
           ellipse 600px 500px at center 45%,
-          rgba(0, 0, 0, 0.1) 0%,
-          rgba(0, 0, 0, 0.4) 40%,
-          rgba(0, 0, 0, 0.7) 70%,
-          rgba(0, 0, 0, 0.85) 100%
+          rgba(0, 0, 0, 0.05) 0%,
+          rgba(0, 0, 0, 0.2) 40%,
+          rgba(0, 0, 0, 0.4) 70%,
+          rgba(0, 0, 0, 0.6) 100%
         );
       }
     }
@@ -129,11 +129,22 @@
       .video-overlay {
         background: radial-gradient(
           ellipse 400px 350px at center 45%,
-          rgba(0, 0, 0, 0.2) 0%,
-          rgba(0, 0, 0, 0.5) 40%,
-          rgba(0, 0, 0, 0.75) 70%,
-          rgba(0, 0, 0, 0.9) 100%
+          rgba(0, 0, 0, 0.1) 0%,
+          rgba(0, 0, 0, 0.3) 40%,
+          rgba(0, 0, 0, 0.5) 70%,
+          rgba(0, 0, 0, 0.7) 100%
         );
+      }
+    }
+
+    /* Video responsiveness */
+    .video-container video {
+      object-fit: contain;
+    }
+
+    @media (min-width: 768px) {
+      .video-container video {
+        object-fit: cover;
       }
     }
 
@@ -262,6 +273,65 @@
       transform: translateY(-2px);
       text-shadow: 0 0 10px #3bc4ff;
     }
+
+    /* --- NEW ADDITIONS: ALERT SYSTEM & ADMIN --- */
+
+    /* Floating Alert Styles */
+    .alert-floater {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 80; /* Higher than panels */
+    }
+
+    .alert-bell {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #ff4d4d, #ff9e00);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 30px rgba(255, 77, 77, 0.6);
+        cursor: pointer;
+        animation: pulse-alert 2s infinite;
+        transition: transform 0.3s;
+    }
+    
+    .alert-bell:hover { transform: scale(1.1); }
+
+    .alert-playcard {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 300px;
+        background: rgba(10, 5, 0, 0.95);
+        border: 2px solid #ff4d4d;
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 1.5rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 0 50px rgba(255, 77, 77, 0.2);
+    }
+
+    .alert-floater:hover .alert-playcard {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    @keyframes pulse-alert {
+        0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
+        70% { box-shadow: 0 0 0 20px rgba(255, 77, 77, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+    }
+
+    /* Custom Scrollbar for Alert Card */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #ff4d4d; }
   </style>
 </head>
 
@@ -346,16 +416,16 @@
     <div id="right-panel" class="fixed top-1/2 flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[50vh] border-r-4 border-blue-500/50 z-50">
       <div class="flex flex-col items-center space-y-8 w-full">
         <!-- Social Icons -->
-        <a href="https://www.instagram.com" target="_blank" class="social-icon">
+        <a href="https://www.instagram.com/mayukh_bv/" target="_blank" class="social-icon">
           <i class="fa-brands fa-instagram"></i>
         </a>
-        <a href="https://www.youtube.com" target="_blank" class="social-icon">
+        <a href="https://www.youtube.com/channel/UCelIKNgiLt_IP4aT2QmZ7WA" target="_blank" class="social-icon">
           <i class="fa-brands fa-youtube"></i>
         </a>
-        <a href="https://www.linkedin.com" target="_blank" class="social-icon">
+        <a href="https://www.linkedin.com/company/mayukh-banasthali/" target="_blank" class="social-icon">
           <i class="fa-brands fa-linkedin"></i>
         </a>
-        <a href="mailto:mayukh@banasthali.org" class="social-icon">
+        <a href="mailto:mayukh@banasthali.in" class="social-icon">
           <i class="fa-solid fa-envelope"></i>
         </a>
         
@@ -370,7 +440,7 @@
     <!-- HOME SECTION with Spotlight Effect -->
     <section id="home" class="relative h-screen flex flex-col justify-center items-center text-center overflow-hidden">
       <div class="video-container">
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-contain z-0">
           <source src="assests/bgwithtitle2.mp4" type="video/mp4">
           <source src="assests/bgwithtitle2.webm" type="video/webm">
         </video>
@@ -381,7 +451,137 @@
 
   </div>
 
+  <div id="alert-system" class="alert-floater hidden">
+    <div class="alert-playcard">
+        <h3 class="orbitron text-red-500 text-lg font-bold border-b border-red-500/30 pb-2 mb-3">
+            ⚠️ ALERT
+        </h3>
+        <div id="alert-content" class="space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+            </div>
+    </div>
+
+    <div class="alert-bell">
+        <i class="fa-solid fa-bell text-white text-2xl animate-bounce"></i>
+        <span id="alert-count" class="absolute -top-1 -right-1 bg-white text-red-600 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-red-600">!</span>
+    </div>
+  </div>
+
+  <div id="admin-fab" class="fixed bottom-6 left-6 z-50 opacity-20 hover:opacity-100 transition-opacity">
+    <button onclick="toggleAdminModal()" class="w-10 h-10 bg-gray-900/80 border border-cyan-500/50 rounded-full text-cyan-400 hover:text-white hover:bg-cyan-600 transition-all flex items-center justify-center backdrop-blur-md">
+        <i class="fa-solid fa-user-shield text-sm"></i>
+    </button>
+  </div>
+
+  <div id="admin-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center backdrop-blur-sm p-4">
+    <div class="bg-gray-900 border border-cyan-500/30 p-8 rounded-2xl w-full max-w-md relative shadow-[0_0_50px_rgba(6,182,212,0.2)]">
+        
+        <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+
+        <div id="admin-step-1" class="text-center space-y-6">
+            <div class="w-16 h-16 bg-cyan-900/30 rounded-full flex items-center justify-center mx-auto border border-cyan-500/50">
+                <i class="fa-solid fa-lock text-2xl text-cyan-400"></i>
+            </div>
+            <h2 class="orbitron text-xl text-white tracking-widest">ADMIN ACCESS</h2>
+            <input type="password" id="admin-passcode" placeholder="Enter Passcode" 
+                class="w-full bg-black border border-gray-700 text-center text-white p-3 rounded-lg focus:border-cyan-500 outline-none tracking-widest text-lg transition-all">
+            <button onclick="verifyAdmin()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition shadow-lg tracking-wider">
+                UNLOCK SYSTEM
+            </button>
+            <p id="admin-error" class="text-red-500 text-xs h-4"></p>
+        </div>
+
+        <div id="admin-step-2" class="hidden space-y-4">
+            <h2 class="orbitron text-center text-xl text-white tracking-widest mb-6">COMMAND CENTER</h2>
+            
+            <a href="admin.html" class="block group">
+                <div class="bg-gray-800 hover:bg-cyan-900/40 border border-gray-700 hover:border-cyan-500 p-4 rounded-xl flex items-center gap-4 transition-all">
+                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 group-hover:text-white">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div><h3 class="font-bold text-gray-200 group-hover:text-white">Manage Events</h3></div>
+                </div>
+            </a>
+
+            <a href="media.html" class="block group">
+                <div class="bg-gray-800 hover:bg-purple-900/40 border border-gray-700 hover:border-purple-500 p-4 rounded-xl flex items-center gap-4 transition-all">
+                    <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 group-hover:text-white">
+                        <i class="fa-solid fa-images"></i>
+                    </div>
+                    <div><h3 class="font-bold text-gray-200 group-hover:text-white">Media Manager</h3></div>
+                </div>
+            </a>
+
+            <a href="alert.html" class="block group">
+                <div class="bg-gray-800 hover:bg-red-900/40 border border-gray-700 hover:border-red-500 p-4 rounded-xl flex items-center gap-4 transition-all">
+                    <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center text-red-400 group-hover:text-white">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <div><h3 class="font-bold text-gray-200 group-hover:text-white">Create Alert</h3></div>
+                </div>
+            </a>
+        </div>
+    </div>
+  </div>
+
 <script>
+    // --- API CONFIGURATION ---
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5001/api'
+        : 'https://mayukh-bv-1.onrender.com/api'; // Make sure this URL is correct!
+
+    // --- ALERT SYSTEM LOGIC ---
+    async function loadAlerts() {
+        try {
+            const res = await fetch(`${API_BASE}/event-alerts`);
+            const alerts = await res.json();
+
+            if (alerts.length > 0) {
+                const container = document.getElementById('alert-system');
+                const content = document.getElementById('alert-content');
+                const count = document.getElementById('alert-count');
+
+                container.classList.remove('hidden'); 
+                count.innerText = alerts.length;
+
+                content.innerHTML = alerts.map(alert => `
+                    <div class="bg-red-900/20 p-3 rounded border-l-2 border-red-500">
+                        <h4 class="rajdhani font-bold text-white text-lg leading-tight">${alert.eventName}</h4>
+                        <div class="text-sm text-gray-300 mt-2 space-y-1 font-mono">
+                            ${alert.changes.venue ? `<p><span class="text-red-400">Venue:</span> ${alert.changes.venue}</p>` : ''}
+                            ${alert.changes.time ? `<p><span class="text-red-400">Time:</span> ${alert.changes.time}</p>` : ''}
+                            ${alert.changes.date ? `<p><span class="text-red-400">Date:</span> ${alert.changes.date}</p>` : ''}
+                            ${alert.changes.fees ? `<p><span class="text-red-400">Fee:</span> ${alert.changes.fees}</p>` : ''}
+                            ${alert.changes.note ? `<p class="italic text-yellow-400 mt-1">"${alert.changes.note}"</p>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } catch (e) { console.error("Alert System Error", e); }
+    }
+
+    // --- ADMIN SYSTEM LOGIC ---
+    function toggleAdminModal() {
+        const modal = document.getElementById('admin-modal');
+        modal.classList.toggle('hidden');
+        if(modal.classList.contains('hidden')) {
+            document.getElementById('admin-step-1').classList.remove('hidden');
+            document.getElementById('admin-step-2').classList.add('hidden');
+            document.getElementById('admin-passcode').value = '';
+            document.getElementById('admin-error').innerText = '';
+        }
+    }
+
+    function verifyAdmin() {
+        const pass = document.getElementById('admin-passcode').value;
+        if(pass === "Mayukh@2026") { 
+            document.getElementById('admin-step-1').classList.add('hidden');
+            document.getElementById('admin-step-2').classList.remove('hidden');
+        } else {
+            document.getElementById('admin-error').innerText = "ACCESS DENIED";
+        }
+    }
     const introVideo = document.getElementById('intro-video');
     const introScreen = document.getElementById('intro-screen');
     const mainContent = document.getElementById('main-content');
@@ -564,7 +764,10 @@
     }
 
     // Adjust on load and resize
-    window.addEventListener('load', adjustSpotlight);
+    window.addEventListener('load', function() {
+        adjustSpotlight();
+        loadAlerts(); // Load alerts when page opens
+    });
     window.addEventListener('resize', adjustSpotlight);
 </script>
 </body>

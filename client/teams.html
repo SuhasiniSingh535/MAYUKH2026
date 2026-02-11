@@ -99,8 +99,8 @@
     .photo-box {
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      height: 320px;
-      width: 100%;
+      height: 390px;
+      width: 80%;
       border-radius: 30px;
       display: flex;
       align-items: center;
@@ -279,7 +279,7 @@
     // --- API Configuration ---
     const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5001/api/teams'
-        : '/api/teams';
+        : 'https://mayukh-bv-1.onrender.com/api/teams';
 
     // --- Hardcoded Theme Colors (Same as original) ---
     const teamColors = {
@@ -310,12 +310,11 @@
                     acc[tName] = { 
                         name: tName, 
                         color: teamColors[tName] || '#3bc4ff', 
-                        core: [], 
-                        sub: [] 
+                        members: []
+                         
                     };
                 }
-                if (member.memberType === 'Core') acc[tName].core.push(member);
-                else acc[tName].sub.push(member);
+                acc[tName].members.push(member);
                 return acc;
             }, {});
 
@@ -339,11 +338,13 @@
                     // IF NO MEMBERS: Show Placeholder that fits the style
                     if(!list || list.length === 0) {
                         return `
-                        <div class="photo-box">
-                            <i class="fa-solid fa-user-secret text-6xl opacity-20" style="color:${team.color}"></i>
-                            <span class="orbitron text-xs mt-2 opacity-50 tracking-widest">COMING SOON</span>
+                        <div class="flex flex-col items-center w-full">
+                            <div class="photo-box">
+                                <i class="fa-solid fa-users text-6xl opacity-20" style="color:${team.color}"></i>
+                                <span class="orbitron text-xs mt-2 opacity-50 tracking-widest">COMING SOON</span>
+                            </div>
+                            <p class="description-text">Team Loading...</p>
                         </div>
-                        <p class="description-text">Pending Data...</p>
                         `;
                     }
 
@@ -359,29 +360,18 @@
                     `).join('');
 
                     // If multiple members, use a grid layout inside the column
-                    if(list.length > 1) {
-                         return `<div class="w-full flex flex-col gap-8">${membersHtml}</div>`;
-                    }
-                    return membersHtml;
+                    return `<div class="w-full flex flex-col gap-8">${membersHtml}</div>`;
                 };
 
                 // Inject HTML (Strictly matching original structure)
                 section.innerHTML = `
                   <div class="flex flex-col items-center w-full">
-                    <h2 class="orbitron team-title text-center">${team.name}</h2>
+                    <h2 class="orbitron team-title text-center mb-8">${team.name}</h2>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-24 w-full px-4">
-                      
-                      <div class="photo-container text-center group w-full">
-                        <span class="member-label">CORE MEMBERS</span>
-                        ${renderMembers(team.core, 'Core')}
+                    <div class="w-full px-4 max-w-6xl"> 
+                      <div class="photo-container text-center group w-full h-full">
+                        ${renderMembers(team.members)}
                       </div>
-
-                      <div class="photo-container text-center group w-full">
-                        <span class="member-label">SUB-CORE MEMBERS</span>
-                        ${renderMembers(team.sub, 'Sub')}
-                      </div>
-                      
                     </div>
                   </div>
                 `;
