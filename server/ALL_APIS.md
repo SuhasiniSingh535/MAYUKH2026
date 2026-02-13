@@ -4,9 +4,9 @@
 
 ### 1. **Health Check**
 ```
-GET https://mayukh2026-wcdo.onrender.com/api/health
+GET https://mayukh-bv-1.onrender.com/api/health
 ```
-**Browser mein:** `https://mayukh2026-wcdo.onrender.com/api/health`  
+**Browser mein:** `https://mayukh-bv-1.onrender.com/api/health`  
 **Response:**
 ```json
 {"status": "Server is running"}
@@ -16,9 +16,9 @@ GET https://mayukh2026-wcdo.onrender.com/api/health
 
 ### 2. **Get All Events**
 ```
-GET https://mayukh2026-wcdo.onrender.com/api/events
+GET https://mayukh-bv-1.onrender.com/api/events
 ```
-**Browser mein:** `https://mayukh2026-wcdo.onrender.com/api/events`  
+**Browser mein:** `https://mayukh-bv-1.onrender.com/api/events`  
 **Response:**
 ```json
 {
@@ -28,19 +28,19 @@ GET https://mayukh2026-wcdo.onrender.com/api/events
 ```
 
 **With Filters:**
-- `https://mayukh2026-wcdo.onrender.com/api/events?category=Sci-FiVerse`
-- `https://mayukh2026-wcdo.onrender.com/api/events?type=Event`
-- `https://mayukh2026-wcdo.onrender.com/api/events?status=upcoming`
-- `https://mayukh2026-wcdo.onrender.com/api/events?category=Sci-FiVerse&type=Event`
+- `https://mayukh-bv-1.onrender.com/api/events?category=Sci-FiVerse`
+- `https://mayukh-bv-1.onrender.com/api/events?type=Event`
+- `https://mayukh-bv-1.onrender.com/api/events?status=upcoming`
+- `https://mayukh-bv-1.onrender.com/api/events?category=Sci-FiVerse&type=Event`
 
 ---
 
 ### 3. **Get Single Event by ID**
 ```
-GET https://mayukh2026-wcdo.onrender.com/api/events/:id
+GET https://mayukh-bv-1.onrender.com/api/events/:id
 ```
-**Browser mein:** `https://mayukh2026-wcdo.onrender.com/api/events/EVENT_ID_HERE`  
-**Example:** `https://mayukh2026-wcdo.onrender.com/api/events/67890abcdef1234567890123`  
+**Browser mein:** `https://mayukh-bv-1.onrender.com/api/events/EVENT_ID_HERE`  
+**Example:** `https://mayukh-bv-1.onrender.com/api/events/67890abcdef1234567890123`  
 **Response:**
 ```json
 {
@@ -57,7 +57,7 @@ GET https://mayukh2026-wcdo.onrender.com/api/events/:id
 
 ### 4. **User Signup**
 ```
-POST https://mayukh2026-wcdo.onrender.com/api/auth/signup
+POST https://mayukh-bv-1.onrender.com/api/auth/signup
 ```
 **Body (JSON):**
 ```json
@@ -73,7 +73,7 @@ POST https://mayukh2026-wcdo.onrender.com/api/auth/signup
 
 ### 5. **User Login**
 ```
-POST https://mayukh2026-wcdo.onrender.com/api/auth/login
+POST https://mayukh-bv-1.onrender.com/api/auth/login
 ```
 **Body (JSON):**
 ```json
@@ -87,7 +87,7 @@ POST https://mayukh2026-wcdo.onrender.com/api/auth/login
 
 ### 6. **Get User Profile** (Token Required)
 ```
-GET https://mayukh2026-wcdo.onrender.com/api/auth/profile
+GET https://mayukh-bv-1.onrender.com/api/auth/profile
 ```
 **Headers:**
 ```
@@ -98,7 +98,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 ### 7. **Upload Poster** (Token Required + File Upload)
 ```
-POST https://mayukh2026-wcdo.onrender.com/api/events/upload-poster
+POST https://mayukh-bv-1.onrender.com/api/events/upload-poster
 ```
 **Headers:**
 ```
@@ -110,7 +110,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 ### 8. **Create Event** (Token Required)
 ```
-POST https://mayukh2026-wcdo.onrender.com/api/events
+POST https://mayukh-bv-1.onrender.com/api/events
 ```
 **Headers:**
 ```
@@ -140,7 +140,7 @@ Content-Type: application/json
 
 ### 9. **Update Event** (Token Required)
 ```
-PUT https://mayukh2026-wcdo.onrender.com/api/events/:id
+PUT https://mayukh-bv-1.onrender.com/api/events/:id
 ```
 **Headers:**
 ```
@@ -153,7 +153,7 @@ Content-Type: application/json
 
 ### 10. **Delete Event** (Token Required)
 ```
-DELETE https://mayukh2026-wcdo.onrender.com/api/events/:id
+DELETE https://mayukh-bv-1.onrender.com/api/events/:id
 ```
 **Headers:**
 ```
@@ -168,27 +168,27 @@ Copy-paste these in your browser:
 
 1. **Health Check:**
    ```
-   https://mayukh2026-wcdo.onrender.com/api/health
+   https://mayukh-bv-1.onrender.com/api/health
    ```
 
 2. **All Events:**
    ```
-   https://mayukh2026-wcdo.onrender.com/api/events
+   https://mayukh-bv-1.onrender.com/api/events
    ```
 
 3. **Events by Category:**
    ```
-   https://mayukh2026-wcdo.onrender.com/api/events?category=Sci-FiVerse
+   https://mayukh-bv-1.onrender.com/api/events?category=Sci-FiVerse
    ```
 
 4. **Events by Type:**
    ```
-   https://mayukh2026-wcdo.onrender.com/api/events?type=Event
+   https://mayukh-bv-1.onrender.com/api/events?type=Event
    ```
 
 5. **Upcoming Events:**
    ```
-   https://mayukh2026-wcdo.onrender.com/api/events?status=upcoming
+   https://mayukh-bv-1.onrender.com/api/events?status=upcoming
    ```
 
 ---
@@ -226,4 +226,4 @@ Copy-paste these in your browser:
 
 ---
 
-**Note:** Server `https://mayukh2026-wcdo.onrender.com` par chal raha hona chahiye!
+**Note:** Server `https://mayukh-bv-1.onrender.com` par chal raha hona chahiye!
