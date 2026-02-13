@@ -1,7 +1,7 @@
 // Frontend API helper for authentication
 // Dynamically determine API base URL for production/development
 const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'https://mayukh2026-wcdo.onrender.com/api' 
+  ? 'https://mayukh-bv-1.onrender.com/api' 
   : '/api';
 
 // Sign up a new user

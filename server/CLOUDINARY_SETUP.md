@@ -96,14 +96,14 @@ This will install:
 
    **Using curl:**
    ```bash
-   curl -X POST https://mayukh2026-wcdo.onrender.com/api/events/upload-poster \
+   curl -X POST https://mayukh-bv-1.onrender.com/api/events/upload-poster \
      -H "Authorization: Bearer YOUR_JWT_TOKEN" \
      -F "poster=@/path/to/your/image.jpg"
    ```
 
    **Using Postman:**
    - Method: POST
-   - URL: `https://mayukh2026-wcdo.onrender.com/api/events/upload-poster`
+   - URL: `https://mayukh-bv-1.onrender.com/api/events/upload-poster`
    - Headers: 
      - `Authorization: Bearer YOUR_JWT_TOKEN`
    - Body: form-data

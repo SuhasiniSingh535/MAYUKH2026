@@ -21,7 +21,7 @@
 
 #### Using Postman:
 
-**POST** `https://mayukh2026-wcdo.onrender.com/api/auth/signup`
+**POST** `https://mayukh-bv-1.onrender.com/api/auth/signup`
 
 **Body (JSON):**
 ```json
@@ -53,7 +53,7 @@
 
 ### **Step 2: Login (If you already have an account)**
 
-**POST** `https://mayukh2026-wcdo.onrender.com/api/auth/login`
+**POST** `https://mayukh-bv-1.onrender.com/api/auth/login`
 
 **Body (JSON):**
 ```json
@@ -83,7 +83,7 @@
 1. **Open Postman**
 2. **Create new request:**
    - Method: `POST`
-   - URL: `https://mayukh2026-wcdo.onrender.com/api/events/upload-poster`
+   - URL: `https://mayukh-bv-1.onrender.com/api/events/upload-poster`
 
 3. **Headers:**
    - Key: `Authorization`
@@ -113,7 +113,7 @@
 #### Method 2: Using cURL (Terminal)
 
 ```bash
-curl -X POST https://mayukh2026-wcdo.onrender.com/api/events/upload-poster \
+curl -X POST https://mayukh-bv-1.onrender.com/api/events/upload-poster \
   -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -F "poster=@/path/to/your/image.jpg"
 ```
@@ -136,7 +136,7 @@ const fileInput = document.getElementById('posterInput'); // Your file input
 formData.append('poster', fileInput.files[0]);
 
 // 3. Upload to Cloudinary
-const response = await fetch('https://mayukh2026-wcdo.onrender.com/api/events/upload-poster', {
+const response = await fetch('https://mayukh-bv-1.onrender.com/api/events/upload-poster', {
   method: 'POST',
   headers: {
     'Authorization': `Bearer ${token}`
@@ -155,7 +155,7 @@ console.log('Poster URL:', data.posterLink);
 
 Now use the `posterLink` from Step 3 to create an event:
 
-**POST** `https://mayukh2026-wcdo.onrender.com/api/events`
+**POST** `https://mayukh-bv-1.onrender.com/api/events`
 
 **Headers:**
 - `Authorization: Bearer YOUR_TOKEN`
@@ -247,7 +247,7 @@ Create a simple HTML file to test:
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      const response = await fetch('https://mayukh2026-wcdo.onrender.com/api/auth/login', {
+      const response = await fetch('https://mayukh-bv-1.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -276,7 +276,7 @@ Create a simple HTML file to test:
       const formData = new FormData();
       formData.append('poster', fileInput.files[0]);
 
-      const response = await fetch('https://mayukh2026-wcdo.onrender.com/api/events/upload-poster', {
+      const response = await fetch('https://mayukh-bv-1.onrender.com/api/events/upload-poster', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -313,7 +313,7 @@ Create a simple HTML file to test:
         status: "upcoming"
       };
 
-      const response = await fetch('https://mayukh2026-wcdo.onrender.com/api/events', {
+      const response = await fetch('https://mayukh-bv-1.onrender.com/api/events', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -358,7 +358,7 @@ Create a simple HTML file to test:
 ### Check MongoDB:
 ```javascript
 // In MongoDB Compass or via API
-GET https://mayukh2026-wcdo.onrender.com/api/events
+GET https://mayukh-bv-1.onrender.com/api/events
 // Should show your created event with posterLink
 ```
 
