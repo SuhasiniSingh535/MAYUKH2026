@@ -510,12 +510,15 @@
       "Cultural": "#ff00ff", 
       "PR": "#7c6bff",
       "Sponsorship": "#ffd700", 
-      "Design": "#00ff7f", 
+      "Decor": "#00ff7f", 
       "Catering": "#ff7f50",
       "Workshop": "#00ffff", 
       "Discipline": "#ff4d4d", 
       "Coverage": "#ffffff",
-      "Drama": "#a855f7"
+      "Drama": "#a855f7",
+      "Finance": "#ff7f50",
+      "Digital": "#00ffff",
+      
     };
 
     const container = document.getElementById('teams-container');
@@ -543,7 +546,7 @@
             container.innerHTML = '';
             
             // 2. Predefined Order
-            const order = ['Technical', 'PR', 'Drama', 'Cultural', 'Sponsorship', 'Design', 'Catering', 'Workshop', 'Discipline', 'Coverage'];
+            const order = ['Technical', 'PR', 'Drama', 'Cultural', 'Sponsorship', 'Decor', 'Catering', 'Workshop', 'Discipline', 'Coverage','Digital','Finance'];
 
             order.forEach(teamName => {
                 const team = groupedTeams[teamName];
