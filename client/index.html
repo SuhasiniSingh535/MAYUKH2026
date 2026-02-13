@@ -90,6 +90,20 @@
       }
     }
 
+    /* Intro Video Responsive Styling */
+    #intro-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* On larger screens, use cover for better fill */
+    @media (min-width: 768px) {
+      #intro-video {
+        object-fit: cover;
+      }
+    }
+
     /* Video Spotlight Effect */
     .video-container {
       position: relative;
@@ -348,7 +362,7 @@
 
   <!-- Intro Screen -->
   <div id="intro-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-700 ease-in-out cursor-pointer">
-    <video id="intro-video" class="w-full h-full object-cover" autoplay muted playsinline>
+    <video id="intro-video" autoplay muted playsinline>
       <source src="assests/MayukhLogo2.mp4" type="video/mp4">
     </video>
     <!-- Skip hint -->
@@ -527,8 +541,9 @@
 
 <script>
     // --- API CONFIGURATION ---
-    // --- FIXED API CONFIGURATION ---
-    const API_BASE = 'https://mayukh-bv-1.onrender.com/api'; // Make sure this URL is correct!
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5001/api'
+        : 'https://mayukh-bv-1.onrender.com/api'; // Make sure this URL is correct!
 
     // --- ALERT SYSTEM LOGIC ---
     async function loadAlerts() {
