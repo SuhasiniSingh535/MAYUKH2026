@@ -34,46 +34,105 @@ router.get('/', async (req, res) => {
     }
 });
 
-// --- 3. CREATE EVENT ---
+// --- 3. CREATE OR UPDATE EVENT ---
 const cpUpload = upload.fields([{ name: 'poster', maxCount: 1 }, { name: 'logo', maxCount: 1 }]);
 
 router.post('/', cpUpload, async (req, res) => {
     try {
-        // Extract text fields
-        const { 
-            title, category, eventType, description, 
-            day, date, venue, time, duration, teamSize, 
-            prizePool, registrationFee, registrationLink 
-        } = req.body;
+        // 1. Clean up IDs
+        if (req.body.id === '') delete req.body.id;
+        if (req.body._id === '') delete req.body._id;
 
-        // Extract image links
-        let posterLink = '', posterPublicId = '';
-        let logoLink = '', logoPublicId = '';
+        /// 2. Handle Images (Priority: New File > Existing Link > Empty)
+        let posterUrl = req.body.existingPoster || '';
+        let logoUrl = req.body.existingLogo || '';
+        let posterPublicId = req.body.posterPublicId || ''; 
+        let logoPublicId = req.body.logoPublicId || '';
 
-        if (req.files['poster']) {
-            posterLink = req.files['poster'][0].path;
-            posterPublicId = req.files['poster'][0].filename;
+        if (req.files && req.files['poster']) {
+            posterUrl = req.files['poster'][0].path;
+            posterPublicId = req.files['poster'][0].filename; 
         }
 
-        if (req.files['logo']) {
-            logoLink = req.files['logo'][0].path;
+        if (req.files && req.files['logo']) {
+            logoUrl = req.files['logo'][0].path;
             logoPublicId = req.files['logo'][0].filename;
         }
 
-        const newEvent = new Event({
-            title, category, eventType, description,
-            day, date, venue, time, duration, teamSize,
-            prizePool, registrationFee, registrationLink,
-            posterLink, posterPublicId,
-            logoLink, logoPublicId
-        });
+        // 3. Prepare Event Data (Explicit mapping)
+        const eventData = {
+            title: req.body.title,
+            category: req.body.category,
+            eventType: req.body.eventType,
+            description: req.body.description,
+            rounds: req.body.rounds,
+            requirements: req.body.requirements,
+            day: req.body.day,
+            date: req.body.date,
+            venue: req.body.venue,
+            time: req.body.time,
+            duration: req.body.duration,
+            teamSize: req.body.teamSize,
+            prizePool: req.body.prizePool,
+            registrationFee: req.body.registrationFee,
+            registrationLink: req.body.registrationLink,
+            posterLink: posterUrl, // Purana link retain hoga agar naya nahi aaya
+            logoLink: logoUrl,
+            posterPublicId: posterPublicId,
+            logoPublicId: logoPublicId
+        };
 
-        await newEvent.save();
-        res.status(201).json(newEvent);
+        // 4. Update Existing OR Create New
+        if (req.body.id || req.body._id) {
+            const id = req.body.id || req.body._id;
+            const updatedEvent = await Event.findByIdAndUpdate(id, eventData, { new: true });
+            console.log("✅ Event Updated:", updatedEvent.title);
+            res.json(updatedEvent);
+        } else {
+            const newEvent = new Event(eventData);
+            await newEvent.save();
+            console.log("✅ New Event Created:", newEvent.title);
+            res.status(201).json(newEvent);
+        }
 
     } catch (err) {
-        console.error("POST Error:", err);
+        console.error("POST Event Error:", err);
         res.status(500).json({ message: 'Error saving event', error: err.message });
+    }
+});
+
+// Events update karne ke liye PUT route
+router.put('/:id', upload.fields([
+    { name: 'poster', maxCount: 1 }, 
+    { name: 'logo', maxCount: 1 }
+]), async (req, res) => {
+    try {
+        // Capture existing links from the hidden fields sent in req.body
+        let posterUrl = req.body.existingPoster;
+        let logoUrl = req.body.existingLogo;
+
+        // If a NEW file is uploaded, use the new path, otherwise keep the old one
+        if (req.files && req.files['poster']) {
+            posterUrl = req.files['poster'][0].path;
+        }
+        if (req.files && req.files['logo']) {
+            logoUrl = req.files['logo'][0].path;
+        }
+
+        // Construct the update object explicitly to avoid data loss
+        const updateData = { 
+            ...req.body,
+            posterLink: posterUrl,
+            logoLink: logoUrl
+        };
+
+        const updatedEvent = await Event.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        
+        if (!updatedEvent) return res.status(404).json({ message: "Event not found" });
+        res.json(updatedEvent);
+    } catch (error) {
+        console.error("Update Error:", error);
+        res.status(500).json({ message: error.message });
     }
 });
 

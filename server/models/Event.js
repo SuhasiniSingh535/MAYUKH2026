@@ -32,7 +32,7 @@ const cpUpload = upload.fields([{ name: 'poster', maxCount: 1 }, { name: 'logo',
 router.post('/', cpUpload, async (req, res) => {
     try {
         const { 
-            title, category, eventType, description, 
+            title, category, eventType, description,rounds, requirements,   
             day, date, venue, time, duration, teamSize, 
             prizePool, registrationFee, registrationLink 
         } = req.body;
@@ -51,7 +51,7 @@ router.post('/', cpUpload, async (req, res) => {
         }
 
         const newEvent = new Event({
-            title, category, eventType, description,
+            title, category, eventType, description,rounds, requirements,
             day, date, venue, time, duration, teamSize,
             prizePool, registrationFee, registrationLink,
             posterLink, posterPublicId,

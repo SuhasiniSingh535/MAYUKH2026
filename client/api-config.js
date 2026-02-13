@@ -2,7 +2,7 @@ const API_CONFIG = {
   // Fix: Check for BOTH 'localhost' AND '127.0.0.1'
   BASE_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:5001' 
-    : 'https://mayukh-bv-1.onrender.com',
+    : 'https://mayukh2026-wcdo.onrender.com',
 
   
   get eventsUrl() {

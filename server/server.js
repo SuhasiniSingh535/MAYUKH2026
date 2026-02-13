@@ -17,6 +17,8 @@ const PORT = process.env.PORT || 5001;
 
 app.use(cors({ origin: '*' })); 
 app.use(express.json());
+// Isse admin.html aur media.html load hone lagenge
+app.use(express.static(path.join(__dirname, '../')));
 app.use(express.urlencoded({ extended: true }));
 
 // Cloudinary
@@ -56,6 +58,8 @@ const Event = mongoose.model('Event', new mongoose.Schema({
     category: { type: String, default: 'all-verses' },
     eventType: { type: String, default: 'tech-event' },
     description: String,
+    rounds: String,
+    requirements: String,
     posterLink: String,
     logoLink: String,
     venue: String,
@@ -96,34 +100,6 @@ app.get('/api/events', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/events', upload.fields([{name: 'poster'}, {name: 'logo'}]), async (req, res) => {
-    try {
-        if (req.body.id === '') delete req.body.id;
-        if (req.body._id === '') delete req.body._id;
-
-        let posterUrl = '', logoUrl = '';
-        if (req.files?.poster) {
-            const up = await uploadToCloudinary(req.files.poster[0].buffer, 'mayukh-events');
-            posterUrl = up.secure_url;
-        }
-        if (req.files?.logo) {
-            const up = await uploadToCloudinary(req.files.logo[0].buffer, 'mayukh-events');
-            logoUrl = up.secure_url;
-        }
-
-        const newEvent = await new Event({ 
-            ...req.body, 
-            posterLink: posterUrl, 
-            logoLink: logoUrl 
-        }).save();
-        
-        res.json(newEvent);
-    } catch (e) { 
-        console.error("POST EVENT ERROR:", e.message);
-        res.status(500).json({ error: e.message }); 
-    }
-});
-
 app.delete('/api/events/:id', async (req, res) => {
     try {
         await Event.findByIdAndDelete(req.params.id);
@@ -139,39 +115,146 @@ app.get('/api/teams', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/teams', upload.single('image'), async (req, res) => {
+// --- CREATE OR UPDATE EVENT ---
+app.post('/api/events', upload.fields([{name: 'poster'}, {name: 'logo'}]), async (req, res) => {
     try {
-        if (req.body.id === '') delete req.body.id;
-        if (req.body._id === '') delete req.body._id;
+        // 1. Clean up IDs to avoid duplicate key errors
+        if (req.body.id === '' || req.body.id === 'undefined') delete req.body.id;
+        if (req.body._id === '' || req.body._id === 'undefined') delete req.body._id;
 
-        // Image Logic: Agar nayi file hai toh upload, nahi toh purani use karo
-        let imgUrl = req.body.existingImage || '';
-        
-        if (req.file) {
-            console.log("Uploading new team photo...");
-            const uploaded = await uploadToCloudinary(req.file.buffer, 'mayukh-teams');
-            imgUrl = uploaded.secure_url;
+        // 2. Handle Images (Priority: New Upload > Existing Hidden Field > Empty)
+        let posterUrl = req.body.existingPoster || ''; 
+        let logoUrl = req.body.existingLogo || '';
+
+        // Check if New Poster is Uploaded
+        if (req.files && req.files['poster']) {
+            console.log("📤 Uploading New Poster...");
+            const up = await uploadToCloudinary(req.files['poster'][0].buffer, 'mayukh-events');
+            posterUrl = up.secure_url;
         }
 
-        // Agar image abhi bhi khali hai (na nayi, na purani), toh error do
-        if (!imgUrl) {
-             return res.status(400).json({ message: 'Image is required' });
+        // Check if New Logo is Uploaded
+        if (req.files && req.files['logo']) {
+            console.log("📤 Uploading New Logo...");
+            const up = await uploadToCloudinary(req.files['logo'][0].buffer, 'mayukh-events');
+            logoUrl = up.secure_url;
         }
-        
-        const newMember = await new Team({
-            name: req.body.name, // Required removed
-            teamName: req.body.teamName,
-            memberType: req.body.memberType || "Member", // Default to "Member" if not provided
-            linkedin: req.body.linkedin,
-            imageUrl: imgUrl
-        }).save();
-        
-        res.json(newMember);
-    } catch (e) { 
-        console.error("POST TEAM ERROR:", e.message);
-        res.status(500).json({ error: e.message }); 
+
+        // 3. Prepare Final Data Object
+        const eventData = {
+            ...req.body, // Gets title, description, rounds, requirements etc.
+            posterLink: posterUrl,
+            logoLink: logoUrl
+        };
+
+        // 4. Update Existing OR Create New Logic
+        if (req.body.id || req.body._id) {
+            // --- UPDATE CASE ---
+            const id = req.body.id || req.body._id;
+            const updatedEvent = await Event.findByIdAndUpdate(id, eventData, { new: true });
+            console.log("✅ Event Updated:", updatedEvent.title);
+            res.json(updatedEvent);
+        } else {
+            // --- CREATE CASE ---
+            // Naye event mein agar poster nahi hai toh warning, but crash nahi hoga
+            const newEvent = new Event(eventData);
+            await newEvent.save();
+            console.log("✅ New Event Created:", newEvent.title);
+            res.status(201).json(newEvent);
+        }
+
+    } catch (err) {
+        console.error("❌ POST Event Error:", err.message);
+        // Returns exact error to your browser console so you know what failed
+        res.status(500).json({ message: 'Server Error', error: err.message });
     }
 });
+
+// --- UPDATE EXISTING EVENT (Dedicated PUT route) ---
+app.put('/api/events/:id', upload.fields([{name: 'poster'}, {name: 'logo'}]), async (req, res) => {
+    try {
+        const id = req.params.id;
+        
+        // 1. Purani images retain karne ke liye logic
+        let posterUrl = req.body.existingPoster || ''; 
+        let logoUrl = req.body.existingLogo || '';
+
+        // 2. Agar nayi files upload hui hain toh unhe use karo
+        if (req.files && req.files['poster']) {
+            const up = await uploadToCloudinary(req.files['poster'][0].buffer, 'mayukh-events');
+            posterUrl = up.secure_url;
+        }
+        if (req.files && req.files['logo']) {
+            const up = await uploadToCloudinary(req.files['logo'][0].buffer, 'mayukh-events');
+            logoUrl = up.secure_url;
+        }
+
+        // 3. Data prepare karein
+        const eventData = {
+            ...req.body,
+            posterLink: posterUrl,
+            logoLink: logoUrl
+        };
+
+        // 4. Database update karein
+        const updatedEvent = await Event.findByIdAndUpdate(id, eventData, { new: true });
+        
+        if (!updatedEvent) return res.status(404).json({ message: "Event not found" });
+        
+        console.log("✅ Event Updated Successfully:", updatedEvent.title);
+        res.json(updatedEvent);
+    } catch (err) {
+        console.error("❌ PUT Error:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// --- 1. POST: CREATE TEAM (Simplified) ---
+app.post('/api/teams', upload.single('image'), async (req, res) => {
+    try {
+        let imgUrl = "";
+        if (req.file) {
+            const result = await uploadToCloudinary(req.file.buffer, 'mayukh-teams');
+            imgUrl = result.secure_url;
+        }
+
+        const newMember = new Team({
+            name: req.body.name || "Team Photo", // Yeh aapka caption ban jayega
+            teamName: req.body.teamName,
+            imageUrl: imgUrl
+            // LinkedIn aur memberType automatic default set ho jayenge
+        });
+
+        await newMember.save();
+        res.status(201).json(newMember);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// --- 2. PUT: UPDATE TEAM (Simplified) ---
+app.put('/api/teams/:id', upload.single('image'), async (req, res) => {
+    try {
+        const id = req.params.id;
+        let updateData = {
+            name: req.body.name,
+            teamName: req.body.teamName
+        };
+
+        if (req.file) {
+            const result = await uploadToCloudinary(req.file.buffer, 'mayukh-teams');
+            updateData.imageUrl = result.secure_url;
+        } else {
+            updateData.imageUrl = req.body.existingImage;
+        }
+
+        const updated = await Team.findByIdAndUpdate(id, updateData, { new: true });
+        res.json(updated);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 
 app.delete('/api/teams/:id', async (req, res) => {
     try {
@@ -213,6 +296,33 @@ app.post('/api/gallery', upload.single('image'), async (req, res) => {
     } catch (e) { 
         console.error("POST GALLERY ERROR:", e.message);
         res.status(500).json({ error: e.message }); 
+    }
+});
+
+// --- UPDATE GALLERY PHOTO ---
+app.put('/api/gallery/:id', upload.single('image'), async (req, res) => {
+    try {
+        const id = req.params.id;
+        let updateData = {
+            caption: req.body.caption,
+            category: req.body.category
+        };
+
+        if (req.file) {
+            const result = await uploadToCloudinary(req.file.buffer, 'mayukh-gallery');
+            updateData.imageUrl = result.secure_url;
+        } else {
+            updateData.imageUrl = req.body.existingImage;
+        }
+
+        const updatedPhoto = await Gallery.findByIdAndUpdate(id, updateData, { new: true });
+        if (!updatedPhoto) return res.status(404).json({ error: "Photo not found" });
+
+        console.log("✅ Gallery Photo Updated");
+        res.json(updatedPhoto);
+    } catch (e) {
+        console.error("UPDATE GALLERY ERROR:", e.message);
+        res.status(500).json({ error: e.message });
     }
 });
 

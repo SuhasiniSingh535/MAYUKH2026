@@ -12,8 +12,8 @@ const teamSchema = new mongoose.Schema({
     required: true,
     enum: [
       'Technical', 'PR', 'Drama', 'Cultural', 
-      'Sponsorship', 'Design', 'Catering', 
-      'Workshop', 'Discipline', 'Coverage'
+      'Sponsorship', 'Decor', 'Catering', 
+      'Workshop', 'Discipline', 'Coverage', 'Finance', 'Digital'
     ]
   },
   // The specific types you requested

@@ -942,7 +942,8 @@
   </div>
 
   <a href="index.html" class="fixed top-6 left-8 z-50 orbitron text-[10px] tracking-widest border-b border-cyan-500 pb-1 hover:text-cyan-400 transition-all uppercase">
-    <i class="fa-solid fa-ghost mr-2"></i> ESC_TERMINAL
+    <i class="fa-solid fa-ghost mr-2"></i> Back
+
   </a>
 
   <main class="min-h-screen flex flex-col justify-center max-w-7xl mx-auto w-full px-3 md:px-6 pt-12 pb-8 relative z-10">
@@ -1215,38 +1216,71 @@
             const eventsList = data.events || data;
 
             const groupedDays = eventsList.reduce((acc, event) => {
-                let dayKey = normalizationMap[event.day] || normalizationMap[event.date];
-                
-                // For Pre-Fest events, use the normalized key
-                if (event.day === 'Pre-Fest') {
-                    dayKey = 'PRE_FEST';
+                let dayKey = null;
+
+                // Strict Date Parsing
+                if (event.date) {
+                    const eventDate = new Date(event.date);
+                    const d = eventDate.getDate(); // Sirf tarikh (1-31)
+                    const m = eventDate.getMonth(); // February is 1
+
+                    // Check specifically for February 2026
+                    if (m === 1) { 
+                        if (d === 18 || d === 19 || d === 20) {
+                            dayKey = 'PRE_FEST';
+                        } else if (d === 21) {
+                            dayKey = 'DAY_01';
+                        } else if (d === 22) {
+                            dayKey = 'DAY_02';
+                        } else if (d === 23) {
+                            dayKey = 'DAY_03';
+                        }
+                    }
                 }
-                
+
+                // Fallback: Agar upar wala fail ho toh string check (Safe version)
+                if (!dayKey && event.day) {
+                    const dField = event.day.toLowerCase();
+                    if (dField.includes("prefest") || dField.includes("pre-fest")) dayKey = 'PRE_FEST';
+                    else if (dField.includes("day 1") || dField.includes("day1")) dayKey = 'DAY_01';
+                    else if (dField.includes("day 2") || dField.includes("day2")) dayKey = 'DAY_02';
+                    else if (dField.includes("day 3") || dField.includes("day3")) dayKey = 'DAY_03';
+                }
+
+                // Final Grouping
                 if (dayKey) {
                     if (!acc[dayKey]) acc[dayKey] = [];
                     acc[dayKey].push(event);
                 }
                 return acc;
             }, {});
-
+            
             // Sort keys to show PRE_FEST first, then DAY_01, DAY_02, DAY_03
             const sortOrder = ['PRE_FEST', 'DAY_01', 'DAY_02', 'DAY_03'];
             const sortedKeys = sortOrder.filter(key => groupedDays[key]);
             let roadmapHTML = '';
 
             sortedKeys.forEach((dayKey) => {
-                // Different styling for PRE_FEST label
                 const isPrefest = dayKey === 'PRE_FEST';
                 const labelClass = isPrefest ? 'day-label prefest-label' : 'day-label';
                 const displayLabel = isPrefest ? 'PRE-FEST' : dayKey;
                 
                 roadmapHTML += `<div class="day-separator" id="${dayKey}"><div class="${labelClass}">${displayLabel}</div></div>`;
+
+                // --- 1. SPECIAL EVENT: INAUGURATION (Day 1 ke shuru mein) ---
+                if (dayKey === 'DAY_01') {
+                    roadmapHTML += createSpecialEventBox(
+                        'INAUGURATION CEREMONY',
+                        ['#FFD700', '#FFA500', '#FF6347'], 
+                        'fa-solid fa-crown'
+                    );
+                }
+
                 const dayEvents = groupedDays[dayKey].sort((a, b) => (a.time || '').localeCompare(b.time || ''));
 
                 dayEvents.forEach((event) => {
                     const style = getVerseStyle(event.category);
                     
-                    // Format date display for pre-fest events
                     let dateDisplay = event.date || 'FEB 2026';
                     if (isPrefest && event.date) {
                         const dateObj = new Date(event.date);
@@ -1290,12 +1324,29 @@
                                             <span class="rajdhani text-[14px] md:text-[17px] text-white font-semibold mt-1 break-words" style="text-shadow: 0 0 5px ${style.color}">${event.venue || 'TBD'}</span>
                                         </div>
                                     </div>
-                                  
                                 </div>
                             </div>
                             <div class="roadmap-card-wrapper"></div>
                         </div>`;
                 });
+
+                // --- 2. SPECIAL EVENT: DINNER NIGHT (Day 2 ke end mein) ---
+                if (dayKey === 'DAY_02') {
+                    roadmapHTML += createSpecialEventBox(
+                        'DINNER NIGHT',
+                        ['#FF1493', '#FF69B4', '#FFB6C1'], 
+                        'fa-solid fa-utensils'
+                    );
+                }
+
+                // --- 3. SPECIAL EVENT: CULTURAL NIGHT (Day 3 ke end mein) ---
+                if (dayKey === 'DAY_03') {
+                    roadmapHTML += createSpecialEventBox(
+                        'CULTURAL NIGHT',
+                        ['#9400D3', '#8A2BE2', '#DA70D6'], 
+                        'fa-solid fa-masks-theater'
+                    );
+                }
             });
             
             root.innerHTML = roadmapHTML || `<p class="orbitron text-red-500 text-center text-lg">⚠ NO MISSION DATA FOUND</p>`;
@@ -1304,7 +1355,44 @@
             root.innerHTML = `<p class="orbitron text-red-500 text-center text-lg">⚠ DATABASE_OFFLINE</p>`; 
         }
     }
-
+    // Helper function to create special event box (Friend's addition)
+    function createSpecialEventBox(title, gradientColors, iconClass) {
+        return `
+            <div class="roadmap-item">
+                <div class="roadmap-node" style="border-color: ${gradientColors[0]}; box-shadow: 0 0 20px ${gradientColors[0]}"></div>
+                <div class="roadmap-card-wrapper">
+                    <div class="special-event-box terminal-frame p-8 md:p-12 border-4 transition-all" style="
+                        border-image: linear-gradient(135deg, ${gradientColors.join(', ')}) 1;
+                        background: linear-gradient(135deg, 
+                            rgba(0, 20, 40, 0.9) 0%,
+                            rgba(30, 10, 50, 0.9) 100%
+                        );
+                        box-shadow: 
+                            0 0 60px ${gradientColors[0]}80,
+                            0 0 90px ${gradientColors[1]}60,
+                            inset 0 0 40px ${gradientColors[0]}40;
+                    ">
+                        <div class="flex items-center justify-center gap-4 md:gap-6">
+                            <div class="special-event-icon w-16 h-16 md:w-20 md:h-20 bg-black/70 border-4 flex items-center justify-center rounded-full flex-shrink-0" style="
+                                border-color: ${gradientColors[0]};
+                                box-shadow: 0 0 30px ${gradientColors[0]}, inset 0 0 20px ${gradientColors[0]}40;
+                            ">
+                                <i class="${iconClass} text-3xl md:text-5xl" style="color: ${gradientColors[0]}"></i>
+                            </div>
+                            <h2 class="orbitron text-2xl md:text-4xl font-black uppercase tracking-widest text-center" style="
+                                background: linear-gradient(135deg, ${gradientColors.join(', ')});
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                background-clip: text;
+                                filter: drop-shadow(0 0 20px ${gradientColors[0]});
+                                letter-spacing: 0.2em;
+                            ">${title}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="roadmap-card-wrapper"></div>
+            </div>`;
+    }
     // Load events when page loads
     window.addEventListener('DOMContentLoaded', loadEvents);
   </script>

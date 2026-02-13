@@ -87,54 +87,44 @@
                     <button onclick="resetTeamForm()" class="text-[10px] bg-gray-700 px-2 py-1 rounded text-white">Reset</button>
                 </h2>
                 <form id="teamForm" class="space-y-4">
-                    <input type="hidden" name="id" id="teamId">
-                    <input type="hidden" name="existingImage" id="teamExistingImage">
-                    
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold">Caption <span class="text-gray-500">(Optional)</span></label>
-                        <input type="text" name="name" placeholder="Ex: TECH CORE " 
-                            class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-white focus:border-cyan-500 outline-none">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="text-[10px] text-gray-400 font-bold">TEAM</label>
-                            <select name="teamName" class="w-full bg-gray-700 p-3 rounded text-xs text-white border border-gray-600">
-                                <option value="Technical">Technical</option>
-                                <option value="PR">PR</option>
-                                <option value="Drama">Drama</option>
-                                <option value="Cultural">Cultural</option>
-                                <option value="Sponsorship">Sponsorship</option>
-                                <option value="Design">Design</option>
-                                <option value="Catering">Catering</option>
-                                <option value="Workshop">Workshop</option>
-                                <option value="Discipline">Discipline</option>
-                                <option value="Coverage">Coverage</option>
-                                <option value="Web-Dev">Web-Dev</option>
-                            </select>
-                        </div>
-                        <!-- <div>
-                            <label class="text-[10px] text-gray-400 font-bold">ROLE</label>
-                            <select name="memberType" class="w-full bg-gray-700 p-3 rounded text-xs text-white border border-gray-600">
-                                <option value="Core">Core</option>
-                                <option value="Sub-Core">Sub-Core</option>
-                            </select>
-                        </div> -->
-                    </div>
-
+    <input type="hidden" name="id" id="teamId">
+    <input type="hidden" name="existingImage" id="teamExistingImage">
     
+    <div>
+        <label class="text-[10px] text-gray-400 font-bold uppercase">Caption</label>
+        <input type="text" name="name" placeholder="Ex: Core Technical Team" 
+            class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-white focus:border-cyan-500 outline-none">
+    </div>
 
-                    <div>
-                        <label class="text-[10px] text-gray-400 font-bold">PHOTO</label>
-                        <p class="text-[9px] text-gray-500 mb-1" id="teamImageMsg">Leave empty to keep current photo</p>
-                        <input type="file" name="image" class="w-full text-xs text-gray-400 bg-gray-900 rounded p-2">
-                    </div>
+    <div>
+        <label class="text-[10px] text-gray-400 font-bold uppercase">Team Category</label>
+        <select name="teamName" class="w-full bg-gray-700 p-3 rounded text-xs text-white border border-gray-600">
+            <option value="Technical">Technical</option>
+            <option value="PR">PR</option>
+            <option value="Drama">Drama</option>
+            <option value="Cultural">Cultural</option>
+            <option value="Sponsorship">Sponsorship</option>
+            <option value="Decor">Decor</option>
+            <option value="Catering">Catering</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Discipline">Discipline</option>
+            <option value="Coverage">Coverage</option>
+            <option value="Digital">Digital</option>
+            <option value="Finance">Finance</option>
+        </select>
+    </div>
 
-                    <div id="teamStatus" class="text-center text-xs h-4"></div>
-                    <button type="submit" id="teamSubmitBtn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded transition shadow-lg">
-                        SAVE TEAM
-                    </button>
-                </form>
+    <div>
+        <label class="text-[10px] text-gray-400 font-bold uppercase">Team Photo</label>
+        <p class="text-[9px] text-gray-500 mb-1" id="teamImageMsg">New photo will replace the old one</p>
+        <input type="file" name="image" class="w-full text-xs text-gray-400 bg-gray-900 rounded p-2">
+    </div>
+
+    <div id="teamStatus" class="text-center text-xs h-4"></div>
+    <button type="submit" id="teamSubmitBtn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded transition shadow-lg">
+        SAVE TEAM DATA
+    </button>
+</form>
             </div>
 
             <div class="w-2/3 bg-black p-6 overflow-y-auto">
@@ -223,19 +213,20 @@
                     return;
                 }
 
-                container.innerHTML = allTeamsData.map(m => `
-                    <div class="bg-gray-800 p-3 rounded border border-gray-700 flex items-center gap-3 relative group">
-                        <img src="${m.imageUrl}" class="w-12 h-12 rounded-full object-cover border border-gray-600">
-                        <div class="overflow-hidden">
-                            <h4 class="font-bold text-white text-sm truncate">${m.name || 'No Name'}</h4>
-                            <p class="text-[10px] text-gray-400">${m.teamName} • ${m.memberType}</p>
-                        </div>
-                        <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                            <button onclick="editTeam('${m._id}')" class="text-yellow-500 hover:scale-110"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteItem('teams', '${m._id}')" class="text-red-500 hover:scale-110"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `).join('');
+                // media.html ke renderTeams function ke andar ka template
+container.innerHTML = allTeamsData.map(m => `
+    <div class="bg-gray-800 p-3 rounded border border-gray-700 flex items-center gap-3 relative group">
+        <img src="${m.imageUrl}" class="w-12 h-12 rounded object-cover border border-gray-600">
+        <div class="overflow-hidden">
+            <h4 class="font-bold text-white text-sm truncate">${m.name || 'Team Photo'}</h4>
+            <p class="text-[10px] text-cyan-400 font-bold uppercase">${m.teamName}</p>
+        </div>
+        <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+            <button onclick="editTeam('${m._id}')" class="text-yellow-500"><i class="fa-solid fa-pen"></i></button>
+            <button onclick="deleteItem('teams', '${m._id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    </div>
+`).join('');
             } catch(e) { console.error(e); }
         }
 
@@ -245,19 +236,19 @@
             if(!member) return;
 
             document.getElementById('teamId').value = member._id;
-            document.getElementById('teamExistingImage').value = member.imageUrl;
+            // hidden field ko value assign karein
+            document.getElementById('teamExistingImage').value = member.imageUrl; 
             
             document.querySelector('#teamForm [name="name"]').value = member.name || '';
             document.querySelector('#teamForm [name="teamName"]').value = member.teamName;
-            //document.querySelector('#teamForm [name="memberType"]').value = member.memberType;
-            document.querySelector('#teamForm [name="linkedin"]').value = member.linkedin || '';
+            
+            const linkedinField = document.querySelector('#teamForm [name="linkedin"]');
+            if(linkedinField) linkedinField.value = member.linkedin || '';
 
             document.getElementById('teamFormTitle').innerText = "EDITING MEMBER";
             const btn = document.getElementById('teamSubmitBtn');
-            btn.innerText = "UPDATE TEAM"; // Changed text for update
-            btn.classList.remove('bg-cyan-600');
-            btn.classList.add('bg-yellow-600');
-            
+            btn.innerText = "UPDATE TEAM";
+            btn.classList.replace('bg-cyan-600', 'bg-yellow-600');
             document.getElementById('teamImageMsg').innerText = "Uploading new photo will replace current one.";
         }
 
@@ -324,18 +315,16 @@
             if(!photo) return;
 
             document.getElementById('galleryId').value = photo._id;
+            // hidden field ko value assign karein
             document.getElementById('galleryExistingImage').value = photo.imageUrl;
-            
+
             document.querySelector('#galleryForm [name="caption"]').value = photo.caption || '';
             document.querySelector('#galleryForm [name="category"]').value = photo.category;
 
             document.getElementById('galleryFormTitle').innerText = "EDITING PHOTO";
             const btn = document.getElementById('gallerySubmitBtn');
             btn.innerText = "UPDATE PHOTO";
-            btn.classList.remove('bg-purple-600');
-            btn.classList.add('bg-yellow-600');
-            
-            document.getElementById('galleryImageMsg').innerText = "Uploading new photo will replace current one.";
+            btn.classList.replace('bg-purple-600', 'bg-yellow-600');
         }
 
         function resetGalleryForm() {
@@ -361,27 +350,26 @@
             const btn = form.querySelector('button[type="submit"]');
             const status = document.getElementById(statusId);
             const formData = new FormData(form);
-            const id = formData.get('id'); 
+            
+            // Get ID from the hidden field
+            const id = document.getElementById(type === 'teams' ? 'teamId' : 'galleryId').value;
 
             btn.disabled = true;
-            btn.innerText = "PROCESSING...";
-            status.innerText = "Processing...";
+            status.innerText = "PROCESSING...";
             status.className = "text-center text-xs text-yellow-400 animate-pulse";
 
             try {
-                if(!id) formData.delete('id');
+                let url = `${API_BASE}/api/${type}`;
+                let method = 'POST';
 
-                // If editing, delete old entry first (Simple Logic for image replacement)
                 if(id) {
-                     await fetch(`${API_BASE}/api/${type}/${id}`, { method: 'DELETE' });
+                    url = `${API_BASE}/api/${type}/${id}`;
+                    method = 'PUT';
                 }
 
-                const res = await fetch(`${API_BASE}/api/${type}`, {
-                    method: 'POST',
-                    body: formData
-                });
+                const res = await fetch(url, { method: method, body: formData });
 
-                if(res.ok) {
+                if (res.ok) {
                     status.innerText = "SUCCESS!";
                     status.className = "text-center text-xs text-green-400";
                     resetFunc(); 
@@ -389,19 +377,14 @@
                     setTimeout(() => status.innerText = "", 3000);
                 } else {
                     const err = await res.json();
-                    throw new Error(err.message || "Upload Failed");
+                    throw new Error(err.error || "Operation Failed");
                 }
-            } catch(err) {
+            } catch (err) {
                 console.error(err);
                 status.innerText = "ERROR: " + err.message;
                 status.className = "text-center text-xs text-red-400";
             } finally {
                 btn.disabled = false;
-                // Button text reset handled by resetFunc in success, or manually here if failed? 
-                // We rely on resetFunc on success. If fail, it stays on processing/update state which is fine.
-                if(status.innerText.includes("ERROR")) {
-                     btn.innerText = type === 'teams' ? "RETRY SAVE" : "RETRY UPLOAD";
-                }
             }
         }
 

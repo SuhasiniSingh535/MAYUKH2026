@@ -279,7 +279,7 @@
     // --- API Configuration ---
     const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5001/api/teams'
-        : 'https://mayukh-bv-1.onrender.com/api/teams';
+        : 'https://mayukh2026-wcdo.onrender.com';
 
     // --- Hardcoded Theme Colors (Same as original) ---
     const teamColors = {
@@ -287,12 +287,14 @@
       "Cultural": "#ff00ff", 
       "PR": "#7c6bff",
       "Sponsorship": "#ffd700", 
-      "Design": "#00ff7f", 
+      "Decor": "#00ff7f", 
       "Catering": "#ff7f50",
       "Workshop": "#00ffff", 
-      "Discipline": "#ff4d4d", 
+      "Discipline and hospitality": "#ff4d4d", 
       "Coverage": "#ffffff",
-      "Drama": "#a855f7"
+      "Drama": "#a855f7",
+      "Finance": "#ff9900",
+      "Digital": "#00ccff"
     };
 
     const container = document.getElementById('teams-container');
@@ -321,7 +323,7 @@
             container.innerHTML = '';
             
             // 2. Predefined Order (Strictly maintained)
-            const order = ['Technical', 'PR', 'Drama', 'Cultural', 'Sponsorship', 'Design', 'Catering', 'Workshop', 'Discipline', 'Coverage'];
+            const order = ['Technical', 'PR', 'Drama', 'Cultural', 'Sponsorship', 'Decor', 'Catering', 'Workshop', 'Discipline and hospitality', 'Coverage', 'Finance', 'Digital'];
 
             order.forEach(teamName => {
                 const team = groupedTeams[teamName];

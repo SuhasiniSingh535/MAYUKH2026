@@ -1,402 +1,644 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Mayukh 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@300;500;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>About | Mayukh 2026</title>
 
-        :root {
-            --neon-cyan: #22d3ee;
-            --neon-purple: #a855f7;
-        }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <style>
+    /* ─── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            background-color: #020617;
-            color: #f8fafc;
-            font-family: 'Space Grotesk', sans-serif;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-        }
+    /* ─── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --cyan:   #22d3ee;
+      --purple: #a855f7;
+      --bg:     #020617;
+      --bg-mid: #0f172a;
 
-        /* --- Dynamic Canvas Background --- */
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-        }
+      /* Fluid type */
+      --fs-xs:   clamp(0.6rem,  1.3vw, 0.75rem);
+      --fs-sm:   clamp(0.7rem,  1.6vw, 0.9rem);
+      --fs-base: clamp(0.85rem, 1.8vw, 1.1rem);
+      --fs-md:   clamp(1rem,    2.2vw, 1.35rem);
+      --fs-lg:   clamp(1.2rem,  2.8vw, 1.75rem);
+      --fs-xl:   clamp(1.6rem,  3.5vw, 2.25rem);
+      --fs-stat: clamp(1.5rem,  4vw,   2.5rem);
+      --fs-hero: clamp(2.4rem,  8vw,   7rem);
 
-        /* --- Home Button --- */
-        .home-btn {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        @media (min-width: 768px) {
-            .home-btn {
-                top: 2rem;
-                left: 2rem;
-            }
-        }
-        
-        .home-btn:hover {
-            background: var(--neon-cyan);
-            color: #000;
-            box-shadow: 0 0 20px var(--neon-cyan);
-            transform: scale(1.05);
-        }
-        
-        /* --- Logo Portal Rings --- */
-        .portal-ring {
-            border: 2px solid var(--neon-cyan);
-            border-radius: 50%;
-            position: absolute;
-            opacity: 0.3;
-        }
+      /* Fluid space */
+      --sp-xs:  clamp(0.5rem,  1.5vw, 1rem);
+      --sp-sm:  clamp(0.75rem, 2vw,   1.25rem);
+      --sp-md:  clamp(1rem,    3vw,   2rem);
+      --sp-lg:  clamp(1.5rem,  4vw,   3rem);
+      --sp-xl:  clamp(2rem,    6vw,   4rem);
+      --sp-2xl: clamp(3rem,    8vw,   6rem);
 
-        .ring-1 { 
-            width: 200px; 
-            height: 200px; 
-            border-style: dashed; 
-            animation: spin 20s linear infinite; 
-        }
-        
-        .ring-2 { 
-            width: 240px; 
-            height: 240px; 
-            border-style: double; 
-            animation: spin 30s linear infinite reverse; 
-            border-color: var(--neon-purple); 
-        }
+      --card-pad:    clamp(1rem, 4vw, 2.5rem);
+      --radius:      clamp(0.75rem, 2vw, 1.25rem);
 
-        @media (min-width: 768px) {
-            .ring-1 { width: 320px; height: 320px; }
-            .ring-2 { width: 380px; height: 380px; }
-        }
+      /* Portal ring sizes */
+      --ring1: clamp(160px, 40vw, 320px);
+      --ring2: clamp(190px, 48vw, 380px);
 
-        @keyframes spin { 
-            from { transform: rotate(0deg); } 
-            to { transform: rotate(360deg); } 
-        }
+      /* Logo size */
+      --logo-sz: clamp(120px, 28vw, 260px);
+    }
 
-        /* --- Satellites --- */
-        .satellite {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(34, 211, 238, 0.1);
-            border: 1px solid var(--neon-cyan);
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
-            animation: float 6s ease-in-out infinite;
-            font-size: 1rem;
-        }
+    /* ─── Base ───────────────────────────────────────────────── */
+    html { scroll-behavior: smooth; }
 
-        @media (min-width: 768px) {
-            .satellite {
-                width: 40px;
-                height: 40px;
-                font-size: 1.25rem;
-            }
-        }
+    body {
+      background-color: var(--bg);
+      color: #f8fafc;
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
-        
-        /* --- Logo Container --- */
-        .logo-wrapper {
-            width: 180px;
-            height: 180px;
-        }
+    /* ─── Canvas ─────────────────────────────────────────────── */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background: radial-gradient(circle at center, var(--bg-mid) 0%, var(--bg) 100%);
+      pointer-events: none;
+    }
 
-        @media (min-width: 640px) {
-            .logo-wrapper {
-                width: 220px;
-                height: 220px;
-            }
-        }
+    /* ─── Back Button ────────────────────────────────────────── */
+    .home-btn {
+      position: fixed;
+      top: clamp(0.75rem, 2vw, 2rem);
+      left: clamp(0.75rem, 2vw, 2rem);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: clamp(0.4rem, 1vw, 0.75rem) clamp(0.75rem, 2vw, 1.5rem);
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #f8fafc;
+      text-decoration: none;
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+    }
 
-        @media (min-width: 768px) {
-            .logo-wrapper {
-                width: 260px;
-                height: 260px;
-            }
-        }
+    .home-btn svg {
+      width: clamp(12px, 2vw, 16px);
+      height: clamp(12px, 2vw, 16px);
+      flex-shrink: 0;
+    }
 
-        /* --- Text & Glass Effects --- */
-        .text-gradient {
-            background: linear-gradient(to bottom right, #fff, var(--neon-cyan), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-left: 4px solid var(--neon-cyan);
-        }
+    .home-btn .label-full { display: none; }
+    .home-btn .label-short { display: inline; }
 
-        /* --- Responsive Title Sizing --- */
-        .main-title {
-            font-size: 3rem;
-            line-height: 1;
-            word-break: break-word;
-        }
+    @media (min-width: 480px) {
+      .home-btn .label-full  { display: inline; }
+      .home-btn .label-short { display: none; }
+    }
 
-        @media (min-width: 640px) {
-            .main-title {
-                font-size: 4.5rem;
-            }
-        }
+    @media (hover: hover) and (pointer: fine) {
+      .home-btn:hover {
+        background: var(--cyan);
+        color: #000;
+        box-shadow: 0 0 20px var(--cyan);
+        transform: scale(1.05);
+      }
+    }
 
-        @media (min-width: 768px) {
-            .main-title {
-                font-size: 6rem;
-            }
-        }
+    /* ─── Page Layout ────────────────────────────────────────── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: clamp(5rem, 12vw, 8rem) clamp(1rem, 5vw, 3rem) var(--sp-xl);
+    }
 
-        @media (min-width: 1024px) {
-            .main-title {
-                font-size: 7rem;
-            }
-        }
+    /* Stack on mobile, side-by-side on desktop */
+    .two-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-lg);
+    }
 
-        /* --- Ensure content stays within viewport --- */
-        main {
-            max-width: 100%;
-            width: 100%;
-        }
+    @media (min-width: 1024px) {
+      .two-col {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: clamp(2rem, 6vw, 5rem);
+      }
+    }
 
-        /* --- Video Container --- */
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-        }
+    /* ─── Logo Column ────────────────────────────────────────── */
+    .logo-col {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      /* ensure rings don't bleed on small screens */
+      width: min(100%, calc(var(--ring2) + 20px));
+      /* fixed height = ring diameter so rings don't overflow layout */
+      height: calc(var(--ring2) + 20px);
+    }
 
-        .video-wrapper iframe,
-        .video-wrapper video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    @media (min-width: 1024px) {
+      .logo-col {
+        width: calc(var(--ring2) + 40px);
+        height: calc(var(--ring2) + 40px);
+        margin-top: -3rem; /* subtle pull-up on desktop */
+      }
+    }
+
+    /* Portal rings - sized from CSS variable, centred absolutely */
+    .portal-ring {
+      border-radius: 50%;
+      position: absolute;
+      top: 50%; left: 50%;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .ring-1 {
+      width: var(--ring1);
+      height: var(--ring1);
+      margin-left: calc(var(--ring1) / -2);
+      margin-top:  calc(var(--ring1) / -2);
+      border: 2px dashed var(--cyan);
+      animation: spin 20s linear infinite;
+    }
+
+    .ring-2 {
+      width: var(--ring2);
+      height: var(--ring2);
+      margin-left: calc(var(--ring2) / -2);
+      margin-top:  calc(var(--ring2) / -2);
+      border: 2px double var(--purple);
+      animation: spin 30s linear infinite reverse;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Logo image */
+    .logo-img {
+      position: relative;
+      z-index: 2;
+      width: var(--logo-sz);
+      height: var(--logo-sz);
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba(34, 211, 238, 0.5);
+      padding: clamp(4px, 1vw, 8px);
+      box-shadow: 0 0 clamp(20px, 5vw, 50px) rgba(34, 211, 238, 0.3);
+      background: #0f172a;
+      flex-shrink: 0;
+    }
+
+    .logo-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Satellites */
+    .satellite {
+      position: absolute;
+      z-index: 3;
+      width: clamp(24px, 5vw, 40px);
+      height: clamp(24px, 5vw, 40px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(0.7rem, 2vw, 1.2rem);
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid var(--cyan);
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%       { transform: translateY(-12px) rotate(8deg); }
+    }
+
+    .sat-1 { top: 8%; left: 8%; }
+    .sat-2 { bottom: 14%; right: 4%; animation-delay: 1s; }
+    .sat-3 { top: 48%; left: 0%;  animation-delay: 2s; }
+
+    /* ─── Content Column ─────────────────────────────────────── */
+    .content-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-md);
+      min-width: 0; /* prevent flex overflow */
+    }
+
+    /* Title */
+    .main-title {
+      font-family: 'Syncopate', sans-serif;
+      font-size: var(--fs-hero);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      word-break: break-word;
+      background: linear-gradient(135deg, #fff, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      color: var(--cyan);
+      font-family: monospace;
+      font-size: var(--fs-xs);
+      letter-spacing: clamp(0.1em, 1.5vw, 0.4em);
+      opacity: 0.8;
+      text-transform: uppercase;
+      margin-top: var(--sp-xs);
+    }
+
+    /* Glass card */
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-left: 4px solid var(--cyan);
+      border-radius: var(--radius);
+      padding: var(--card-pad);
+    }
+
+    .glass-panel .lead {
+      font-size: var(--fs-md);
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+
+    .glass-panel .lead .accent { color: var(--cyan); font-weight: 700; }
+    .glass-panel .lead .underlined {
+      color: #fff;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.5);
+    }
+
+    .glass-panel .subtext {
+      margin-top: var(--sp-sm);
+      font-size: var(--fs-base);
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+
+    /* Video */
+    .video-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: monospace;
+      font-size: var(--fs-xs);
+      color: #64748b;
+    }
+
+    .ping-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: ping 1.5s cubic-bezier(0,0,0.2,1) infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes ping {
+      0%    { transform: scale(1);   opacity: 1; }
+      75%   { transform: scale(1.8); opacity: 0; }
+      100%  { transform: scale(1.8); opacity: 0; }
+    }
+
+    .video-outer {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 16:9 intrinsic ratio wrapper */
+    .video-ratio {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .video-ratio video,
+    .video-ratio iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ─── Stats ──────────────────────────────────────────────── */
+    .stats-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 5vw, 3rem) clamp(2rem, 6vw, 5rem);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: clamp(0.75rem, 2vw, 2rem);
+      opacity: 0.45;
+    }
+
+    @media (min-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .stat-item {
+      border-top: 1px solid #334155;
+      padding-top: clamp(0.75rem, 2vw, 1.5rem);
+    }
+
+    .stat-number {
+      display: block;
+      font-size: var(--fs-stat);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: monospace;
+      font-size: var(--fs-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.25rem;
+      display: block;
+    }
+
+    /* ─── Reduced motion ─────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ─── Print ──────────────────────────────────────────────── */
+    @media print {
+      #particle-canvas, .home-btn, .satellite { display: none !important; }
+      body { background: white; color: black; }
+      .main-title { -webkit-text-fill-color: black; color: black; }
+      .glass-panel { border: 1px solid #ccc; background: #f9f9f9; }
+    }
+  </style>
 </head>
 <body>
 
-    <canvas id="particle-canvas"></canvas>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
-    <a href="index.html" class="home-btn group flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256" class="md:w-5 md:h-5"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
-        <span class="hidden sm:inline">Back to Home</span>
-        <span class="sm:hidden">Home</span>
-    </a>
+  <!-- Back Button -->
+  <a href="index.html" class="home-btn" aria-label="Back to home">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true">
+      <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/>
+    </svg>
+    <span class="label-full">Back to Home</span>
+    <span class="label-short">Home</span>
+  </a>
 
-    <main class="max-w-7xl mx-auto min-h-screen flex flex-col lg:flex-row lg:items-start justify-center gap-8 lg:gap-16 px-4 sm:px-6 py-16 sm:py-20 relative">
-        
-        <!-- Logo Section -->
-        <div class="relative w-full lg:w-1/2 flex items-center justify-center min-h-[300px] sm:min-h-[400px] lg:min-h-[500px] lg:-translate-y-12">
-            <div class="ring-1 portal-ring"></div>
-            <div class="ring-2 portal-ring"></div>
-            
-            <div class="logo-wrapper relative rounded-full overflow-hidden border-4 border-cyan-400/50 p-2 shadow-[0_0_50px_rgba(34,211,238,0.3)] bg-slate-900">
-                <img src="assests/P6.jpg" alt="Mayukh Logo" class="w-full h-full object-contain">
+  <!-- Main Content -->
+  <div class="page-wrap">
+    <div class="two-col">
+
+      <!-- Logo Column -->
+      <div class="logo-col" aria-hidden="true">
+        <div class="ring-1 portal-ring"></div>
+        <div class="ring-2 portal-ring"></div>
+
+        <div class="logo-img">
+          <img src="assests/P6.jpg" alt="Mayukh Logo">
+        </div>
+
+        <div class="satellite sat-1">🚀</div>
+        <div class="satellite sat-2">⚡</div>
+        <div class="satellite sat-3">💻</div>
+      </div>
+
+      <!-- Content Column -->
+      <div class="content-col">
+        <div>
+          <h1 class="main-title">ABOUT<br>MAYUKH</h1>
+          <p class="tagline">Innovation // Creativity // Technology</p>
+        </div>
+
+        <div class="glass-panel">
+          <p class="lead">
+            <span class="accent">Mayukh</span> is the grand annual technical fest of
+            <span class="underlined">Banasthali Vidyapith</span>.
+            It serves as a convergence of brilliant minds to collaborate, compete, and redefine possibilities.
+          </p>
+          <p class="subtext">
+            Inspired by the brilliance of light, Mayukh shines as a celebration of intellect and futuristic vision — illuminating the path toward a smarter tomorrow.
+          </p>
+        </div>
+
+        <!-- Video -->
+        <div>
+          <p class="video-label" aria-label="Recap video 2025">
+            <span class="ping-dot" aria-hidden="true"></span>
+            RECAP_MEMORY_2025.EXE
+          </p>
+          <div class="video-outer" style="margin-top: var(--sp-sm);">
+            <div class="video-ratio">
+              <video controls preload="none">
+                <source src="assests/recap.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="satellite" style="top: 10%; left: 10%;">🚀</div>
-            <div class="satellite" style="bottom: 20%; right: 5%; animation-delay: 1s;">⚡</div>
-            <div class="satellite" style="top: 50%; left: -5%; animation-delay: 2s;">💻</div>
-        </div>
-
-        <!-- Content Section -->
-        <div class="flex-1 space-y-6 sm:space-y-8 lg:space-y-10 z-10 lg:pt-10 w-full">
-            <div>
-                <h1 class="main-title font-bold font-['Syncopate'] text-gradient tracking-tighter leading-none">
-                    ABOUT<br>MAYUKH
-                </h1>
-                <p class="text-cyan-400 font-mono mt-3 sm:mt-4 tracking-[0.2em] sm:tracking-[0.4em] opacity-80 uppercase text-xs sm:text-sm">
-                    Innovation // Creativity // Technology
-                </p>
-            </div>
-
-            <div class="glass-panel p-6 sm:p-8 lg:p-10 rounded-2xl relative overflow-hidden">
-                <p class="text-lg sm:text-xl lg:text-2xl leading-relaxed text-slate-200">
-                    <span class="text-cyan-400 font-bold">Mayukh</span> is the grand annual technical fest of 
-                    <span class="text-white border-b border-cyan-500/50">Banasthali Vidyapith</span>. 
-                    It serves as a convergence of brilliant minds to collaborate, compete, and redefine possibilities.
-                </p>
-                <p class="mt-4 sm:mt-6 text-slate-400 text-sm sm:text-base">
-                    Inspired by the brilliance of light, Mayukh shines as a celebration of intellect and futuristic vision – illuminating the path toward a smarter tomorrow.
-                </p>
-            </div>
-            
-            <!-- Video Section -->
-            <div class="space-y-3 sm:space-y-4">
-                <p class="text-xs font-mono text-slate-500 flex items-center gap-2">
-                    <span class="w-2 h-2 bg-red-500 rounded-full animate-ping"></span> 
-                    RECAP_MEMORY_2025.EXE
-                </p>
-                <div class="relative group rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-                    <div class="video-wrapper">
-                        <video class="group-hover:scale-105 transition-transform duration-700" controls>
-                            <source src="assests/recap.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Stats Section -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 opacity-40">
-        <div class="border-t border-slate-700 pt-4 sm:pt-6">
-            <span class="block text-2xl sm:text-3xl font-bold">2026</span>
-            <span class="text-xs uppercase font-mono">Edition</span>
-        </div>
-        <div class="border-t border-slate-700 pt-4 sm:pt-6">
-            <span class="block text-2xl sm:text-3xl font-bold">50+</span>
-            <span class="text-xs uppercase font-mono">Events</span>
-        </div>
-        <div class="border-t border-slate-700 pt-4 sm:pt-6">
-            <span class="block text-2xl sm:text-3xl font-bold">500+</span>
-            <span class="text-xs uppercase font-mono">Participants</span>
-        </div>
-        <div class="border-t border-slate-700 pt-4 sm:pt-6">
-            <span class="block text-2xl sm:text-3xl font-bold">100%</span>
-            <span class="text-xs uppercase font-mono">Innovation</span>
-        </div>
     </div>
+  </div>
 
-    <script>
-        // --- Particle System Logic ---
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const mouse = { x: null, y: null, radius: 150 };
+  <!-- Stats -->
+  <div class="stats-wrap" aria-label="Event statistics">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span class="stat-number">2026</span>
+        <span class="stat-label">Edition</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">50+</span>
+        <span class="stat-label">Events</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">500+</span>
+        <span class="stat-label">Participants</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Innovation</span>
+      </div>
+    </div>
+  </div>
 
-        window.addEventListener('mousemove', (e) => { 
-            mouse.x = e.x; 
-            mouse.y = e.y; 
+  <script>
+    // ─── Particle Canvas ──────────────────────────────────────
+    const canvas = document.getElementById('particle-canvas');
+    const ctx    = canvas.getContext('2d');
+    let particles = [], raf;
+    const mouse   = { x: null, y: null };
+    const LINK_DIST = 100;
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    }, { passive: true });
+
+    function initCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particles = [];
+      // Scale particle count to viewport area, cap at 100
+      const count = Math.min(100, Math.floor((canvas.width * canvas.height) / 12000));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 0.8,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8
         });
+      }
+    }
 
-        function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            
-            // Adjust particle count based on screen size
-            const particleCount = window.innerWidth < 768 ? 50 : 100;
-            
-            for (let i = 0; i < particleCount; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2 + 1,
-                    speedX: Math.random() * 1 - 0.5,
-                    speedY: Math.random() * 1 - 0.5
-                });
-            }
+    function animateCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x > canvas.width  || p.x < 0) p.vx *= -1;
+        if (p.y > canvas.height || p.y < 0) p.vy *= -1;
+
+        ctx.fillStyle = 'rgba(34,211,238,0.35)';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2   = particles[j];
+          const dx   = p.x - p2.x;
+          const dy   = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < LINK_DIST) {
+            ctx.strokeStyle = `rgba(34,211,238,${(1 - dist / LINK_DIST) * 0.4})`;
+            ctx.lineWidth   = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p.x,  p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
         }
+      }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.x += p.speedX; 
-                p.y += p.speedY;
-                
-                if (p.x > canvas.width || p.x < 0) p.speedX *= -1;
-                if (p.y > canvas.height || p.y < 0) p.speedY *= -1;
+      raf = requestAnimationFrame(animateCanvas);
+    }
 
-                ctx.fillStyle = 'rgba(34, 211, 238, 0.3)';
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
+    // Throttled resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        cancelAnimationFrame(raf);
+        initCanvas();
+        animateCanvas();
+      }, 150);
+    }, { passive: true });
 
-                // Draw lines
-                particles.forEach(p2 => {
-                    let dx = p.x - p2.x; 
-                    let dy = p.y - p2.y;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
-                    
-                    if (dist < 120) {
-                        ctx.strokeStyle = `rgba(34, 211, 238, ${1 - dist/120})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                });
-            });
-            requestAnimationFrame(animate);
-        }
+    // ─── GSAP Animations ──────────────────────────────────────
+    // Guard: only run if GSAP is available
+    if (typeof gsap !== 'undefined') {
+      gsap.from('.glass-panel', {
+        duration: 1.2,
+        x: 60,
+        opacity: 0,
+        delay: 0.5,
+        ease: 'power4.out'
+      });
 
-        window.addEventListener('resize', () => {
-            init();
-        });
-        
-        init();
-        animate();
+      gsap.from('.portal-ring', {
+        duration: 2,
+        scale: 0,
+        opacity: 0,
+        stagger: 0.2,
+        ease: 'elastic.out(1, 0.5)'
+      });
 
-        // Use GSAP to animate the satellites
-        gsap.to(".satellite", {
-            duration: 10,
-            x: "random(-50, 50)",
-            y: "random(-50, 50)",
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
-        });
+      gsap.from('.main-title', {
+        duration: 1,
+        y: 30,
+        opacity: 0,
+        ease: 'power3.out'
+      });
 
-        // Entrance animations
-        gsap.from(".glass-panel", { 
-            duration: 1.2, 
-            x: 100, 
-            opacity: 0, 
-            delay: 0.5, 
-            ease: "power4.out" 
-        });
-        
-        gsap.from(".portal-ring", { 
-            duration: 2, 
-            scale: 0, 
-            opacity: 0, 
-            stagger: 0.2, 
-            ease: "elastic.out(1, 0.5)" 
-        });
-    </script>
+      gsap.from('.stats-grid .stat-item', {
+        duration: 0.8,
+        y: 20,
+        opacity: 0,
+        stagger: 0.1,
+        delay: 0.8,
+        ease: 'power2.out'
+      });
+
+      // Satellites: subtle random drift
+      gsap.to('.satellite', {
+        duration: 10,
+        x: 'random(-30, 30)',
+        y: 'random(-30, 30)',
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: { each: 1 }
+      });
+    }
+
+    // ─── Init ────────────────────────────────────────────────
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    initCanvas();
+    if (!prefersReduced) animateCanvas();
+  </script>
+
 </body>
 </html>
