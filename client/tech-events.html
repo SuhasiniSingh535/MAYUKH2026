@@ -25,11 +25,6 @@
     .orbitron { font-family: 'Orbitron', sans-serif; }
     .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff; }
     .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
-    .spy-verse-bg { border-color: rgba(14, 165, 233, 0.3); } 
-    .scifi-verse-bg { border-color: rgba(168, 85, 247, 0.3); }
-    .carnival-verse-bg { border-color: rgba(239, 68, 68, 0.3); } 
-    .dark-verse-bg { border-color: rgba(71, 85, 105, 0.3); }
-    .mythic-verse-bg { border-color: rgba(249, 115, 22, 0.3); }
     .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
     ::-webkit-scrollbar { width: 8px; } 
@@ -42,39 +37,47 @@
       top: 1rem;
       left: 1rem;
       z-index: 60;
+      font-size: 0.75rem;
     }
     
     @media (min-width: 768px) {
       .home-button {
         top: 1.5rem;
         left: 1.5rem;
+        font-size: 0.875rem;
       }
     }
     
-    /* Navigation - Two rows on mobile, single row on desktop */
+    /* Navigation - Completely redesigned for mobile */
     .main-nav {
       position: fixed;
-      top: 5rem;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 50;
-      width: calc(100% - 2rem);
-      max-width: 95vw;
+      width: 100%;
+      padding: 4.5rem 0.75rem 0.75rem;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
     }
     
     @media (min-width: 768px) {
       .main-nav {
+        position: fixed;
         top: 1.5rem;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
         width: auto;
-        max-width: none;
+        padding: 0;
+        background: transparent;
       }
     }
     
     .nav-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      padding: 0.5rem;
+      gap: 0.4rem;
+      max-width: 100%;
     }
     
     @media (min-width: 768px) {
@@ -86,18 +89,28 @@
     }
     
     .nav-link {
-      white-space: nowrap;
-      padding: 0.75rem 1rem;
+      white-space: normal;
+      padding: 0.625rem 0.5rem;
       text-align: center;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
+      font-size: 0.6rem;
+      letter-spacing: 0.03em;
+      line-height: 1.2;
+      word-spacing: 100vw;
+    }
+    
+    @media (min-width: 375px) {
+      .nav-link {
+        font-size: 0.65rem;
+        padding: 0.625rem 0.625rem;
+      }
     }
     
     @media (min-width: 640px) {
       .nav-link {
         font-size: 0.75rem;
+        padding: 0.75rem 1rem;
       }
     }
     
@@ -110,7 +123,7 @@
     
     /* Main content padding adjustment for fixed nav */
     main {
-      padding-top: 11rem;
+      padding-top: 9rem;
     }
     
     @media (min-width: 768px) {
@@ -121,31 +134,75 @@
     
     /* Hero title responsive sizing */
     .hero-title {
-      font-size: 3rem;
-      line-height: 1;
+      font-size: 2.5rem;
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+    }
+    
+    @media (min-width: 375px) {
+      .hero-title {
+        font-size: 3rem;
+      }
     }
     
     @media (min-width: 640px) {
       .hero-title {
-        font-size: 4.5rem;
+        font-size: 4rem;
       }
     }
     
     @media (min-width: 768px) {
       .hero-title {
-        font-size: 5.5rem;
+        font-size: 5rem;
       }
     }
     
     @media (min-width: 1024px) {
       .hero-title {
+        font-size: 6rem;
+      }
+    }
+    
+    @media (min-width: 1280px) {
+      .hero-title {
         font-size: 7rem;
+      }
+    }
+    
+    .hero-subtitle {
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+    
+    @media (min-width: 375px) {
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (min-width: 640px) {
+      .hero-subtitle {
+        font-size: 1.25rem;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .hero-subtitle {
+        font-size: 1.5rem;
+        margin-top: 1rem;
       }
     }
     
     /* Verse titles responsive */
     .verse-title {
-      font-size: 2rem;
+      font-size: 1.75rem;
+      letter-spacing: 0.05em;
+    }
+    
+    @media (min-width: 375px) {
+      .verse-title {
+        font-size: 2rem;
+      }
     }
     
     @media (min-width: 640px) {
@@ -166,22 +223,24 @@
       }
     }
     
-    /* Event Cards Grid - 2 columns on mobile, 3 on desktop */
+    /* Event Cards Grid - 1 column on mobile, 2 on tablet, 3 on desktop */
     .events-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
     
     @media (min-width: 640px) {
       .events-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
       }
     }
     
     @media (min-width: 1024px) {
       .events-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
       }
     }
     
@@ -212,9 +271,15 @@
       max-width: 90vw;
       max-height: 85vh;
       object-fit: contain;
-      border-radius: 20px;
+      border-radius: 12px;
       box-shadow: 0 0 50px rgba(59, 196, 255, 0.5);
       animation: zoomIn 0.3s ease-out;
+    }
+    
+    @media (min-width: 768px) {
+      .poster-modal img {
+        border-radius: 20px;
+      }
     }
     
     @keyframes zoomIn {
@@ -232,8 +297,8 @@
       position: absolute;
       top: 1rem;
       right: 1rem;
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid rgba(255, 255, 255, 0.3);
@@ -275,7 +340,7 @@
       justify-content: center;
       opacity: 0;
       transition: opacity 0.4s ease;
-      padding: 1rem;
+      padding: 0;
     }
     
     @media (min-width: 768px) {
@@ -292,14 +357,16 @@
     .detail-content {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1.5rem;
       max-width: 1400px;
       width: 100%;
-      max-height: 90vh;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(59, 196, 255, 0.3);
-      border-radius: 20px;
-      padding: 1.5rem;
+      height: 100vh;
+      max-height: 100vh;
+      background: rgba(15, 23, 42, 0.95);
+      border: none;
+      border-radius: 0;
+      padding: 1.25rem;
+      padding-top: 4rem;
       overflow-y: auto;
       animation: slideUp 0.4s ease-out;
     }
@@ -311,6 +378,9 @@
         border-radius: 30px;
         gap: 3rem;
         overflow: hidden;
+        height: auto;
+        max-height: 90vh;
+        border: 1px solid rgba(59, 196, 255, 0.3);
       }
     }
     
@@ -341,22 +411,23 @@
     .detail-left img {
       width: 100%;
       height: auto;
-      max-height: 40vh;
+      max-height: 35vh;
       object-fit: contain;
-      border-radius: 20px;
+      border-radius: 12px;
       box-shadow: 0 0 40px rgba(59, 196, 255, 0.3);
     }
     
     @media (min-width: 768px) {
       .detail-left img {
         max-height: 75vh;
+        border-radius: 20px;
       }
     }
     
     .detail-right {
       flex: 1;
       overflow-y: auto;
-      padding-right: 0.5rem;
+      padding-right: 0.25rem;
     }
     
     @media (min-width: 768px) {
@@ -366,7 +437,13 @@
     }
     
     .detail-right::-webkit-scrollbar {
-      width: 6px;
+      width: 4px;
+    }
+    
+    @media (min-width: 768px) {
+      .detail-right::-webkit-scrollbar {
+        width: 6px;
+      }
     }
     
     .detail-right::-webkit-scrollbar-thumb {
@@ -379,7 +456,19 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      min-height: 480px;
+      min-height: 420px;
+    }
+    
+    @media (min-width: 640px) {
+      .event-card {
+        min-height: 460px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .event-card {
+        min-height: 500px;
+      }
     }
     
     .event-card-content {
@@ -390,7 +479,7 @@
     
     .event-card-poster {
       width: 100%;
-      height: 200px;
+      height: 180px;
       object-fit: cover;
       border-radius: 12px;
       cursor: pointer;
@@ -398,9 +487,21 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
+    @media (min-width: 640px) {
+      .event-card-poster {
+        height: 200px;
+      }
+    }
+    
     @media (min-width: 768px) {
       .event-card-poster {
-        height: 250px;
+        height: 220px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .event-card-poster {
+        height: 240px;
       }
     }
     
@@ -416,7 +517,16 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
-      min-height: 4.5rem;
+      min-height: 3.5rem;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+    
+    @media (min-width: 640px) {
+      .event-card-description {
+        font-size: 0.875rem;
+        min-height: 4rem;
+      }
     }
     
     .card-actions {
@@ -440,18 +550,25 @@
       border: 1px solid rgba(59, 196, 255, 0.5);
       color: #3bc4ff;
       font-weight: bold;
-      padding: 0.75rem;
+      padding: 0.625rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
       cursor: pointer;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       letter-spacing: 0.05em;
+    }
+    
+    @media (min-width: 640px) {
+      .see-more-card-btn {
+        font-size: 0.7rem;
+      }
     }
     
     @media (min-width: 768px) {
       .see-more-card-btn {
         font-size: 0.75rem;
+        padding: 0.75rem;
       }
     }
     
@@ -460,31 +577,53 @@
       box-shadow: 0 0 20px rgba(59, 196, 255, 0.4);
       transform: translateY(-2px);
     }
+    
+    .register-btn {
+      font-size: 0.65rem;
+      padding: 0.625rem;
+    }
+    
+    @media (min-width: 640px) {
+      .register-btn {
+        font-size: 0.7rem;
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .register-btn {
+        font-size: 0.875rem;
+        padding: 0.75rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="fixed inset-0 -z-10"><img src="assests/p1.png" class="w-full h-full object-cover opacity-30"></div>
   
   <!-- Home Button -->
-  <a href="index.html" class="home-button glass px-4 py-2 md:px-6 md:py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:text-cyan-400 transition-all">
-    <i class="fa-solid fa-chevron-left text-sm md:text-base"></i> 
-    <span class="orbitron text-xs font-bold tracking-widest">HOME</span>
+  <a href="index.html" class="home-button glass px-3 py-2 md:px-6 md:py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:text-cyan-400 transition-all">
+    <i class="fa-solid fa-chevron-left text-xs md:text-base"></i> 
+    <span class="orbitron font-bold tracking-widest">HOME</span>
   </a>
    
   <!-- Navigation -->
-  <nav class="main-nav glass rounded-xl border border-white/10">
+  <nav class="main-nav glass rounded-none md:rounded-xl border-0 md:border md:border-white/10">
     <div class="nav-container">
       <a href="tech-event.html" class="nav-link orbitron font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]">
-        TECH EVENTS
+        <span class="md:hidden">TECH<br>EVENTS</span>
+        <span class="hidden md:inline">TECH EVENTS</span>
       </a>
       <a href="non-tech-events.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
-        NON-TECH EVENTS
+        <span class="md:hidden">NON-TECH<br>EVENTS</span>
+        <span class="hidden md:inline">NON-TECH EVENTS</span>
       </a>
       <a href="tech-workshops.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
-        TECH WORKSHOPS
+        <span class="md:hidden">TECH<br>WORKSHOPS</span>
+        <span class="hidden md:inline">TECH WORKSHOPS</span>
       </a>
       <a href="non-tech-workshops.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
-        NON-TECH WORKSHOPS
+        <span class="md:hidden">NON-TECH<br>WORKSHOPS</span>
+        <span class="hidden md:inline">NON-TECH WORKSHOPS</span>
       </a>
     </div>
   </nav>
@@ -492,7 +631,7 @@
   <!-- Poster Zoom Modal -->
   <div id="posterModal" class="poster-modal">
     <div class="close-modal" onclick="closePosterModal()">
-      <i class="fa-solid fa-xmark text-white text-xl md:text-2xl"></i>
+      <i class="fa-solid fa-xmark text-white text-lg md:text-2xl"></i>
     </div>
     <img id="posterModalImg" src="" alt="Event Poster">
   </div>
@@ -500,7 +639,7 @@
   <!-- Detail Modal -->
   <div id="detailModal" class="detail-modal">
     <div class="close-modal" onclick="closeDetailModal()">
-      <i class="fa-solid fa-xmark text-white text-xl md:text-2xl"></i>
+      <i class="fa-solid fa-xmark text-white text-lg md:text-2xl"></i>
     </div>
     <div class="detail-content">
       <div class="detail-left">
@@ -508,61 +647,61 @@
       </div>
       <div class="detail-right">
         <div class="mb-4 md:mb-6">
-          <div class="flex items-center gap-3 md:gap-4 mb-4">
-            <img id="detailLogo" src="" class="w-12 h-12 md:w-16 md:h-16 object-contain" alt="Event Logo">
+          <div class="flex items-center gap-2 md:gap-4 mb-3 md:mb-4">
+            <img id="detailLogo" src="" class="w-10 h-10 md:w-16 md:h-16 object-contain" alt="Event Logo">
             <div>
-              <h2 id="detailTitle" class="text-2xl md:text-4xl font-black orbitron text-cyan-400 uppercase"></h2>
+              <h2 id="detailTitle" class="text-xl md:text-4xl font-black orbitron text-cyan-400 uppercase leading-tight"></h2>
               <p id="detailCategory" class="text-cyan-300 text-xs md:text-sm mt-1 uppercase tracking-wider"></p>
             </div>
           </div>
         </div>
         
-        <div class="space-y-4 md:space-y-6">
-          <div class="glass rounded-xl p-4 md:p-5 border border-cyan-400/20">
-            <h3 class="orbitron text-cyan-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-clock"></i> Event Schedule
+        <div class="space-y-3 md:space-y-6">
+          <div class="glass rounded-xl p-3 md:p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-clock text-sm md:text-base"></i> Event Schedule
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-3 md:gap-4">
               <div>
                 <p class="text-gray-400 text-xs md:text-sm">Day</p>
-                <p id="detailDay" class="text-white font-semibold text-base md:text-lg"></p>
+                <p id="detailDay" class="text-white font-semibold text-sm md:text-lg"></p>
               </div>
               <div>
                 <p class="text-gray-400 text-xs md:text-sm">Time</p>
-                <p id="detailTime" class="text-white font-semibold text-base md:text-lg"></p>
+                <p id="detailTime" class="text-white font-semibold text-sm md:text-lg"></p>
               </div>
             </div>
           </div>
           
-          <div class="glass rounded-xl p-4 md:p-5 border border-cyan-400/20">
-            <h3 class="orbitron text-cyan-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-info-circle"></i> Description
+          <div class="glass rounded-xl p-3 md:p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-info-circle text-sm md:text-base"></i> Description
             </h3>
-            <p id="detailDescription" class="text-gray-300 leading-relaxed text-sm md:text-base"></p>
+            <p id="detailDescription" class="text-gray-300 leading-relaxed text-xs md:text-base"></p>
           </div>
           
-          <div class="glass rounded-xl p-4 md:p-5 border border-cyan-400/20">
-            <h3 class="orbitron text-cyan-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-info-circle"></i> Rounds
+          <div class="glass rounded-xl p-3 md:p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-info-circle text-sm md:text-base"></i> Rounds
             </h3>
-            <p id="detailRounds" class="text-gray-300 leading-relaxed text-sm md:text-base"></p>
+            <p id="detailRounds" class="text-gray-300 leading-relaxed text-xs md:text-base"></p>
           </div>
 
-          <div class="glass rounded-xl p-4 md:p-5 border border-cyan-400/20">
-            <h3 class="orbitron text-cyan-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-laptop"></i> Requirements
+          <div class="glass rounded-xl p-3 md:p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-laptop text-sm md:text-base"></i> Requirements
             </h3>
-            <p id="detailRequirement" class="text-gray-300 leading-relaxed text-sm md:text-base"></p>
+            <p id="detailRequirement" class="text-gray-300 leading-relaxed text-xs md:text-base"></p>
           </div>
           
-          <div class="glass rounded-xl p-4 md:p-5 border border-cyan-400/20">
-            <h3 class="orbitron text-cyan-400 font-bold text-base md:text-lg mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-users"></i> Team Size
+          <div class="glass rounded-xl p-3 md:p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-users text-sm md:text-base"></i> Team Size
             </h3>
-            <p id="detailTeamSize" class="text-white font-semibold text-base md:text-lg"></p>
+            <p id="detailTeamSize" class="text-white font-semibold text-sm md:text-lg"></p>
           </div>
           
-          <a id="detailRegisterBtn" href="#" target="_blank" class="block w-full text-center bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 md:py-4 rounded-xl transition-all orbitron text-base md:text-lg shadow-lg shadow-cyan-500/50">
+          <a id="detailRegisterBtn" href="#" target="_blank" class="block w-full text-center bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 md:py-4 rounded-xl transition-all orbitron text-sm md:text-lg shadow-lg shadow-cyan-500/50">
             REGISTER NOW
             <i class="fa-solid fa-arrow-right ml-2"></i>
           </a>
@@ -572,41 +711,41 @@
   </div>
 
   <main class="relative z-10">
-    <section class="min-h-[40vh] md:min-h-[50vh] flex flex-col justify-center items-center text-center px-4 md:px-6">
-      <h1 class="hero-title font-black orbitron glow mb-3 md:mb-4 tracking-wider">TECH EVENTS</h1>
-      <p class="text-lg md:text-2xl text-cyan-300 font-medium">Explore the Five Verses of Innovation</p>
+    <section class="min-h-[35vh] md:min-h-[50vh] flex flex-col justify-center items-center text-center px-4 md:px-6">
+      <h1 class="hero-title font-black orbitron glow mb-2 md:mb-4 tracking-wider">TECH EVENTS</h1>
+      <p class="hero-subtitle text-cyan-300 font-medium">Explore the Five Verses of Innovation</p>
     </section>
 
-    <section id="spy-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-8 md:mb-10">
+    <section id="spy-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-6 md:mb-10">
         <h2 class="verse-title font-black orbitron text-cyan-400">SPY VERSE</h2>
       </div>
       <div id="spy-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="scifi-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-8 md:mb-10">
+    <section id="scifi-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-6 md:mb-10">
         <h2 class="verse-title font-black orbitron text-purple-400">SCI-FI VERSE</h2>
       </div>
       <div id="scifi-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="carnival-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-8 md:mb-10">
+    <section id="carnival-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-6 md:mb-10">
         <h2 class="verse-title font-black orbitron text-red-400">CARNIVAL VERSE</h2>
       </div>
       <div id="carnival-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="dark-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-8 md:mb-10">
+    <section id="dark-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-6 md:mb-10">
         <h2 class="verse-title font-black orbitron text-slate-400">DARK VERSE</h2>
       </div>
       <div id="dark-verse-container" class="events-grid max-w-7xl mx-auto"></div>
     </section>
 
-    <section id="mythic-verse" class="py-12 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-8 md:mb-10">
+    <section id="mythic-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
+      <div class="text-center mb-6 md:mb-10">
         <h2 class="verse-title font-black orbitron text-orange-400">MYTHIC VERSE</h2>
       </div>
       <div id="mythic-verse-container" class="events-grid max-w-7xl mx-auto"></div>
@@ -677,21 +816,21 @@
           <div class="event-card glass rounded-2xl border border-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-300">
             <div class="event-card-content p-4 md:p-6">
               <div class="flex justify-between items-center mb-3 md:mb-4">
-                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-8 h-8 md:w-10 md:h-10 object-contain">` : `<i class="fa-solid fa-microchip text-xl md:text-2xl text-cyan-400"></i>`}
+                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-8 h-8 md:w-10 md:h-10 object-contain">` : `<i class="fa-solid fa-microchip text-lg md:text-2xl text-cyan-400"></i>`}
                  <span class="text-xs bg-white/10 px-2 md:px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
               </div>
               <img src="${event.posterLink}" 
                    class="event-card-poster mb-3 md:mb-4" 
                    onclick='openPosterModal("${event.posterLink}", JSON.parse(decodeURIComponent("${eventDataStr}")))' 
                    alt="${event.title}">
-              <h3 class="text-lg md:text-xl font-bold orbitron text-cyan-400 mb-2 uppercase">${event.title}</h3>
-              <p class="event-card-description text-gray-400 text-xs md:text-sm mb-3 md:mb-4">${event.description}</p>
+              <h3 class="text-base md:text-xl font-bold orbitron text-cyan-400 mb-2 uppercase">${event.title}</h3>
+              <p class="event-card-description text-gray-400 mb-3 md:mb-4">${event.description}</p>
               
               <div class="card-actions">
                 <button onclick='openDetailModal(JSON.parse(decodeURIComponent("${eventDataStr}")))' class="see-more-card-btn">
                   <i class="fa-solid fa-circle-info mr-1"></i> SEE MORE
                 </button>
-                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 md:py-3 rounded-lg transition-all text-xs md:text-sm">
+                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-lg transition-all register-btn">
                   REGISTER
                 </a>
               </div>
