@@ -168,9 +168,8 @@
         gsap.to("#progress-bar", { width: "75%", duration: 4, ease: "power2.inOut", repeat: -1, yoyo: true });
 
         // --- 3. DYNAMIC LOGIC (SEGREGATED) ---
-        const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-            ? 'https://mayukh-bv-1.onrender.com/api/gallery'
-            : '/api/gallery';
+       // --- FIXED API CONFIGURATION ---
+        const API_URL = 'https://mayukh-bv-1.onrender.com/api/gallery';
 
         async function fetchGallery() {
             try {

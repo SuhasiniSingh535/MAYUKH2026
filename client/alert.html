@@ -135,10 +135,8 @@
     <script src="api-config.js"></script> 
     
     <script>
-        // ✅ CORRECT API CONNECTION LOGIC
-        const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-            ? 'https://mayukh-bv-1.onrender.com/api'
-            : 'https://mayukh-bv-1.onrender.com'; // Ensure this matches your live backend URL
+        // ✅ FIXED API CONNECTION LOGIC
+        const API_BASE = 'https://mayukh-bv-1.onrender.com/api'; // Ensure this matches your live backend URL
 
         // --- 1. Load Data on Start ---
         window.onload = async () => {
