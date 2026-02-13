@@ -527,7 +527,7 @@
             let events = data.events.filter(e => e.category === CURRENT_VERSE);
             allEvents = events;
             
-            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4 };
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4, 'fun-event': 5 };
             events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
 
             if(events.length > 0) {
