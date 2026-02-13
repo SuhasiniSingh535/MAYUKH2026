@@ -1213,8 +1213,12 @@
            // Change to this:
             const response = await fetch(API_CONFIG.eventsUrl);
             const data = await response.json();
-            const eventsList = data.events || data;
-
+            // Line 11 se 16 ko isse replace karein:
+            let eventsList = data.events || data; 
+            eventsList = eventsList.filter(event => {
+                const type = (event.eventType || '').toLowerCase();
+                return !type.includes('workshop'); // Workshop kisi bhi date ki ho, hide ho jayegi
+            });
             const groupedDays = eventsList.reduce((acc, event) => {
                 let dayKey = null;
 
