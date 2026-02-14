@@ -1,886 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mayukh 2026 - Non-Tech Events</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body { 
-      font-family: 'Rajdhani', sans-serif; 
-      background-color: black; 
-      color: white; 
-      overflow-x: hidden; 
-      width: 100%;
-    }
-    
-    .orbitron { font-family: 'Orbitron', sans-serif; }
-    .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff; }
-    .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
-    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-    ::-webkit-scrollbar { width: 8px; } 
-    ::-webkit-scrollbar-track { background: #000; } 
-    ::-webkit-scrollbar-thumb { background: #3bc4ff; border-radius: 4px; }
-    
-    /* Home Button - Fixed positioning */
-    .home-button {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      z-index: 60;
-      font-size: 0.75rem;
-    }
-    
-    @media (min-width: 768px) {
-      .home-button {
-        top: 1.5rem;
-        left: 1.5rem;
-        font-size: 0.875rem;
-      }
-    }
-    
-    /* Navigation - Completely redesigned for mobile */
-    .main-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
-      width: 100%;
-      padding: 4.5rem 0.75rem 0.75rem;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 100%);
-    }
-    
-    @media (min-width: 768px) {
-      .main-nav {
-        position: fixed;
-        top: 1.5rem;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        width: auto;
-        padding: 0;
-        background: transparent;
-      }
-    }
-    
-    .nav-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.4rem;
-      max-width: 100%;
-    }
-    
-    @media (min-width: 768px) {
-      .nav-container {
-        display: flex;
-        gap: 0.5rem;
-        padding: 0.5rem;
-      }
-    }
-    
-    .nav-link {
-      white-space: normal;
-      padding: 0.625rem 0.5rem;
-      text-align: center;
-      border-radius: 0.5rem;
-      transition: all 0.3s ease;
-      font-size: 0.6rem;
-      letter-spacing: 0.03em;
-      line-height: 1.2;
-      word-spacing: 100vw;
-    }
-    
-    @media (min-width: 375px) {
-      .nav-link {
-        font-size: 0.65rem;
-        padding: 0.625rem 0.625rem;
-      }
-    }
-    
-    @media (min-width: 640px) {
-      .nav-link {
-        font-size: 0.75rem;
-        padding: 0.75rem 1rem;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .nav-link {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        word-spacing: normal;
-      }
-    }
-    
-    /* Main content padding adjustment for fixed nav */
-    main {
-      padding-top: 9rem;
-    }
-    
-    @media (min-width: 768px) {
-      main {
-        padding-top: 5rem;
-      }
-    }
-    
-    /* Hero title responsive sizing */
-    .hero-title {
-      font-size: 2rem;
-      line-height: 1.1;
-      letter-spacing: 0.05em;
-    }
-    
-    @media (min-width: 375px) {
-      .hero-title {
-        font-size: 2.5rem;
-      }
-    }
-    
-    @media (min-width: 640px) {
-      .hero-title {
-        font-size: 3.5rem;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .hero-title {
-        font-size: 4.5rem;
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .hero-title {
-        font-size: 6rem;
-      }
-    }
-    
-    @media (min-width: 1280px) {
-      .hero-title {
-        font-size: 7rem;
-      }
-    }
-    
-    .hero-subtitle {
-      font-size: 0.875rem;
-      margin-top: 0.5rem;
-    }
-    
-    @media (min-width: 375px) {
-      .hero-subtitle {
-        font-size: 1rem;
-      }
-    }
-    
-    @media (min-width: 640px) {
-      .hero-subtitle {
-        font-size: 1.25rem;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .hero-subtitle {
-        font-size: 1.5rem;
-        margin-top: 1rem;
-      }
-    }
-    
-    /* Verse titles responsive */
-    .verse-title {
-      font-size: 1.75rem;
-      letter-spacing: 0.05em;
-    }
-    
-    @media (min-width: 375px) {
-      .verse-title {
-        font-size: 2rem;
-      }
-    }
-    
-    @media (min-width: 640px) {
-      .verse-title {
-        font-size: 2.5rem;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .verse-title {
-        font-size: 3rem;
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .verse-title {
-        font-size: 3.5rem;
-      }
-    }
-    
-    /* Event Cards Grid - 1 column on mobile, 2 on tablet, 3 on desktop */
-    .events-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-    
-    @media (min-width: 640px) {
-      .events-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .events-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-      }
-    }
-    
-    /* Poster Zoom Modal */
-    .poster-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      padding: 1rem;
-    }
-    
-    .poster-modal.active {
-      display: flex;
-      opacity: 1;
-    }
-    
-    .poster-modal img {
-      max-width: 90vw;
-      max-height: 85vh;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 0 50px rgba(168, 85, 247, 0.5);
-      animation: zoomIn 0.3s ease-out;
-    }
-    
-    @media (min-width: 768px) {
-      .poster-modal img {
-        border-radius: 20px;
-      }
-    }
-    
-    @keyframes zoomIn {
-      from {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-    
-    .close-modal {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 10000;
-    }
-    
-    @media (min-width: 768px) {
-      .close-modal {
-        top: 2rem;
-        right: 2rem;
-        width: 50px;
-        height: 50px;
-      }
-    }
-    
-    .close-modal:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: #a855f7;
-      transform: rotate(90deg);
-    }
-    
-    /* Detail Modal */
-    .detail-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(15px);
-      z-index: 10000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      padding: 0;
-    }
-    
-    @media (min-width: 768px) {
-      .detail-modal {
-        padding: 2rem;
-      }
-    }
-    
-    .detail-modal.active {
-      display: flex;
-      opacity: 1;
-    }
-    
-    .detail-content {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      max-width: 1400px;
-      width: 100%;
-      height: 100vh;
-      max-height: 100vh;
-      background: rgba(15, 23, 42, 0.95);
-      border: none;
-      border-radius: 0;
-      padding: 1.25rem;
-      padding-top: 4rem;
-      overflow-y: auto;
-      animation: slideUp 0.4s ease-out;
-    }
-    
-    @media (min-width: 768px) {
-      .detail-content {
-        flex-direction: row;
-        padding: 2.5rem;
-        border-radius: 30px;
-        gap: 3rem;
-        overflow: hidden;
-        height: auto;
-        max-height: 90vh;
-        border: 1px solid rgba(168, 85, 247, 0.3);
-      }
-    }
-    
-    @keyframes slideUp {
-      from {
-        transform: translateY(100px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-    
-    .detail-left {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    @media (min-width: 768px) {
-      .detail-left {
-        flex: 0 0 45%;
-      }
-    }
-    
-    .detail-left img {
-      width: 100%;
-      height: auto;
-      max-height: 35vh;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
-    }
-    
-    @media (min-width: 768px) {
-      .detail-left img {
-        max-height: 75vh;
-        border-radius: 20px;
-      }
-    }
-    
-    .detail-right {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 0.25rem;
-    }
-    
-    @media (min-width: 768px) {
-      .detail-right {
-        padding-right: 1rem;
-      }
-    }
-    
-    .detail-right::-webkit-scrollbar {
-      width: 4px;
-    }
-    
-    @media (min-width: 768px) {
-      .detail-right::-webkit-scrollbar {
-        width: 6px;
-      }
-    }
-    
-    .detail-right::-webkit-scrollbar-thumb {
-      background: #a855f7;
-      border-radius: 3px;
-    }
-    
-    /* Card Uniform Sizing */
-    .event-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      min-height: 420px;
-    }
-    
-    @media (min-width: 640px) {
-      .event-card {
-        min-height: 460px;
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .event-card {
-        min-height: 500px;
-      }
-    }
-    
-    .event-card-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .event-card-poster {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    @media (min-width: 640px) {
-      .event-card-poster {
-        height: 200px;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .event-card-poster {
-        height: 220px;
-      }
-    }
-    
-    @media (min-width: 1024px) {
-      .event-card-poster {
-        height: 240px;
-      }
-    }
-    
-    .event-card-poster:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
-    }
-    
-    .event-card-description {
-      flex: 1;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      min-height: 3.5rem;
-      font-size: 0.8rem;
-      line-height: 1.4;
-    }
-    
-    @media (min-width: 640px) {
-      .event-card-description {
-        font-size: 0.875rem;
-        min-height: 4rem;
-      }
-    }
-    
-    .card-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    
-    @media (min-width: 640px) {
-      .card-actions {
-        flex-direction: row;
-        gap: 0.75rem;
-      }
-    }
-    
-    .see-more-card-btn {
-      flex: 1;
-      text-align: center;
-      background: rgba(168, 85, 247, 0.2);
-      border: 1px solid rgba(168, 85, 247, 0.5);
-      color: #a855f7;
-      font-weight: bold;
-      padding: 0.625rem;
-      border-radius: 0.5rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.05em;
-    }
-    
-    @media (min-width: 640px) {
-      .see-more-card-btn {
-        font-size: 0.7rem;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .see-more-card-btn {
-        font-size: 0.75rem;
-        padding: 0.75rem;
-      }
-    }
-    
-    .see-more-card-btn:hover {
-      background: rgba(168, 85, 247, 0.3);
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-      transform: translateY(-2px);
-    }
-    
-    .register-btn {
-      font-size: 0.65rem;
-      padding: 0.625rem;
-    }
-    
-    @media (min-width: 640px) {
-      .register-btn {
-        font-size: 0.7rem;
-      }
-    }
-    
-    @media (min-width: 768px) {
-      .register-btn {
-        font-size: 0.875rem;
-        padding: 0.75rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Tech Events | Mayukh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-  <div class="fixed inset-0 -z-10"><img src="assests/p1.png" class="w-full h-full object-cover opacity-30"></div>
-  
-  <!-- Home Button -->
-  <a href="index.html" class="home-button glass px-3 py-2 md:px-6 md:py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:text-cyan-400 transition-all">
-    <i class="fa-solid fa-chevron-left text-xs md:text-base"></i> 
-    <span class="orbitron font-bold tracking-widest">HOME</span>
-  </a>
+<body class="bg-gray-900 text-white font-sans overflow-x-hidden">
 
-  <!-- Navigation -->
-  <nav class="main-nav glass rounded-none md:rounded-xl border-0 md:border md:border-white/10">
-    <div class="nav-container">
-      <a href="tech-events.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
-        <span class="md:hidden">TECH<br>EVENTS</span>
-        <span class="hidden md:inline">TECH EVENTS</span>
-      </a>
-      <a href="non-tech-events.html" class="nav-link orbitron font-bold bg-purple-500/20 text-purple-400 border border-purple-400/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]">
-        <span class="md:hidden">NON-TECH<br>EVENTS</span>
-        <span class="hidden md:inline">NON-TECH EVENTS</span>
-      </a>
-      <a href="tech-workshops.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
-        <span class="md:hidden">TECH<br>WORKSHOPS</span>
-        <span class="hidden md:inline">TECH WORKSHOPS</span>
-      </a>
-      <a href="non-tech-workshops.html" class="nav-link orbitron font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all">
-        <span class="md:hidden">NON-TECH<br>WORKSHOPS</span>
-        <span class="hidden md:inline">NON-TECH WORKSHOPS</span>
-      </a>
-    </div>
-  </nav>
+    <main class="md:ml-64 min-h-screen p-6">
+        <header class="mb-12 mt-12 md:mt-0 text-center md:text-left">
+            <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-2">NON-TECH EVENTS</h1>
+            <p class="text-gray-400">Unleash your creativity beyond code.</p>
+        </header>
 
-  <!-- Poster Zoom Modal -->
-  <div id="posterModal" class="poster-modal">
-    <div class="close-modal" onclick="closePosterModal()">
-      <i class="fa-solid fa-xmark text-white text-lg md:text-2xl"></i>
-    </div>
-    <img id="posterModalImg" src="" alt="Event Poster">
-  </div>
-
-  <!-- Detail Modal -->
-  <div id="detailModal" class="detail-modal">
-    <div class="close-modal" onclick="closeDetailModal()">
-      <i class="fa-solid fa-xmark text-white text-lg md:text-2xl"></i>
-    </div>
-    <div class="detail-content">
-      <div class="detail-left">
-        <img id="detailPosterImg" src="" alt="Event Poster">
-      </div>
-      <div class="detail-right">
-        <div class="mb-4 md:mb-6">
-          <div class="flex items-center gap-2 md:gap-4 mb-3 md:mb-4">
-            <img id="detailLogo" src="" class="w-10 h-10 md:w-16 md:h-16 object-contain" alt="Event Logo">
-            <div>
-              <h2 id="detailTitle" class="text-xl md:text-4xl font-black orbitron text-purple-400 uppercase leading-tight"></h2>
-              <p id="detailCategory" class="text-purple-300 text-xs md:text-sm mt-1 uppercase tracking-wider"></p>
-            </div>
-          </div>
+        <div class="mb-8 relative max-w-md">
+            <input type="text" id="searchInput" placeholder="Search events..." 
+                   class="w-full bg-gray-800/50 border border-gray-700 rounded-full py-3 px-6 pl-12 text-white focus:border-purple-500 focus:outline-none transition">
+            <i class="fa-solid fa-search absolute left-4 top-3.5 text-gray-500"></i>
         </div>
+
+        <div id="skeletonLoader" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="h-96 bg-gray-800/50 rounded-2xl animate-pulse"></div>
+            <div class="h-96 bg-gray-800/50 rounded-2xl animate-pulse"></div>
+            <div class="h-96 bg-gray-800/50 rounded-2xl animate-pulse"></div>
+        </div>
+
+        <div id="eventsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+            </div>
+    </main>
+
+    <script src="api-config.js"></script>
+    <script>
+        const CATEGORY_FILTER = "non-tech-event";
         
-        <div class="space-y-3 md:space-y-6">
-          <div class="glass rounded-xl p-3 md:p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-clock text-sm md:text-base"></i> Event Schedule
-            </h3>
-            <div class="grid grid-cols-2 gap-3 md:gap-4">
-              <div>
-                <p class="text-gray-400 text-xs md:text-sm">Day</p>
-                <p id="detailDay" class="text-white font-semibold text-sm md:text-lg"></p>
-              </div>
-              <div>
-                <p class="text-gray-400 text-xs md:text-sm">Time</p>
-                <p id="detailTime" class="text-white font-semibold text-sm md:text-lg"></p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="glass rounded-xl p-3 md:p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-info-circle text-sm md:text-base"></i> Description
-            </h3>
-            <p id="detailDescription" class="text-gray-300 leading-relaxed text-xs md:text-base"></p>
-          </div>
-          
-          <div class="glass rounded-xl p-3 md:p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-info-circle text-sm md:text-base"></i> Rounds
-            </h3>
-            <p id="detailRounds" class="text-gray-300 leading-relaxed text-xs md:text-base"></p>
-          </div>
+        let allEvents = [];
+        const container = document.getElementById('eventsContainer');
+        const loader = document.getElementById('skeletonLoader');
 
-          <div class="glass rounded-xl p-3 md:p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-laptop text-sm md:text-base"></i> Requirements
-            </h3>
-            <p id="detailRequirement" class="text-gray-300 leading-relaxed text-xs md:text-base"></p>
-          </div>
-          
-          <div class="glass rounded-xl p-3 md:p-5 border border-purple-400/20">
-            <h3 class="orbitron text-purple-400 font-bold text-sm md:text-lg mb-2 md:mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-users text-sm md:text-base"></i> Team Size
-            </h3>
-            <p id="detailTeamSize" class="text-white font-semibold text-sm md:text-lg"></p>
-          </div>
-          
-          <a id="detailRegisterBtn" href="#" target="_blank" class="block w-full text-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 md:py-4 rounded-xl transition-all orbitron text-sm md:text-lg shadow-lg shadow-purple-500/50">
-            REGISTER NOW
-            <i class="fa-solid fa-arrow-right ml-2"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+        async function loadData() {
+            try {
+                const cached = localStorage.getItem('mayukh_events_cache');
+                const cacheTime = localStorage.getItem('mayukh_events_time');
+                const now = new Date().getTime();
 
-  <main class="relative z-10">
-    <section class="min-h-[35vh] md:min-h-[50vh] flex flex-col justify-center items-center text-center px-4 md:px-6">
-      <h1 class="hero-title font-black orbitron glow mb-2 md:mb-4 tracking-wider">NON-TECH EVENTS</h1>
-      <p class="hero-subtitle text-cyan-300 font-medium">Creativity & Fun Across The Verses</p>
-    </section>
-
-    <section id="spy-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-6 md:mb-10">
-        <h2 class="verse-title font-black orbitron text-cyan-400">SPY VERSE</h2>
-      </div>
-      <div id="spy-verse-container" class="events-grid max-w-7xl mx-auto"></div>
-    </section>
-
-    <section id="scifi-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-6 md:mb-10">
-        <h2 class="verse-title font-black orbitron text-purple-400">SCI-FI VERSE</h2>
-      </div>
-      <div id="scifi-verse-container" class="events-grid max-w-7xl mx-auto"></div>
-    </section>
-
-    <section id="carnival-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-6 md:mb-10">
-        <h2 class="verse-title font-black orbitron text-red-400">CARNIVAL VERSE</h2>
-      </div>
-      <div id="carnival-verse-container" class="events-grid max-w-7xl mx-auto"></div>
-    </section>
-
-    <section id="dark-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-6 md:mb-10">
-        <h2 class="verse-title font-black orbitron text-slate-400">DARK VERSE</h2>
-      </div>
-      <div id="dark-verse-container" class="events-grid max-w-7xl mx-auto"></div>
-    </section>
-
-    <section id="mythic-verse" class="py-8 md:py-20 px-4 md:px-6 reveal">
-      <div class="text-center mb-6 md:mb-10">
-        <h2 class="verse-title font-black orbitron text-orange-400">MYTHIC VERSE</h2>
-      </div>
-      <div id="mythic-verse-container" class="events-grid max-w-7xl mx-auto"></div>
-    </section>
-  </main>
-
-  <script src="api-config.js"></script>
-  <script>
-    const TARGET_TYPE = 'non-tech-event';
-    let currentEventData = null;
-
-    function openPosterModal(posterUrl, eventData) {
-      currentEventData = eventData;
-      document.getElementById('posterModalImg').src = posterUrl;
-      document.getElementById('posterModal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closePosterModal() {
-      document.getElementById('posterModal').classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-
-    function openDetailModal(eventData) {
-      currentEventData = eventData;
-      
-      document.getElementById('detailPosterImg').src = eventData.posterLink;
-      document.getElementById('detailLogo').src = eventData.logoLink || '';
-      document.getElementById('detailTitle').textContent = eventData.title;
-      document.getElementById('detailCategory').textContent = eventData.category.replace('-', ' ');
-      document.getElementById('detailDay').textContent = eventData.day;
-      document.getElementById('detailTime').textContent = eventData.time;
-      document.getElementById('detailDescription').textContent = eventData.description;
-      document.getElementById('detailRounds').textContent = eventData.rounds || 'TBA';
-      document.getElementById('detailRequirement').textContent = eventData.requirements || 'TBA';
-      document.getElementById('detailTeamSize').textContent = eventData.teamSize || 'Individual/Team';
-      document.getElementById('detailRegisterBtn').href = eventData.registrationLink;
-      
-      document.getElementById('detailModal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeDetailModal() {
-      document.getElementById('detailModal').classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-
-    document.getElementById('posterModal').addEventListener('click', function(e) {
-      if (e.target === this) closePosterModal();
-    });
-
-    document.getElementById('detailModal').addEventListener('click', function(e) {
-      if (e.target === this) closeDetailModal();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closePosterModal();
-        closeDetailModal();
-      }
-    });
-
-    function createCardHTML(event) {
-        const eventDataStr = encodeURIComponent(JSON.stringify(event));
-        return `
-          <div class="event-card glass rounded-2xl border border-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-            <div class="event-card-content p-4 md:p-6">
-              <div class="flex justify-between items-center mb-3 md:mb-4">
-                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-8 h-8 md:w-10 md:h-10 object-contain">` : `<i class="fa-solid fa-paintbrush text-lg md:text-2xl text-purple-400"></i>`}
-                 <span class="text-xs bg-white/10 px-2 md:px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
-              </div>
-              <img src="${event.posterLink}" 
-                   class="event-card-poster mb-3 md:mb-4" 
-                   onclick='openPosterModal("${event.posterLink}", JSON.parse(decodeURIComponent("${eventDataStr}")))' 
-                   alt="${event.title}">
-              <h3 class="text-base md:text-xl font-bold orbitron text-purple-400 mb-2 uppercase">${event.title}</h3>
-              <p class="event-card-description text-gray-400 mb-3 md:mb-4">${event.description}</p>
-              
-              <div class="card-actions">
-                <button onclick='openDetailModal(JSON.parse(decodeURIComponent("${eventDataStr}")))' class="see-more-card-btn">
-                  <i class="fa-solid fa-circle-info mr-1"></i> SEE MORE
-                </button>
-                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-lg transition-all register-btn">
-                  REGISTER
-                </a>
-              </div>
-            </div>
-          </div>
-        `;
-    }
-
-    async function loadAllEvents() {
-        try {
-            const response = await fetch(API_CONFIG.eventsUrl);
-            const data = await response.json();
-            
-            if (!data.events) return;
-
-            const sections = [
-                { id: 'spy-verse-container', category: 'spy-verse' },
-                { id: 'scifi-verse-container', category: 'scifi-verse' },
-                { id: 'carnival-verse-container', category: 'carnival-verse' },
-                { id: 'dark-verse-container', category: 'dark-verse' },
-                { id: 'mythic-verse-container', category: 'mythic-verse' }
-            ];
-
-            sections.forEach(section => {
-                const container = document.getElementById(section.id);
-                if (container) {
-                    const filteredEvents = data.events.filter(e => 
-                        e.category === section.category && 
-                        e.eventType === TARGET_TYPE 
-                    );
-                    
-                    if (filteredEvents.length > 0) {
-                        container.innerHTML = filteredEvents.map(createCardHTML).join('');
-                    } else {
-                        container.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10 italic">No Non-Tech Events scheduled here yet.</p>`;
-                    }
+                if (cached && cacheTime && (now - cacheTime < 300000)) {
+                    allEvents = JSON.parse(cached);
+                    renderEvents(allEvents);
                 }
-            });
-        } catch (error) { 
-            console.error('Failed to load events:', error); 
+
+                const res = await fetch(`${API_BASE_URL}/api/events`);
+                if (!res.ok) throw new Error('API Failed');
+                
+                const data = await res.json();
+                allEvents = (data.events || data).filter(e => e.eventType === CATEGORY_FILTER);
+                
+                localStorage.setItem('mayukh_events_cache', JSON.stringify(allEvents));
+                localStorage.setItem('mayukh_events_time', now);
+
+                renderEvents(allEvents);
+
+            } catch (err) {
+                console.error(err);
+                showToast("Failed to load events", "error");
+            } finally {
+                loader.classList.add('hidden');
+                container.classList.remove('hidden');
+            }
         }
-    }
 
-    window.addEventListener('scroll', () => {
-      document.querySelectorAll('.reveal').forEach(el => {
-        if(el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
-      });
-    });
+        function renderEvents(events) {
+            if (events.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10">No events found.</div>`;
+                return;
+            }
 
-    loadAllEvents();
-  </script>
+            container.innerHTML = events.map(e => `
+                <div class="bg-gray-800/40 border border-gray-700 rounded-2xl overflow-hidden hover:border-purple-500/50 transition-all group hover:-translate-y-1">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="${e.posterLink}" 
+                             alt="${e.title}" 
+                             loading="lazy"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://via.placeholder.com/400?text=Event'">
+                        <div class="absolute top-2 right-2 bg-black/60 backdrop-blur px-2 py-1 rounded text-xs font-bold text-[#66fcf1]">
+                            ${e.category}
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-white mb-2 line-clamp-1">${e.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">${e.description}</p>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-xs text-purple-400"><i class="fa-regular fa-calendar mr-1"></i> ${e.date || 'TBA'}</span>
+                            <a href="${e.registrationLink}" target="_blank" class="bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold px-4 py-2 rounded-full transition">REGISTER</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let debounceTimer;
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const query = e.target.value.toLowerCase();
+                const filtered = allEvents.filter(ev => ev.title.toLowerCase().includes(query));
+                renderEvents(filtered);
+            }, 300);
+        });
+
+        function showToast(msg, type) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-5 right-5 px-6 py-3 rounded shadow-lg text-white font-bold z-50 ${type === 'error' ? 'bg-red-600' : 'bg-green-600'} animate-bounce`;
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        loadData();
+    </script>
 </body>
 </html>

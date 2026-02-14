@@ -110,12 +110,12 @@
             </div>
         </div>
 
-        <div id="general-section" class="hidden w-full max-w-7xl flex-col items-center">
+        <div id="general-section" class="hidden w-full flex-col items-center px-6 lg:px-12">
             <h2 class="section-title">MAYUKH ARCHIVES</h2>
             <div id="general-grid" class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
-        <div id="cultural-section" class="hidden w-full max-w-7xl flex-col items-center mt-12 mb-20">
+        <div id="cultural-section" class="hidden w-full flex-col items-center mt-12 mb-20 px-6 lg:px-12">
             <h2 class="section-title">THE CULTURAL NIGHT</h2>
             <div id="cultural-grid" class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
@@ -127,8 +127,8 @@
         <button class="absolute top-6 right-6 text-white/50 hover:text-white text-5xl font-light transition-colors">&times;</button>
     </div>
 
+    <script src="api-config.js"></script>
     <script>
-        // --- 1. PARTICLE SYSTEM ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -164,16 +164,18 @@
         window.addEventListener('resize', init);
         init(); animate();
 
-        // --- 2. PROGRESS BAR ---
         gsap.to("#progress-bar", { width: "75%", duration: 4, ease: "power2.inOut", repeat: -1, yoyo: true });
 
-        // --- 3. DYNAMIC LOGIC (SEGREGATED) ---
-       // --- FIXED API CONFIGURATION ---
-        const API_URL = 'https://mayukh-bv-1.onrender.com/api/gallery';
+        function sanitizeHTML(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         async function fetchGallery() {
             try {
-                const res = await fetch(API_URL);
+                const res = await fetch(`${API_CONFIG.galleryUrl}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const photos = await res.json();
 
                 if (photos && photos.length > 0) {
@@ -189,19 +191,23 @@
                     mainContent.classList.remove('items-center', 'justify-center', 'h-screen'); 
                     mainContent.classList.add('h-auto', 'items-start');
 
-                    // Helper to create Photo HTML
                     const createPhotoCard = (photo) => {
+                        if (!photo || !photo.imageUrl) return '';
                         let captionHtml = '';
                         if (photo.caption && photo.caption.trim() !== '') {
                             captionHtml = `
                             <div class="absolute bottom-0 left-0 w-full p-4 border-t border-cyan-500/20 bg-slate-900/80 backdrop-blur">
-                                <p class="text-xs font-mono text-cyan-400 tracking-widest uppercase truncate">${photo.caption}</p>
+                                <p class="text-xs font-mono text-cyan-400 tracking-widest uppercase truncate">${sanitizeHTML(photo.caption)}</p>
                             </div>`;
                         }
                         return `
-                        <div class="photo-card group" onclick="openLightbox('${photo.imageUrl}')">
-                            <div class="aspect-square w-full overflow-hidden relative">
-                                <img src="${photo.imageUrl}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:grayscale-0 grayscale opacity-80 group-hover:opacity-100">
+                        <div class="photo-card group" onclick="openLightbox('${sanitizeHTML(photo.imageUrl)}')">
+                            <div class="aspect-square w-full overflow-hidden relative bg-gray-900">
+                                <img src="${sanitizeHTML(photo.imageUrl)}" 
+                                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:grayscale-0 grayscale opacity-80 group-hover:opacity-100" 
+                                     loading="lazy"
+                                     alt="${sanitizeHTML(photo.caption || 'Gallery Image')}"
+                                     onerror="this.src='https://via.placeholder.com/400?text=Image+Not+Found'">
                                 <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-60"></div>
                             </div>
                             ${captionHtml}
@@ -229,18 +235,21 @@
             } catch (err) { console.error(err); }
         }
 
-        // --- 4. LIGHTBOX ---
         function openLightbox(url) {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-img');
             img.src = url;
+            img.onerror = () => { img.src = 'https://via.placeholder.com/800?text=Image+Not+Found'; };
             lightbox.classList.remove('hidden');
             lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
         }
+        
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
             lightbox.classList.add('hidden');
             lightbox.classList.remove('flex');
+            document.body.style.overflow = 'auto';
             setTimeout(() => { document.getElementById('lightbox-img').src = ''; }, 200);
         }
 

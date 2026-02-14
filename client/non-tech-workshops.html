@@ -685,10 +685,31 @@
   <script>
     const TARGET_TYPE = 'non-tech-workshop';
     let currentEventData = null;
+    let eventsCache = null;
+    let eventsCacheTime = 0;
+    const CACHE_DURATION = 120000;
+
+    function sanitizeHTML(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        const bgColor = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-green-600' : 'bg-blue-600';
+        toast.className = `fixed bottom-4 right-4 ${bgColor} text-white px-4 py-3 rounded-lg shadow-lg z-50`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
 
     function openPosterModal(posterUrl, eventData) {
       currentEventData = eventData;
-      document.getElementById('posterModalImg').src = posterUrl;
+      const img = document.getElementById('posterModalImg');
+      img.src = posterUrl;
+      img.alt = eventData.title || 'Workshop Poster';
+      img.onerror = () => { img.src = 'https://via.placeholder.com/400?text=Image+Not+Found'; };
       document.getElementById('posterModal').classList.add('active');
       document.body.style.overflow = 'hidden';
     }
@@ -737,25 +758,31 @@
 
     function createCardHTML(event) {
         const eventDataStr = encodeURIComponent(JSON.stringify(event));
+        const posterUrl = event.posterLink || 'https://via.placeholder.com/400?text=Workshop+Poster';
+        const logoUrl = event.logoLink || '';
         return `
           <div class="event-card glass rounded-2xl border border-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-300">
             <div class="event-card-content p-4 md:p-6">
               <div class="flex justify-between items-center mb-3 md:mb-4">
-                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-8 h-8 md:w-10 md:h-10 object-contain">` : `<i class="fa-solid fa-paintbrush text-lg md:text-2xl text-purple-400"></i>`}
-                 <span class="text-xs bg-white/10 px-2 md:px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
+                 ${logoUrl ? `<img src="${sanitizeHTML(logoUrl)}" class="w-8 h-8 md:w-10 md:h-10 object-contain" loading="lazy" onerror="this.style.display='none'" alt="Logo">` : `<i class="fa-solid fa-paintbrush text-lg md:text-2xl text-purple-400"></i>`}
+                 <span class="text-xs bg-white/10 px-2 md:px-3 py-1 rounded-full">${sanitizeHTML(event.day || 'TBA')} • ${sanitizeHTML(event.time || 'TBA')}</span>
               </div>
-              <img src="${event.posterLink}" 
-                   class="event-card-poster mb-3 md:mb-4" 
-                   onclick='openPosterModal("${event.posterLink}", JSON.parse(decodeURIComponent("${eventDataStr}")))' 
-                   alt="${event.title}">
-              <h3 class="text-base md:text-xl font-bold orbitron text-purple-400 mb-2 uppercase">${event.title}</h3>
-              <p class="event-card-description text-gray-400 mb-3 md:mb-4">${event.description}</p>
+              <div class="aspect-video overflow-hidden rounded-lg mb-3 md:mb-4 bg-gray-800">
+                <img src="${sanitizeHTML(posterUrl)}" 
+                     class="event-card-poster w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-300" 
+                     onclick='openPosterModal("${posterUrl}", JSON.parse(decodeURIComponent("${eventDataStr}")))' 
+                     alt="${sanitizeHTML(event.title)}"
+                     loading="lazy"
+                     onerror="this.src='https://via.placeholder.com/400?text=Image+Not+Found'">
+              </div>
+              <h3 class="text-base md:text-xl font-bold orbitron text-purple-400 mb-2 uppercase truncate" title="${sanitizeHTML(event.title)}">${sanitizeHTML(event.title)}</h3>
+              <p class="event-card-description text-gray-400 mb-3 md:mb-4 line-clamp-2">${sanitizeHTML(event.description || 'No description available')}</p>
               
               <div class="card-actions">
                 <button onclick='openDetailModal(JSON.parse(decodeURIComponent("${eventDataStr}")))' class="see-more-card-btn">
                   <i class="fa-solid fa-circle-info mr-1"></i> SEE MORE
                 </button>
-                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-lg transition-all register-btn">
+                <a href="${sanitizeHTML(event.registrationLink || '#')}" target="_blank" rel="noopener noreferrer" class="flex-1 text-center bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg transition-all register-btn">
                   REGISTER
                 </a>
               </div>
@@ -766,17 +793,29 @@
 
     async function loadAllWorkshops() {
         try {
-            const response = await fetch(API_CONFIG.eventsUrl);
-            const data = await response.json();
-            
+            const now = Date.now();
             const container = document.getElementById('workshops-container');
             
-            if (!data.events) {
-                container.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10 italic">Unable to load workshops. Please try again later.</p>`;
-                return;
+            const cached = localStorage.getItem('mayukh_nontech_workshops_cache');
+            const cacheTime = localStorage.getItem('mayukh_nontech_workshops_time');
+
+            if (cached && cacheTime && (now - cacheTime < 300000)) {
+                const data = JSON.parse(cached);
+                const nonTechWorkshops = data.filter(e => e && e.eventType === TARGET_TYPE);
+                if (nonTechWorkshops.length > 0) {
+                    container.innerHTML = nonTechWorkshops.map(createCardHTML).join('');
+                }
             }
 
-            const nonTechWorkshops = data.events.filter(e => e.eventType === TARGET_TYPE);
+            const response = await fetch(`${API_BASE_URL}/api/events`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const fullData = await response.json();
+            const events = fullData.events || fullData;
+
+            localStorage.setItem('mayukh_nontech_workshops_cache', JSON.stringify(events));
+            localStorage.setItem('mayukh_nontech_workshops_time', now);
+
+            const nonTechWorkshops = events.filter(e => e && e.eventType === TARGET_TYPE);
             
             if (nonTechWorkshops.length > 0) {
                 container.innerHTML = nonTechWorkshops.map(createCardHTML).join('');
@@ -791,6 +830,7 @@
             }
         } catch (error) { 
             console.error('Failed to load workshops:', error);
+            showToast('Failed to load workshops. Please try again.', 'error');
             document.getElementById('workshops-container').innerHTML = `
               <div class="col-span-full text-center py-20">
                 <i class="fa-solid fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
