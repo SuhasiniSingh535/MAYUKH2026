@@ -8,161 +8,219 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #02040a; color: white; font-family: 'Rajdhani', sans-serif; }
-        .orbitron { font-family: 'Orbitron', sans-serif; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        
+        body { background-color: #111827; color: white; font-family: 'Rajdhani', sans-serif; }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        .glass-input {
+            background: rgba(31, 41, 55, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-input:focus {
+            outline: none;
+            background: rgba(31, 41, 55, 0.7);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        .glass-btn {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(225, 29, 72, 0.8) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-btn:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 1) 0%, rgba(225, 29, 72, 1) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.4);
+        }
+        
+        .glass-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+        
+        .glass-label {
+            display: block;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(239, 68, 68, 0.9);
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden">
 
-
+    <script src="api-config.js"></script>
     <script>
-        (function checkAuth() {
-            const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 Minutes (in milliseconds)
+        function checkAuth() {
+            const SESSION_TIMEOUT = 30 * 60 * 1000;
+            const token = localStorage.getItem("token");
+            const adminFlag = localStorage.getItem("admin_logged_in");
             const lastLogin = localStorage.getItem("admin_login_time");
             const currentTime = new Date().getTime();
 
-            // 1. Check if user is logged in AND session is valid
-            if (localStorage.getItem("admin_logged_in") === "true" && lastLogin) {
-                
-                // Check if time expired
-                if (currentTime - lastLogin > SESSION_TIMEOUT) {
-                    alert("⏳ Session Expired. Please login again.");
-                    logout();
-                    return;
-                } else {
-                    // User is active, EXTEND the session time
-                    localStorage.setItem("admin_login_time", currentTime);
-                    return; // Access Granted
-                }
+            if (!token || adminFlag !== "true") {
+                window.location.href = "index.html";
+                return false;
             }
 
-            // // 2. If not logged in, Ask for Password
-            // const pass = prompt("🔒 ADMIN ACCESS REQUIRED:\nEnter Password:");
-            // if (pass === "Mayukh@2026") {
-            //     localStorage.setItem("admin_logged_in", "true");
-            //     localStorage.setItem("admin_login_time", new Date().getTime()); // Set Start Time
-            // } else {
-            //     alert("❌ Access Denied!");
-            //     window.location.href = "index.html"; 
-            // }
-
-            function logout() {
+            if (lastLogin && currentTime - lastLogin > SESSION_TIMEOUT) {
+                alert("Session Expired. Please login again.");
                 localStorage.removeItem("admin_logged_in");
                 localStorage.removeItem("admin_login_time");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
                 window.location.href = "index.html";
+                return false;
             }
-        })();
+
+            localStorage.setItem("admin_login_time", currentTime);
+            return true;
+        }
+
+        if (!checkAuth()) {
+            document.documentElement.style.display = "none";
+        }
     </script>
 
-    <div class="bg-gray-900 border-b border-gray-800 p-4 flex justify-between items-center shadow-lg z-20">
-        <div class="flex items-center gap-4">
-        <div class="absolute top-5 right-6 z-50 flex gap-3">
-            <a href="media.html" class="bg-gray-800 border border-gray-700 text-[10px] text-purple-400 px-4 py-2 rounded-full hover:bg-purple-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
-                <i class="fa-solid fa-images"></i> MEDIA
+    <header class="glass-card mx-2 my-2 p-4 flex flex-wrap justify-between gap-4 z-50 items-center rounded-xl">
+        <h1 class="text-2xl md:text-3xl font-bold text-red-400 orbitron">EMERGENCY ALERT SYSTEM</h1>
+        <div class="flex flex-wrap gap-3">
+            <a href="admin.html" class="glass-btn text-xs font-bold text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 min-h-10" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.8) 0%, rgba(59, 130, 246, 0.8) 100%);">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>EVENTS</span>
             </a>
-            
-            <a href="admin.html" class="bg-gray-800 border border-gray-700 text-[10px] text-red-400 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
-                <i class="fa-solid fa-bell"></i> EVENTS
+            <a href="media.html" class="glass-btn text-xs font-bold text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 min-h-10" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%);">
+                <i class="fa-solid fa-images"></i>
+                <span>MEDIA</span>
             </a>
-
-            <a href="index.html" onclick="localStorage.removeItem('admin_logged_in'); localStorage.removeItem('admin_login_time');" class="bg-red-900/80 border border-red-700 text-[10px] text-white px-4 py-2 rounded-full hover:bg-red-600 transition-all shadow-lg flex items-center gap-2">
-                <i class="fa-solid fa-power-off"></i> LOGOUT
+            <a href="index.html" onclick="localStorage.removeItem('admin_logged_in'); localStorage.removeItem('admin_login_time'); localStorage.removeItem('token'); localStorage.removeItem('user');" class="glass-btn text-xs font-bold text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 min-h-10" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(225, 29, 72, 0.8) 100%);">
+                <i class="fa-solid fa-power-off"></i>
+                <span>LOGOUT</span>
             </a>
         </div>
-            <h1 class="text-xl font-bold tracking-wider text-red-500 orbitron">EMERGENCY ALERT SYSTEM</h1>
-        </div>
-        <div class="text-xs text-gray-500 font-mono">ADMIN MODE</div>
-    </div>
+    </header>
 
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative gap-2 p-2">
         
-        <div class="w-full md:w-1/3 bg-gray-900/50 p-6 border-r border-gray-800 overflow-y-auto backdrop-blur-sm">
-            <h2 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                <i class="fa-solid fa-pen-to-square text-red-500"></i> <span id="formTitle">CREATE NEW ALERT</span>
+        <div class="w-full lg:w-1/3 glass-card p-6 overflow-y-auto rounded-xl">
+            <h2 class="text-lg font-bold text-white mb-6 flex items-center gap-2 orbitron">
+                <i class="fa-solid fa-pen-to-square text-red-400"></i> <span id="formTitle">CREATE NEW ALERT</span>
             </h2>
 
             <form id="alertForm" class="space-y-4">
                 <input type="hidden" id="editAlertId">
 
                 <div>
-                    <label class="text-[10px] text-gray-400 font-bold tracking-wider">TARGET EVENT</label>
-                    <select id="alertEventSelect" class="w-full bg-gray-800 p-3 rounded text-sm text-white border border-gray-700 focus:border-red-500 outline-none transition">
+                    <label class="glass-label">TARGET EVENT</label>
+                    <select id="alertEventSelect" class="glass-input w-full p-3 rounded-lg text-sm">
                         <option value="">-- Loading Events --</option>
                     </select>
                 </div>
 
-                <div class="p-4 bg-black/40 rounded-lg border border-gray-800 space-y-3">
-                    <p class="text-[10px] text-red-400 font-bold mb-1 uppercase tracking-widest">Update Details (Optional)</p>
+                <div class="p-4 glass-card space-y-3">
+                    <p class="text-[10px] text-red-400 font-bold mb-2 uppercase tracking-widest orbitron">Update Details (Optional)</p>
                     
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="changeVenue" placeholder="New Venue" class="bg-gray-800 p-2 rounded text-xs text-white border border-gray-700 focus:border-red-500 outline-none">
-                        <input type="text" id="changeTime" placeholder="New Time" class="bg-gray-800 p-2 rounded text-xs text-white border border-gray-700 focus:border-red-500 outline-none">
+                        <input type="text" id="changeVenue" placeholder="New Venue" class="glass-input p-2 rounded-lg text-xs">
+                        <input type="text" id="changeTime" placeholder="New Time" class="glass-input p-2 rounded-lg text-xs">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="text" id="changeDate" placeholder="New Date" class="bg-gray-800 p-2 rounded text-xs text-white border border-gray-700 focus:border-red-500 outline-none">
-                        <input type="text" id="changeFees" placeholder="New Fee" class="bg-gray-800 p-2 rounded text-xs text-white border border-gray-700 focus:border-red-500 outline-none">
+                        <input type="text" id="changeDate" placeholder="New Date" class="glass-input p-2 rounded-lg text-xs">
+                        <input type="text" id="changeFees" placeholder="New Fee" class="glass-input p-2 rounded-lg text-xs">
                     </div>
-                    <textarea id="changeNote" rows="3" placeholder="Important Note (e.g. 'Event Cancelled due to rain')" class="w-full bg-gray-800 p-2 rounded text-xs text-white border border-gray-700 focus:border-red-500 outline-none"></textarea>
+                    <textarea id="changeNote" rows="3" placeholder="Important Note (e.g. 'Event Cancelled due to rain')" class="glass-input w-full p-2 rounded-lg text-xs resize-none"></textarea>
                 </div>
 
-                <button type="button" onclick="submitAlert()" id="submitBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-all tracking-widest text-sm">
+                <button type="button" onclick="submitAlert()" id="submitBtn" class="glass-btn w-full font-bold py-3 rounded-lg text-sm min-h-12 tracking-widest orbitron">
                     PUBLISH ALERT
                 </button>
                 
-                <button type="button" onclick="resetForm()" id="cancelBtn" class="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-2 rounded text-xs hidden">
+                <button type="button" onclick="resetForm()" id="cancelBtn" class="glass-card w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-2 rounded-lg text-xs hidden">
                     CANCEL EDIT
                 </button>
             </form>
         </div>
 
-        <div class="w-full md:w-2/3 bg-black p-6 overflow-y-auto relative">
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none"></div>
+        <div class="w-full lg:w-2/3 glass-card p-6 overflow-y-auto rounded-xl relative">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none rounded-xl"></div>
             
-            <h2 class="text-2xl font-bold text-white mb-6 orbitron flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-white mb-6 orbitron flex justify-between items-center relative z-10">
                 ACTIVE BROADCASTS
-                <span id="alertCount" class="text-xs bg-red-900 text-red-200 px-2 py-1 rounded font-mono">0</span>
+                <span id="alertCount" class="text-xs bg-red-900 text-red-200 px-3 py-1 rounded-lg font-mono">0</span>
             </h2>
             
-            <div id="alertsList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <p class="text-gray-600 text-sm animate-pulse">Scanning frequency...</p>
+            <div id="alertsList" class="grid grid-cols-1 lg:grid-cols-2 gap-4 relative z-10">
+                <p class="text-gray-600 text-sm animate-pulse col-span-full text-center py-8">Scanning frequency...</p>
             </div>
         </div>
     </div>
 
-    <script src="api-config.js"></script> 
-    
     <script>
-        // ✅ FIXED API CONNECTION LOGIC
-        const API_BASE = 'https://mayukh-bv-1.onrender.com/api'; // Ensure this matches your live backend URL
+        const getAPIBase = () => {
+            if (typeof API_CONFIG !== 'undefined') {
+                return API_CONFIG.API_BASE;
+            }
+            const hostname = window.location.hostname;
+            return (hostname === 'localhost' || hostname === '127.0.0.1') 
+                ? 'http://localhost:5001/api'
+                : 'https://mayukh-bv-1.onrender.com/api';
+        };
 
-        // --- 1. Load Data on Start ---
+        const API_BASE = getAPIBase();
+
         window.onload = async () => {
             await loadEvents();
             await loadAlerts();
         };
 
-        // --- 2. Load Events for Dropdown ---
         async function loadEvents() {
             try {
-                // Adjust endpoint if your event API is different
-                const res = await fetch(`${API_BASE}/events`); 
+                const res = await fetch(`${API_BASE}/events`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                
                 const data = await res.json();
                 const select = document.getElementById('alertEventSelect');
                 
-                // Handle different API response structures ({events: []} vs [])
-                const events = data.events || data; 
+                const events = Array.isArray(data) ? data : (data.events || []);
+                
+                if (events.length === 0) {
+                    select.innerHTML = '<option value="">-- No Events Available --</option>';
+                    console.warn("No events found from API");
+                    return;
+                }
                 
                 select.innerHTML = '<option value="">-- Select Target Event --</option>';
                 events.forEach(e => {
-                    select.innerHTML += `<option value="${e.title}">${e.title}</option>`;
+                    const title = e.title || e._id || 'Untitled';
+                    select.innerHTML += `<option value="${title}">${title}</option>`;
                 });
-            } catch(e) { console.error("Event Load Error:", e); }
+            } catch(e) { 
+                console.error("Event Load Error:", e);
+                document.getElementById('alertEventSelect').innerHTML = '<option value="">-- Load Failed --</option>';
+            }
         }
 
-        // --- 3. Submit Logic (Create & Edit) ---
         async function submitAlert() {
             const eventName = document.getElementById('alertEventSelect').value;
             const editId = document.getElementById('editAlertId').value;
@@ -213,49 +271,58 @@
             }
         }
 
-        // --- 4. Load & Display Alerts ---
         async function loadAlerts() {
             try {
                 const res = await fetch(`${API_BASE}/event-alerts`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                
                 const alerts = await res.json();
                 
                 document.getElementById('alertCount').innerText = alerts.length;
                 const container = document.getElementById('alertsList');
                 
                 if(alerts.length === 0) {
-                    container.innerHTML = `<div class="col-span-full text-center text-gray-600 py-10 border border-gray-800 rounded border-dashed">No Active Alerts</div>`;
+                    container.innerHTML = `<div class="col-span-full text-center text-gray-600 py-10 border border-gray-800 rounded-lg border-dashed">No Active Alerts</div>`;
                     return;
                 }
 
                 container.innerHTML = alerts.map(a => `
-                    <div class="bg-gray-900 border border-gray-700 hover:border-red-500/50 p-4 rounded-xl relative group transition-all">
+                    <div class="glass-card p-4 rounded-lg border border-gray-700 hover:border-red-500/50 relative group transition-all">
                         <div class="absolute top-4 right-4 flex gap-2 opacity-50 group-hover:opacity-100 transition">
-                            <button onclick="editAlert('${encodeURIComponent(JSON.stringify(a))}')" class="text-yellow-500 hover:text-white"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteAlert('${a._id}')" class="text-red-500 hover:text-white"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="editAlert('${encodeURIComponent(JSON.stringify(a))}')" class="bg-yellow-500/20 text-yellow-400 p-2 rounded-md hover:bg-yellow-500 hover:text-black text-xs transition-all">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteAlert('${a._id}')" class="bg-red-500/20 text-red-400 p-2 rounded-md hover:bg-red-500 hover:text-white text-xs transition-all">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                         
-                        <h3 class="font-bold text-white text-lg orbitron mb-2 text-red-400">${a.eventName}</h3>
+                        <h3 class="font-bold text-lg orbitron mb-3 text-red-400">${a.eventName}</h3>
                         
-                        <div class="space-y-1 text-xs font-mono text-gray-400 bg-black/30 p-3 rounded">
-                            ${a.changes.venue ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span>VENUE CHANGE</span><span class="text-white">${a.changes.venue}</span></div>` : ''}
-                            ${a.changes.time ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span>TIME CHANGE</span><span class="text-white">${a.changes.time}</span></div>` : ''}
-                            ${a.changes.date ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span>DATE CHANGE</span><span class="text-white">${a.changes.date}</span></div>` : ''}
-                            ${a.changes.fees ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span>FEE UPDATE</span><span class="text-white">${a.changes.fees}</span></div>` : ''}
-                            ${a.changes.note ? `<div class="mt-2 text-yellow-500 italic">"${a.changes.note}"</div>` : ''}
+                        <div class="space-y-2 text-xs font-mono text-gray-400 bg-black/30 p-3 rounded">
+                            ${a.changes.venue ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span class="text-gray-500">VENUE</span><span class="text-white">${a.changes.venue}</span></div>` : ''}
+                            ${a.changes.time ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span class="text-gray-500">TIME</span><span class="text-white">${a.changes.time}</span></div>` : ''}
+                            ${a.changes.date ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span class="text-gray-500">DATE</span><span class="text-white">${a.changes.date}</span></div>` : ''}
+                            ${a.changes.fees ? `<div class="flex justify-between border-b border-gray-800 pb-1"><span class="text-gray-500">FEE</span><span class="text-white">${a.changes.fees}</span></div>` : ''}
+                            ${a.changes.note ? `<div class="mt-2 text-red-400 italic">"${a.changes.note}"</div>` : ''}
                             
-                            ${!a.changes.venue && !a.changes.time && !a.changes.date && !a.changes.fees && !a.changes.note ? '<span class="text-gray-600 italic">No specific details provided.</span>' : ''}
+                            ${!a.changes.venue && !a.changes.time && !a.changes.date && !a.changes.fees && !a.changes.note ? '<span class="text-gray-600 italic text-xs">No specific details provided.</span>' : ''}
                         </div>
-                        <div class="mt-2 text-[10px] text-gray-600 text-right">ID: ${a._id.slice(-6)}</div>
+                        <div class="mt-2 text-[10px] text-gray-700 text-right">ID: ${a._id.slice(-6)}</div>
                     </div>
                 `).join('');
-            } catch(e) { console.error(e); }
+            } catch(e) { 
+                console.error(e);
+                document.getElementById('alertsList').innerHTML = `<div class="col-span-full text-red-400 text-sm text-center py-8">Error loading alerts: ${e.message}</div>`;
+            }
         }
 
-        // --- 5. Helper Functions ---
         async function deleteAlert(id) {
             if(!confirm("Terminate this broadcast?")) return;
-            await fetch(`${API_BASE}/event-alerts/${id}`, { method: 'DELETE' });
-            loadAlerts();
+            try {
+                const res = await fetch(`${API_BASE}/event-alerts/${id}`, { method: 'DELETE' });
+                if (res.ok) loadAlerts();
+            } catch(e) { console.error(e); }
         }
 
         function editAlert(strData) {
@@ -271,7 +338,7 @@
 
             document.getElementById('formTitle').innerText = "EDITING BROADCAST";
             document.getElementById('submitBtn').innerText = "UPDATE ALERT";
-            document.getElementById('submitBtn').className = "w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded shadow transition-all tracking-widest text-sm";
+            document.getElementById('submitBtn').style.background = 'linear-gradient(135deg, rgba(234, 179, 8, 0.8) 0%, rgba(202, 138, 4, 0.8) 100%)';
             document.getElementById('cancelBtn').classList.remove('hidden');
         }
 
@@ -281,7 +348,7 @@
             
             document.getElementById('formTitle').innerText = "CREATE NEW ALERT";
             document.getElementById('submitBtn').innerText = "PUBLISH ALERT";
-            document.getElementById('submitBtn').className = "w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-all tracking-widest text-sm";
+            document.getElementById('submitBtn').style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(225, 29, 72, 0.8) 100%)';
             document.getElementById('cancelBtn').classList.add('hidden');
         }
     </script>

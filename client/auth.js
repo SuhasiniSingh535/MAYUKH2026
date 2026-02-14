@@ -1,10 +1,25 @@
-// Frontend API helper for authentication
-// Dynamically determine API base URL for production/development
-const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'https://mayukh-bv-1.onrender.com/api' 
-  : '/api';
+const getAPIBaseURL = () => {
+  const hostname = window.location.hostname;
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:5001/api';
+  }
+  return 'https://mayukh-bv-1.onrender.com/api';
+};
 
-// Sign up a new user
+const API_BASE_URL = getAPIBaseURL();
+
+function setAdminSession() {
+  localStorage.setItem("admin_logged_in", "true");
+  localStorage.setItem("admin_login_time", new Date().getTime());
+}
+
+function clearAdminSession() {
+  localStorage.removeItem("admin_logged_in");
+  localStorage.removeItem("admin_login_time");
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+}
+
 async function signup(name, email, password, role) {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/signup`, {
@@ -20,6 +35,7 @@ async function signup(name, email, password, role) {
     if (response.ok) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      setAdminSession();
       return { success: true, data };
     } else {
       return { success: false, error: data.message || 'Signup failed' };
@@ -30,7 +46,6 @@ async function signup(name, email, password, role) {
   }
 }
 
-// Login user
 async function login(email, password) {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -46,6 +61,7 @@ async function login(email, password) {
     if (response.ok) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      setAdminSession();
       return { success: true, data };
     } else {
       return { success: false, error: data.message || 'Login failed' };
@@ -56,7 +72,6 @@ async function login(email, password) {
   }
 }
 
-// Get user profile
 async function getProfile() {
   try {
     const token = localStorage.getItem('token');
@@ -73,7 +88,7 @@ async function getProfile() {
       localStorage.setItem('user', JSON.stringify(user));
       return user;
     } else if (response.status === 401) {
-      logout();
+      clearAdminSession();
       return null;
     }
     return null;
@@ -83,13 +98,10 @@ async function getProfile() {
   }
 }
 
-// Logout user
 function logout() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+  clearAdminSession();
 }
 
-// Check if user is logged in
 function isLoggedIn() {
   const token = localStorage.getItem('token');
   if (!token) return false;
@@ -102,23 +114,20 @@ function isLoggedIn() {
   }
 }
 
-// Get current user
 function getCurrentUser() {
   if (!isLoggedIn()) {
-    logout();
+    clearAdminSession();
     return null;
   }
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : null;
 }
 
-// Check if user has specific role
 function hasRole(requiredRole) {
   const user = getCurrentUser();
   return user && user.role === requiredRole;
 }
 
-// Get auth header for API calls
 function getAuthHeader() {
   const token = localStorage.getItem('token');
   return token ? { 'Authorization': `Bearer ${token}` } : {};

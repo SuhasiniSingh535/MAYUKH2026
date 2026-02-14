@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mayukh Media Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -9,246 +10,306 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        .glass-input {
+            background: rgba(31, 41, 55, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-input:focus {
+            outline: none;
+            background: rgba(31, 41, 55, 0.7);
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+        
+        .glass-btn {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-btn:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 1) 0%, rgba(139, 92, 246, 1) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(168, 85, 247, 0.4);
+        }
+        
+        .glass-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+        
+        .glass-label {
+            display: block;
+            font-size: 0.625rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(168, 85, 247, 0.9);
+            margin-bottom: 0.5rem;
+        }
+        
         .hidden-tab { display: none; }
-        .active-tab { border-bottom: 2px solid #06b6d4; color: #06b6d4; }
+        .active-tab { border-bottom: 2px solid #a855f7; color: #a855f7; }
         .inactive-tab { color: #9ca3af; }
+        
+        @media (max-width: 1024px) {
+            .form-sidebar {
+                width: 100% !important;
+                border-right: none;
+                border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+            }
+            
+            .gallery-panel {
+                width: 100% !important;
+            }
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-white h-screen flex flex-col overflow-hidden font-sans">
+<body class="bg-gray-950 text-white h-screen flex flex-col overflow-hidden font-sans">
 
+    <script src="api-config.js"></script>
     <script>
-        (function checkAuth() {
-            const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 Minutes (in milliseconds)
+        function checkAuth() {
+            const SESSION_TIMEOUT = 30 * 60 * 1000;
+            const token = localStorage.getItem("token");
+            const adminFlag = localStorage.getItem("admin_logged_in");
             const lastLogin = localStorage.getItem("admin_login_time");
             const currentTime = new Date().getTime();
 
-            // 1. Check if user is logged in AND session is valid
-            if (localStorage.getItem("admin_logged_in") === "true" && lastLogin) {
-                
-                // Check if time expired
-                if (currentTime - lastLogin > SESSION_TIMEOUT) {
-                    alert("⏳ Session Expired. Please login again.");
-                    logout();
-                    return;
-                } else {
-                    // User is active, EXTEND the session time
-                    localStorage.setItem("admin_login_time", currentTime);
-                    return; // Access Granted
-                }
+            if (!token || adminFlag !== "true") {
+                window.location.href = "index.html";
+                return false;
             }
 
-            // // 2. If not logged in, Ask for Password
-            // const pass = prompt("🔒 ADMIN ACCESS REQUIRED:\nEnter Password:");
-            // if (pass === "Mayukh@2026") {
-            //     localStorage.setItem("admin_logged_in", "true");
-            //     localStorage.setItem("admin_login_time", new Date().getTime()); // Set Start Time
-            // } else {
-            //     alert("❌ Access Denied!");
-            //     window.location.href = "index.html"; 
-            // }
-
-            function logout() {
+            if (lastLogin && currentTime - lastLogin > SESSION_TIMEOUT) {
+                alert("Session Expired. Please login again.");
                 localStorage.removeItem("admin_logged_in");
                 localStorage.removeItem("admin_login_time");
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
                 window.location.href = "index.html";
+                return false;
             }
-        })();
+
+            localStorage.setItem("admin_login_time", currentTime);
+            return true;
+        }
+
+        if (!checkAuth()) {
+            document.documentElement.style.display = "none";
+        }
     </script>
 
-    <div class="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center shadow-lg z-20">
-        <div class="flex items-center gap-4">
-            <div class="absolute top-5 right-6 z-50 flex gap-3">
-            <a href="admin.html" class="bg-gray-800 border border-gray-700 text-[10px] text-purple-400 px-4 py-2 rounded-full hover:bg-purple-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
-                <i class="fa-solid fa-images"></i> EVENTS
+    <header class="glass-card mx-2 my-2 p-4 flex flex-wrap justify-between gap-4 z-50 items-center rounded-xl">
+        <h1 class="text-2xl md:text-3xl font-bold text-purple-300">MEDIA MANAGER</h1>
+        <div class="flex flex-wrap gap-3">
+            <a href="admin.html" class="glass-btn text-xs font-bold text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 min-h-10" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.8) 0%, rgba(59, 130, 246, 0.8) 100%);">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>EVENTS</span>
             </a>
-            
-            <a href="alert.html" class="bg-gray-800 border border-gray-700 text-[10px] text-red-400 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
-                <i class="fa-solid fa-bell"></i> ALERTS
+            <a href="alert.html" class="glass-btn text-xs font-bold text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 min-h-10" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(225, 29, 72, 0.8) 100%);">
+                <i class="fa-solid fa-bell"></i>
+                <span>ALERTS</span>
             </a>
-
-            <a href="index.html" onclick="localStorage.removeItem('admin_logged_in'); localStorage.removeItem('admin_login_time');" class="bg-red-900/80 border border-red-700 text-[10px] text-white px-4 py-2 rounded-full hover:bg-red-600 transition-all shadow-lg flex items-center gap-2">
-                <i class="fa-solid fa-power-off"></i> LOGOUT
+            <a href="index.html" onclick="localStorage.removeItem('admin_logged_in'); localStorage.removeItem('admin_login_time'); localStorage.removeItem('token'); localStorage.removeItem('user');" class="glass-btn text-xs font-bold text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 min-h-10" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(225, 29, 72, 0.8) 100%);">
+                <i class="fa-solid fa-power-off"></i>
+                <span>LOGOUT</span>
             </a>
         </div>
-            <h1 class="text-xl font-bold tracking-wider text-cyan-400">MEDIA MANAGER</h1>
-        </div>
-        <div class="flex gap-6 text-sm font-bold">
-            <button onclick="switchTab('teams')" id="btn-teams" class="active-tab pb-1 transition-all">TEAMS</button>
-            <button onclick="switchTab('gallery')" id="btn-gallery" class="inactive-tab pb-1 transition-all">GALLERY</button>
-        </div>
-    </div>
+    </header>
 
     <div class="flex-1 flex overflow-hidden relative">
         
         <div id="tab-teams" class="flex w-full h-full">
-            <div class="w-1/3 bg-gray-800 p-6 border-r border-gray-700 overflow-y-auto">
-                <h2 class="text-lg font-bold text-cyan-400 mb-4 flex justify-between">
-                    <span id="teamFormTitle">ADD TEAM </span>
-                    <button onclick="resetTeamForm()" class="text-[10px] bg-gray-700 px-2 py-1 rounded text-white">Reset</button>
-                </h2>
+            <div class="form-sidebar w-full lg:w-1/3 glass-card p-6 overflow-y-auto rounded-xl m-2">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+                    <h2 class="text-lg font-bold text-purple-400" id="teamFormTitle">ADD TEAM</h2>
+                    <button onclick="resetTeamForm()" class="glass-btn text-xs font-bold text-white px-3 py-2 rounded-lg min-h-10">
+                        RESET
+                    </button>
+                </div>
                 <form id="teamForm" class="space-y-4">
-    <input type="hidden" name="id" id="teamId">
-    <input type="hidden" name="existingImage" id="teamExistingImage">
-    
-    <div>
-        <label class="text-[10px] text-gray-400 font-bold uppercase">Caption</label>
-        <input type="text" name="name" placeholder="Ex: Core Technical Team" 
-            class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-white focus:border-cyan-500 outline-none">
-    </div>
+                    <input type="hidden" name="id" id="teamId">
+                    <input type="hidden" name="existingImage" id="teamExistingImage">
+                    
+                    <div>
+                        <label class="glass-label">CAPTION</label>
+                        <input type="text" name="name" placeholder="Ex: Core Technical Team" class="glass-input w-full p-3 rounded-lg text-sm">
+                    </div>
 
-    <div>
-        <label class="text-[10px] text-gray-400 font-bold uppercase">Team Category</label>
-        <select name="teamName" class="w-full bg-gray-700 p-3 rounded text-xs text-white border border-gray-600">
-            <option value="Technical">Technical</option>
-            <option value="PR">PR</option>
-            <option value="Drama">Drama</option>
-            <option value="Cultural">Cultural</option>
-            <option value="Sponsorship">Sponsorship</option>
-            <option value="Decor">Decor</option>
-            <option value="Catering">Catering</option>
-            <option value="Workshop">Workshop</option>
-            <option value="Discipline">Discipline</option>
-            <option value="Coverage">Coverage</option>
-            <option value="Digital">Digital</option>
-            <option value="Finance">Finance</option>
-        </select>
-    </div>
+                    <div>
+                        <label class="glass-label">TEAM CATEGORY</label>
+                        <select name="teamName" class="glass-input w-full p-2 rounded-lg text-xs">
+                            <option value="Technical">Technical</option>
+                            <option value="PR">PR</option>
+                            <option value="Drama">Drama</option>
+                            <option value="Cultural">Cultural</option>
+                            <option value="Sponsorship">Sponsorship</option>
+                            <option value="Decor">Decor</option>
+                            <option value="Catering">Catering</option>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Discipline">Discipline</option>
+                            <option value="Coverage">Coverage</option>
+                            <option value="Digital">Digital</option>
+                            <option value="Finance">Finance</option>
+                        </select>
+                    </div>
 
-    <div>
-        <label class="text-[10px] text-gray-400 font-bold uppercase">Team Photo</label>
-        <p class="text-[9px] text-gray-500 mb-1" id="teamImageMsg">New photo will replace the old one</p>
-        <input type="file" name="image" class="w-full text-xs text-gray-400 bg-gray-900 rounded p-2">
-    </div>
+                    <div>
+                        <label class="glass-label">TEAM PHOTO</label>
+                        <p class="text-[9px] text-gray-500 mb-2" id="teamImageMsg">New photo will replace the old one</p>
+                        <input type="file" name="image" class="glass-input w-full p-2 rounded-lg text-xs">
+                    </div>
 
-    <div id="teamStatus" class="text-center text-xs h-4"></div>
-    <button type="submit" id="teamSubmitBtn" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded transition shadow-lg">
-        SAVE TEAM DATA
-    </button>
-</form>
+                    <div id="teamStatus" class="text-center text-xs font-mono text-purple-300 min-h-4"></div>
+                    <button type="submit" id="teamSubmitBtn" class="glass-btn w-full font-bold py-3 rounded-lg text-sm min-h-12">
+                        SAVE TEAM DATA
+                    </button>
+                </form>
             </div>
 
-            <div class="w-2/3 bg-black p-6 overflow-y-auto">
+            <div class="gallery-panel w-full lg:w-2/3 glass-card p-6 overflow-y-auto rounded-xl m-2">
                 <h2 class="text-2xl font-bold text-white mb-6">Current Team</h2>
-                <div id="teamList" class="grid grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                <div id="teamList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </div>
 
         <div id="tab-gallery" class="hidden-tab flex w-full h-full">
-            <div class="w-1/3 bg-gray-800 p-6 border-r border-gray-700 overflow-y-auto">
-                <h2 class="text-lg font-bold text-purple-400 mb-4 flex justify-between">
-                    <span id="galleryFormTitle">ADD PHOTO</span>
-                    <button onclick="resetGalleryForm()" class="text-[10px] bg-gray-700 px-2 py-1 rounded text-white">Reset</button>
-                </h2>
+            <div class="form-sidebar w-full lg:w-1/3 glass-card p-6 overflow-y-auto rounded-xl m-2">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+                    <h2 class="text-lg font-bold text-purple-400" id="galleryFormTitle">ADD PHOTO</h2>
+                    <button onclick="resetGalleryForm()" class="glass-btn text-xs font-bold text-white px-3 py-2 rounded-lg min-h-10">
+                        RESET
+                    </button>
+                </div>
                 <form id="galleryForm" class="space-y-4">
                     <input type="hidden" name="id" id="galleryId">
                     <input type="hidden" name="existingImage" id="galleryExistingImage">
                     
                     <div>
-                        <label class="text-[10px] text-gray-400 font-bold">CAPTION <span class="text-gray-500">(Optional)</span></label>
-                        <input type="text" name="caption" placeholder="Ex: Hackathon Winners" 
-                            class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-white focus:border-purple-500 outline-none">
+                        <label class="glass-label">CAPTION</label>
+                        <input type="text" name="caption" placeholder="Ex: Hackathon Winners" class="glass-input w-full p-3 rounded-lg text-sm">
                     </div>
 
                     <div>
-                        <label class="text-[10px] text-gray-400 font-bold">CATEGORY</label>
-                        <select name="category" class="w-full bg-gray-700 p-3 rounded text-xs text-white border border-gray-600">
+                        <label class="glass-label">CATEGORY</label>
+                        <select name="category" class="glass-input w-full p-2 rounded-lg text-xs">
                             <option value="General">General</option>
                             <option value="Cultural Night">Cultural Night</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="text-[10px] text-gray-400 font-bold">IMAGE</label>
-                        <p class="text-[9px] text-gray-500 mb-1" id="galleryImageMsg">Leave empty to keep current photo</p>
-                        <input type="file" name="image" class="w-full text-xs text-gray-400 bg-gray-900 rounded p-2">
+                        <label class="glass-label">IMAGE</label>
+                        <p class="text-[9px] text-gray-500 mb-2" id="galleryImageMsg">Leave empty to keep current photo</p>
+                        <input type="file" name="image" class="glass-input w-full p-2 rounded-lg text-xs">
                     </div>
 
-                    <div id="galleryStatus" class="text-center text-xs h-4"></div>
-                    <button type="submit" id="gallerySubmitBtn" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded transition shadow-lg">
+                    <div id="galleryStatus" class="text-center text-xs font-mono text-purple-300 min-h-4"></div>
+                    <button type="submit" id="gallerySubmitBtn" class="glass-btn w-full font-bold py-3 rounded-lg text-sm min-h-12">
                         UPLOAD PHOTO
                     </button>
                 </form>
             </div>
 
-            <div class="w-2/3 bg-black p-6 overflow-y-auto">
+            <div class="gallery-panel w-full lg:w-2/3 glass-card p-6 overflow-y-auto rounded-xl m-2">
                 <h2 class="text-2xl font-bold text-white mb-6">Gallery Preview</h2>
                 
-                <h3 class="text-lg font-bold text-purple-400 mb-2 border-b border-gray-700 pb-1">General</h3>
-                <div id="galleryListGeneral" class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+                <h3 class="text-lg font-bold text-purple-400 mb-4 border-b border-gray-700 pb-2">General</h3>
+                <div id="galleryListGeneral" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
 
-                <h3 class="text-lg font-bold text-pink-400 mb-2 border-b border-gray-700 pb-1">Cultural Night</h3>
-                <div id="galleryListCultural" class="grid grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                <h3 class="text-lg font-bold text-purple-400 mb-4 border-b border-gray-700 pb-2">Cultural Night</h3>
+                <div id="galleryListCultural" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
         </div>
     </div>
 
+    <div class="fixed bottom-4 left-4 z-50 flex gap-2">
+        <button onclick="switchTab('teams')" id="btn-teams" class="active-tab glass-card px-4 py-2 rounded-lg text-sm font-bold pb-2 transition-all">TEAMS</button>
+        <button onclick="switchTab('gallery')" id="btn-gallery" class="inactive-tab glass-card px-4 py-2 rounded-lg text-sm font-bold pb-2 transition-all">GALLERY</button>
+    </div>
+
     <script>
-        const API_BASE = 'https://mayukh-bv-1.onrender.com';
         let allTeamsData = [];
         let allGalleryData = [];
+        const API_BASE = API_CONFIG.BASE_URL;
 
-        // --- TAB SWITCHER ---
         function switchTab(tab) {
             document.getElementById('tab-teams').classList.add('hidden-tab');
             document.getElementById('tab-gallery').classList.add('hidden-tab');
-            document.getElementById('btn-teams').className = "inactive-tab pb-1 transition-all";
-            document.getElementById('btn-gallery').className = "inactive-tab pb-1 transition-all";
+            document.getElementById('btn-teams').className = "inactive-tab glass-card px-4 py-2 rounded-lg text-sm font-bold pb-2 transition-all";
+            document.getElementById('btn-gallery').className = "inactive-tab glass-card px-4 py-2 rounded-lg text-sm font-bold pb-2 transition-all";
 
             document.getElementById(`tab-${tab}`).classList.remove('hidden-tab');
-            document.getElementById(`btn-${tab}`).className = `active-tab pb-1 transition-all text-${tab === 'teams' ? 'cyan' : 'purple'}-400 border-${tab === 'teams' ? 'cyan' : 'purple'}-400`;
+            document.getElementById(`btn-${tab}`).className = "active-tab glass-card px-4 py-2 rounded-lg text-sm font-bold pb-2 transition-all";
             
             if(tab === 'teams') loadTeams();
             else loadGallery();
         }
 
-        // --- TEAMS LOGIC ---
         async function loadTeams() {
             try {
                 const res = await fetch(`${API_BASE}/api/teams`);
-                allTeamsData = await res.json(); 
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                allTeamsData = await res.json();
                 const container = document.getElementById('teamList');
                 
                 if(allTeamsData.length === 0) {
-                    container.innerHTML = '<p class="text-gray-500 col-span-full">No members yet.</p>';
+                    container.innerHTML = '<p class="text-gray-500 col-span-full text-sm">No members yet.</p>';
                     return;
                 }
 
-                // media.html ke renderTeams function ke andar ka template
-container.innerHTML = allTeamsData.map(m => `
-    <div class="bg-gray-800 p-3 rounded border border-gray-700 flex items-center gap-3 relative group">
-        <img src="${m.imageUrl}" class="w-12 h-12 rounded object-cover border border-gray-600">
-        <div class="overflow-hidden">
-            <h4 class="font-bold text-white text-sm truncate">${m.name || 'Team Photo'}</h4>
-            <p class="text-[10px] text-cyan-400 font-bold uppercase">${m.teamName}</p>
-        </div>
-        <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-            <button onclick="editTeam('${m._id}')" class="text-yellow-500"><i class="fa-solid fa-pen"></i></button>
-            <button onclick="deleteItem('teams', '${m._id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-        </div>
-    </div>
-`).join('');
-            } catch(e) { console.error(e); }
+                container.innerHTML = allTeamsData.map(m => `
+                    <div class="glass-card p-4 rounded-lg flex items-center gap-3 relative group">
+                        <img src="${m.imageUrl}" class="w-12 h-12 rounded-lg object-cover border border-purple-500/20">
+                        <div class="overflow-hidden">
+                            <h4 class="font-bold text-white text-sm truncate">${m.name || 'Team Photo'}</h4>
+                            <p class="text-[10px] text-purple-400 font-bold uppercase">${m.teamName}</p>
+                        </div>
+                        <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="editTeam('${m._id}')" class="bg-yellow-500/20 text-yellow-400 p-2 rounded-md hover:bg-yellow-500 hover:text-black text-xs transition-all">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteItem('teams', '${m._id}')" class="bg-red-500/20 text-red-400 p-2 rounded-md hover:bg-red-500 hover:text-white text-xs transition-all">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) { 
+                console.error(e);
+                document.getElementById('teamList').innerHTML = `<p class="text-red-400 text-sm col-span-full">Error loading teams: ${e.message}</p>`;
+            }
         }
 
-        // --- EDIT TEAM FUNCTION ---
         function editTeam(id) {
             const member = allTeamsData.find(m => m._id === id);
             if(!member) return;
 
             document.getElementById('teamId').value = member._id;
-            // hidden field ko value assign karein
-            document.getElementById('teamExistingImage').value = member.imageUrl; 
-            
+            document.getElementById('teamExistingImage').value = member.imageUrl;
             document.querySelector('#teamForm [name="name"]').value = member.name || '';
             document.querySelector('#teamForm [name="teamName"]').value = member.teamName;
-            
-            const linkedinField = document.querySelector('#teamForm [name="linkedin"]');
-            if(linkedinField) linkedinField.value = member.linkedin || '';
 
             document.getElementById('teamFormTitle').innerText = "EDITING MEMBER";
             const btn = document.getElementById('teamSubmitBtn');
             btn.innerText = "UPDATE TEAM";
-            btn.classList.replace('bg-cyan-600', 'bg-yellow-600');
             document.getElementById('teamImageMsg').innerText = "Uploading new photo will replace current one.";
         }
 
@@ -256,12 +317,10 @@ container.innerHTML = allTeamsData.map(m => `
             document.getElementById('teamForm').reset();
             document.getElementById('teamId').value = '';
             document.getElementById('teamExistingImage').value = '';
-            document.getElementById('teamFormTitle').innerText = "ADD TEAM MEMBER";
+            document.getElementById('teamFormTitle').innerText = "ADD TEAM";
             const btn = document.getElementById('teamSubmitBtn');
-            btn.innerText = "SAVE TEAM"; // Revert text
-            btn.classList.remove('bg-yellow-600');
-            btn.classList.add('bg-cyan-600');
-            document.getElementById('teamImageMsg').innerText = "Leave empty to keep current photo";
+            btn.innerText = "SAVE TEAM DATA";
+            document.getElementById('teamImageMsg').innerText = "New photo will replace the old one";
         }
 
         document.getElementById('teamForm').addEventListener('submit', async (e) => {
@@ -269,62 +328,62 @@ container.innerHTML = allTeamsData.map(m => `
             await handleSubmit(e, 'teams', 'teamStatus', loadTeams, resetTeamForm);
         });
 
-        // --- GALLERY LOGIC ---
         async function loadGallery() {
             try {
                 const res = await fetch(`${API_BASE}/api/gallery`);
-                allGalleryData = await res.json(); 
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                allGalleryData = await res.json();
                 
                 const containerGeneral = document.getElementById('galleryListGeneral');
                 const containerCultural = document.getElementById('galleryListCultural');
 
-                // Filter Data
                 const generalPhotos = allGalleryData.filter(g => g.category === 'General');
                 const culturalPhotos = allGalleryData.filter(g => g.category === 'Cultural Night');
 
-                // Render General
                 if(generalPhotos.length === 0) containerGeneral.innerHTML = '<p class="text-gray-500 col-span-full text-xs">No photos in General.</p>';
                 else containerGeneral.innerHTML = renderGalleryItems(generalPhotos);
 
-                // Render Cultural
                 if(culturalPhotos.length === 0) containerCultural.innerHTML = '<p class="text-gray-500 col-span-full text-xs">No photos in Cultural Night.</p>';
                 else containerCultural.innerHTML = renderGalleryItems(culturalPhotos);
 
-            } catch(e) { console.error(e); }
+            } catch(e) { 
+                console.error(e);
+                document.getElementById('galleryListGeneral').innerHTML = `<p class="text-red-400 text-sm col-span-full">Error loading gallery: ${e.message}</p>`;
+            }
         }
 
         function renderGalleryItems(items) {
             return items.map(g => `
-                <div class="relative group rounded overflow-hidden border border-gray-700">
+                <div class="relative group rounded-lg overflow-hidden border border-purple-500/20 glass-card">
                     <img src="${g.imageUrl}" class="w-full h-32 object-cover">
                     <div class="absolute bottom-0 left-0 right-0 bg-black/80 p-2">
                         <p class="text-[10px] text-white truncate">${g.caption || 'No Caption'}</p>
                         <p class="text-[9px] text-purple-400">${g.category}</p>
                     </div>
                     <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                         <button onclick="editGallery('${g._id}')" class="bg-yellow-600 text-white text-xs px-2 py-1 rounded">Edit</button>
-                         <button onclick="deleteItem('gallery', '${g._id}')" class="bg-red-600 text-white text-xs px-2 py-1 rounded">Delete</button>
+                        <button onclick="editGallery('${g._id}')" class="bg-yellow-500/20 text-yellow-400 p-2 rounded-md hover:bg-yellow-500 hover:text-black text-xs transition-all">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button onclick="deleteItem('gallery', '${g._id}')" class="bg-red-500/20 text-red-400 p-2 rounded-md hover:bg-red-500 hover:text-white text-xs transition-all">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // --- EDIT GALLERY FUNCTION ---
         function editGallery(id) {
             const photo = allGalleryData.find(g => g._id === id);
             if(!photo) return;
 
             document.getElementById('galleryId').value = photo._id;
-            // hidden field ko value assign karein
             document.getElementById('galleryExistingImage').value = photo.imageUrl;
-
             document.querySelector('#galleryForm [name="caption"]').value = photo.caption || '';
             document.querySelector('#galleryForm [name="category"]').value = photo.category;
 
             document.getElementById('galleryFormTitle').innerText = "EDITING PHOTO";
             const btn = document.getElementById('gallerySubmitBtn');
             btn.innerText = "UPDATE PHOTO";
-            btn.classList.replace('bg-purple-600', 'bg-yellow-600');
         }
 
         function resetGalleryForm() {
@@ -334,8 +393,6 @@ container.innerHTML = allTeamsData.map(m => `
             document.getElementById('galleryFormTitle').innerText = "ADD PHOTO";
             const btn = document.getElementById('gallerySubmitBtn');
             btn.innerText = "UPLOAD PHOTO";
-            btn.classList.remove('bg-yellow-600');
-            btn.classList.add('bg-purple-600');
             document.getElementById('galleryImageMsg').innerText = "Leave empty to keep current photo";
         }
 
@@ -344,19 +401,17 @@ container.innerHTML = allTeamsData.map(m => `
             await handleSubmit(e, 'gallery', 'galleryStatus', loadGallery, resetGalleryForm);
         });
 
-        // --- SHARED SUBMIT LOGIC ---
         async function handleSubmit(e, type, statusId, reloadFunc, resetFunc) {
             const form = e.target;
             const btn = form.querySelector('button[type="submit"]');
             const status = document.getElementById(statusId);
             const formData = new FormData(form);
             
-            // Get ID from the hidden field
             const id = document.getElementById(type === 'teams' ? 'teamId' : 'galleryId').value;
 
             btn.disabled = true;
-            status.innerText = "PROCESSING...";
-            status.className = "text-center text-xs text-yellow-400 animate-pulse";
+            status.innerText = "Processing...";
+            status.className = "text-center text-xs text-yellow-400 font-mono min-h-4 animate-pulse";
 
             try {
                 let url = `${API_BASE}/api/${type}`;
@@ -370,10 +425,10 @@ container.innerHTML = allTeamsData.map(m => `
                 const res = await fetch(url, { method: method, body: formData });
 
                 if (res.ok) {
-                    status.innerText = "SUCCESS!";
-                    status.className = "text-center text-xs text-green-400";
-                    resetFunc(); 
-                    reloadFunc(); 
+                    status.innerText = "Success!";
+                    status.className = "text-center text-xs text-green-400 font-mono min-h-4";
+                    resetFunc();
+                    reloadFunc();
                     setTimeout(() => status.innerText = "", 3000);
                 } else {
                     const err = await res.json();
@@ -381,8 +436,8 @@ container.innerHTML = allTeamsData.map(m => `
                 }
             } catch (err) {
                 console.error(err);
-                status.innerText = "ERROR: " + err.message;
-                status.className = "text-center text-xs text-red-400";
+                status.innerText = "Error: " + err.message;
+                status.className = "text-center text-xs text-red-400 font-mono min-h-4";
             } finally {
                 btn.disabled = false;
             }
@@ -390,12 +445,15 @@ container.innerHTML = allTeamsData.map(m => `
 
         async function deleteItem(type, id) {
             if(!confirm("Are you sure?")) return;
-            await fetch(`${API_BASE}/api/${type}/${id}`, { method: 'DELETE' });
-            if(type === 'teams') loadTeams();
-            else loadGallery();
+            try {
+                const res = await fetch(`${API_BASE}/api/${type}/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    if(type === 'teams') loadTeams();
+                    else loadGallery();
+                }
+            } catch(e) { console.error(e); }
         }
 
-        // Init
         loadTeams();
     </script>
 </body>

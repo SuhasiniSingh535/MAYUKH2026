@@ -15,7 +15,26 @@ const PORT = process.env.PORT || 5001;
 // 1. CONFIGURATION
 // ==========================================
 
-app.use(cors({ origin: 'https://mayukh2026.netlify.app' })); 
+const allowedOrigins = [
+    "http://localhost:5001",
+    "http://127.0.0.1:5001",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "https://mayukh2026.netlify.app",
+    "https://mayukh-bv-1.onrender.com"
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log("Blocked by CORS:", origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+})); 
 app.use(express.json());
 // Isse admin.html aur media.html load hone lagenge
 app.use(express.static(path.join(__dirname, '../')));

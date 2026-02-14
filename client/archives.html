@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Mayukh Archives | Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background-color: #0b0c10; 
+            color: #c5c6c7;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            overflow-x: hidden;
+        }
+        
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        header {
+            padding: max(1rem, calc(env(safe-area-inset-top) + 0.75rem)) 1rem max(1rem, calc(env(safe-area-inset-bottom) + 0.5rem));
+            background: rgba(31, 40, 51, 0.4);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(102, 252, 241, 0.1);
+            border-radius: 0 0 1rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        @media (min-width: 480px) {
+            header {
+                padding: max(1.125rem, calc(env(safe-area-inset-top) + 0.875rem)) 1.25rem max(1.125rem, calc(env(safe-area-inset-bottom) + 0.5rem));
+            }
+        }
+
+        @media (min-width: 640px) {
+            header {
+                padding: max(1.25rem, calc(env(safe-area-inset-top) + 1rem)) 1.5rem max(1.25rem, calc(env(safe-area-inset-bottom) + 0.5rem));
+            }
+        }
+        
+        @media (min-width: 768px) {
+            header {
+                padding: 1.5rem 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            header {
+                padding: 2rem;
+            }
+        }
+        
+        header h1 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            min-height: 2.5em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            header h1 {
+                font-size: clamp(1.875rem, 4vw, 2.25rem);
+                gap: 1rem;
+            }
+        }
+        
+        header a {
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            touch-action: manipulation;
+            user-select: none;
+            text-decoration: none;
+            color: #45a29e;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(69, 162, 158, 0.3);
+            border-radius: 0.5rem;
+        }
+
+        header a:hover {
+            color: #66fcf1;
+            border-color: #66fcf1;
+            background: rgba(102, 252, 241, 0.1);
+        }
+        
+        main {
+            padding: 1rem;
+            padding-bottom: max(1rem, calc(env(safe-area-inset-bottom) + 1rem));
+        }
+        
+        @media (min-width: 480px) {
+            main {
+                padding: 1.25rem;
+                padding-bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 1rem));
+            }
+        }
+
+        @media (min-width: 640px) {
+            main {
+                padding: 1.25rem;
+                padding-bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 1rem));
+            }
+        }
+        
+        @media (min-width: 768px) {
+            main {
+                padding: 1.5rem;
+                padding-bottom: max(1.5rem, calc(env(safe-area-inset-bottom) + 1.5rem));
+            }
+        }
+
+        @media (min-width: 1024px) {
+            main {
+                padding: 1.5rem;
+                padding-bottom: max(1.5rem, calc(env(safe-area-inset-bottom) + 1.5rem));
+            }
+        }
+        
+        .skeleton { 
+            background: linear-gradient(90deg, #1f2833 25%, #2c3e50 50%, #1f2833 75%); 
+            background-size: 200% 100%; 
+            animation: loading 1.5s infinite;
+            border-radius: 1rem;
+        }
+        
+        @keyframes loading { 
+            0% { background-position: 200% 0; } 
+            100% { background-position: -200% 0; } 
+        }
+        
+        #loader {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        @media (min-width: 480px) {
+            #loader {
+                gap: 1.25rem;
+            }
+        }
+
+        @media (min-width: 640px) {
+            #loader {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            #loader {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            #loader {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2.5rem;
+            }
+        }
+        
+        @media (min-width: 1536px) {
+            #loader {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 3rem;
+            }
+        }
+        
+        #galleryGrid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        @media (min-width: 480px) {
+            #galleryGrid {
+                gap: 1.25rem;
+            }
+        }
+
+        @media (min-width: 640px) {
+            #galleryGrid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            #galleryGrid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            #galleryGrid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2.5rem;
+            }
+        }
+
+        @media (min-width: 1536px) {
+            #galleryGrid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 3rem;
+            }
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            aspect-ratio: 16/10;
+            background: #1f2833;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            touch-action: manipulation;
+            group: hover / group-hover;
+        }
+
+        .gallery-item:hover {
+            border-color: rgba(102, 252, 241, 0.5);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(102, 252, 241, 0.15);
+        }
+        
+        .gallery-item-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px) brightness(0.4);
+            z-index: 1;
+        }
+        
+        .gallery-item img {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            pointer-events: none;
+            z-index: 3;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .gallery-overlay-content {
+            width: 100%;
+        }
+        
+        .gallery-category {
+            color: #66fcf1;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .gallery-caption {
+            color: white;
+            font-size: clamp(0.875rem, 2vw, 1.125rem);
+            font-weight: 500;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        
+        #emptyState {
+            text-align: center;
+            padding: 3rem 1rem;
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #emptyState i {
+            font-size: clamp(3rem, 10vw, 4rem);
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+        
+        #emptyState p {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: #4a5f7f;
+        }
+    </style>
+</head>
+<body class="bg-[#0b0c10] min-h-screen flex flex-col">
+
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <h1 class="text-3xl md:text-4xl font-bold orbitron text-[#66fcf1] flex items-center gap-2">
+            <i class="fa-solid fa-camera-retro"></i>
+            <span>ARCHIVES</span>
+        </h1>
+        <a href="index.html" title="Go back to home">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>BACK</span>
+        </a>
+    </header>
+
+    <main class="flex-1 w-full">
+        <div id="loader" class="grid">
+            <div class="aspect-video rounded-xl skeleton"></div>
+            <div class="aspect-video rounded-xl skeleton"></div>
+            <div class="aspect-video rounded-xl skeleton"></div>
+            <div class="aspect-video rounded-xl skeleton"></div>
+            <div class="aspect-video rounded-xl skeleton"></div>
+            <div class="aspect-video rounded-xl skeleton"></div>
+        </div>
+
+        <div id="galleryGrid" class="hidden"></div>
+
+        <div id="emptyState" class="hidden">
+            <i class="fa-solid fa-images"></i>
+            <p class="orbitron">No Memories Found in the Archives.</p>
+        </div>
+    </main>
+
+    <script src="api-config.js"></script>
+    <script>
+        const CACHE_KEY = 'mayukh_gallery_cache';
+        const CACHE_TIME_KEY = 'mayukh_gallery_time';
+        const CACHE_DURATION = 300000;
+
+        function sanitizeHTML(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function getFromCache() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                const cacheTime = localStorage.getItem(CACHE_TIME_KEY);
+                if (cached && cacheTime && (Date.now() - parseInt(cacheTime) < CACHE_DURATION)) {
+                    return JSON.parse(cached);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            return null;
+        }
+
+        function saveToCache(data) {
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+                localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        const grid = document.getElementById('galleryGrid');
+        const loader = document.getElementById('loader');
+        const emptyState = document.getElementById('emptyState');
+
+        async function loadArchives() {
+            try {
+                const cachedData = getFromCache();
+                if (cachedData && cachedData.length > 0) {
+                    renderGallery(cachedData);
+                }
+
+                const res = await fetch(`${API_CONFIG.galleryUrl}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                
+                const data = await res.json();
+                const images = Array.isArray(data) ? data : (data.images || []);
+
+                if (images && images.length > 0) {
+                    saveToCache(images);
+                }
+
+                loader.classList.add('hidden');
+                
+                if (!images || images.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                renderGallery(images);
+
+            } catch (err) {
+                console.error(err);
+                loader.classList.add('hidden');
+                
+                const cachedData = getFromCache();
+                if (cachedData && cachedData.length > 0) {
+                    renderGallery(cachedData);
+                } else {
+                    emptyState.innerHTML = `
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <p class="orbitron">Failed to access archives. Please try again.</p>
+                    `;
+                    emptyState.classList.remove('hidden');
+                }
+            }
+        }
+
+        function renderGallery(images) {
+            loader.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            grid.classList.remove('hidden');
+            
+            grid.innerHTML = images.map(img => `
+                <div class="gallery-item">
+                    <div class="gallery-item-bg" style="background-image: url('${sanitizeHTML(img.imageUrl)}')"></div>
+                    <img 
+                        src="${sanitizeHTML(img.imageUrl)}" 
+                        alt="${sanitizeHTML(img.caption || 'Memory')}" 
+                        loading="lazy"
+                        onerror="this.src='https://via.placeholder.com/600x400?text=Memory+Lost'"
+                    >
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-content">
+                            <span class="gallery-category">${sanitizeHTML(img.category || 'Event')}</span>
+                            <p class="gallery-caption">${sanitizeHTML(img.caption || '')}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadArchives);
+        } else {
+            loadArchives();
+        }
+    </script>
+</body>
+</html>

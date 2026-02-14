@@ -1,24 +1,20 @@
-const API_CONFIG = {
-  // Fix: Check for BOTH 'localhost' AND '127.0.0.1'
-  BASE_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'https://mayukh-bv-1.onrender.com' 
-    : 'https://mayukh-bv-1.onrender.com',
+const API_CONFIG = (() => {
+    const hostname = window.location.hostname;
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168') || hostname.startsWith('10.');
+    const baseUrl = isLocal ? 'http://localhost:5001' : 'https://mayukh-bv-1.onrender.com';
+    
+    return {
+        BASE_URL: baseUrl,
+        get API_BASE() { return `${this.BASE_URL}/api`; },
+        get eventsUrl() { return `${this.API_BASE}/events`; },
+        get teamsUrl() { return `${this.API_BASE}/teams`; },
+        get galleryUrl() { return `${this.API_BASE}/gallery`; },
+        get alertsUrl() { return `${this.API_BASE}/event-alerts`; }
+    };
+})();
 
-  
-  get eventsUrl() {
-    return `${this.BASE_URL}/api/events`;
-  },
-  
-  get authUrl() {
-    return `${this.BASE_URL}/api/auth`;
-  },
-  
-  get healthUrl() {
-    return `${this.BASE_URL}/api/health`;
-  }
-};
+const API_BASE_URL = API_CONFIG.BASE_URL;
 
-// Export for use in other scripts
-if (typeof module !== 'undefined') {
-  module.exports = API_CONFIG;
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = API_CONFIG;
 }
