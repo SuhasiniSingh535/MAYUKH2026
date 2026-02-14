@@ -1210,14 +1210,12 @@
         const root = document.getElementById('roadmap-content-dynamic');
 
         try {
-           // Change to this:
             const response = await fetch(API_CONFIG.eventsUrl);
             const data = await response.json();
-            // Line 11 se 16 ko isse replace karein:
             let eventsList = data.events || data; 
             eventsList = eventsList.filter(event => {
                 const type = (event.eventType || '').toLowerCase();
-                return !type.includes('workshop'); // Workshop kisi bhi date ki ho, hide ho jayegi
+                return !type.includes('workshop');
             });
             const groupedDays = eventsList.reduce((acc, event) => {
                 let dayKey = null;
@@ -1225,8 +1223,8 @@
                 // Strict Date Parsing
                 if (event.date) {
                     const eventDate = new Date(event.date);
-                    const d = eventDate.getDate(); // Sirf tarikh (1-31)
-                    const m = eventDate.getMonth(); // February is 1
+                    const d = eventDate.getDate();
+                    const m = eventDate.getMonth();
 
                     // Check specifically for February 2026
                     if (m === 1) { 
@@ -1242,7 +1240,7 @@
                     }
                 }
 
-                // Fallback: Agar upar wala fail ho toh string check (Safe version)
+                // Fallback
                 if (!dayKey && event.day) {
                     const dField = event.day.toLowerCase();
                     if (dField.includes("prefest") || dField.includes("pre-fest")) dayKey = 'PRE_FEST';
@@ -1251,7 +1249,6 @@
                     else if (dField.includes("day 3") || dField.includes("day3")) dayKey = 'DAY_03';
                 }
 
-                // Final Grouping
                 if (dayKey) {
                     if (!acc[dayKey]) acc[dayKey] = [];
                     acc[dayKey].push(event);
@@ -1259,7 +1256,6 @@
                 return acc;
             }, {});
             
-            // Sort keys to show PRE_FEST first, then DAY_01, DAY_02, DAY_03
             const sortOrder = ['PRE_FEST', 'DAY_01', 'DAY_02', 'DAY_03'];
             const sortedKeys = sortOrder.filter(key => groupedDays[key]);
             let roadmapHTML = '';
@@ -1270,15 +1266,6 @@
                 const displayLabel = isPrefest ? 'PRE-FEST' : dayKey;
                 
                 roadmapHTML += `<div class="day-separator" id="${dayKey}"><div class="${labelClass}">${displayLabel}</div></div>`;
-
-                // --- 1. SPECIAL EVENT: INAUGURATION (Day 1 ke shuru mein) ---
-                if (dayKey === 'DAY_01') {
-                    roadmapHTML += createSpecialEventBox(
-                        'INAUGURATION CEREMONY',
-                        ['#FFD700', '#FFA500', '#FF6347'], 
-                        'fa-solid fa-crown'
-                    );
-                }
 
                 const dayEvents = groupedDays[dayKey].sort((a, b) => (a.time || '').localeCompare(b.time || ''));
 
@@ -1334,7 +1321,19 @@
                         </div>`;
                 });
 
-                // --- 2. SPECIAL EVENT: DINNER NIGHT (Day 2 ke end mein) ---
+                // --- SPECIAL EVENTS PLACEMENT ---
+                // INAUGURATION CEREMONY on Feb 20 (end of PRE_FEST)
+                if (dayKey === 'PRE_FEST') {
+                    roadmapHTML += createSpecialEventBox(
+                        'INAUGURATION CEREMONY',
+                        ['#FFD700', '#FFA500', '#FF6347'], 
+                        'fa-solid fa-crown',
+                        '20 FEB 2026',
+                        '6:00 PM ONWARDS'
+                    );
+                }
+
+                // DINNER NIGHT (Day 2 end)
                 if (dayKey === 'DAY_02') {
                     roadmapHTML += createSpecialEventBox(
                         'DINNER NIGHT',
@@ -1343,7 +1342,7 @@
                     );
                 }
 
-                // --- 3. SPECIAL EVENT: CULTURAL NIGHT (Day 3 ke end mein) ---
+                // CULTURAL NIGHT (Day 3 end)
                 if (dayKey === 'DAY_03') {
                     roadmapHTML += createSpecialEventBox(
                         'CULTURAL NIGHT',
@@ -1359,8 +1358,26 @@
             root.innerHTML = `<p class="orbitron text-red-500 text-center text-lg">⚠ DATABASE_OFFLINE</p>`; 
         }
     }
-    // Helper function to create special event box (Friend's addition)
-    function createSpecialEventBox(title, gradientColors, iconClass) {
+
+    // Helper function to create special event box with optional date/time
+    function createSpecialEventBox(title, gradientColors, iconClass, dateText, timeText) {
+        const dateTimeHTML = (dateText || timeText) ? `
+            <div class="flex flex-wrap gap-4 md:gap-8 justify-center mt-6 border-t border-white/20 pt-4">
+                ${dateText ? `
+                    <div class="flex flex-col items-center">
+                        <span class="orbitron text-xs text-white/60 uppercase tracking-wider">Date</span>
+                        <span class="orbitron text-sm md:text-base text-white font-bold mt-1" style="text-shadow: 0 0 10px ${gradientColors[0]}">${dateText}</span>
+                    </div>
+                ` : ''}
+                ${timeText ? `
+                    <div class="flex flex-col items-center">
+                        <span class="orbitron text-xs text-white/60 uppercase tracking-wider">Time</span>
+                        <span class="orbitron text-sm md:text-base text-white font-bold mt-1" style="text-shadow: 0 0 10px ${gradientColors[0]}">${timeText}</span>
+                    </div>
+                ` : ''}
+            </div>
+        ` : '';
+
         return `
             <div class="roadmap-item">
                 <div class="roadmap-node" style="border-color: ${gradientColors[0]}; box-shadow: 0 0 20px ${gradientColors[0]}"></div>
@@ -1392,11 +1409,13 @@
                                 letter-spacing: 0.2em;
                             ">${title}</h2>
                         </div>
+                        ${dateTimeHTML}
                     </div>
                 </div>
                 <div class="roadmap-card-wrapper"></div>
             </div>`;
     }
+
     // Load events when page loads
     window.addEventListener('DOMContentLoaded', loadEvents);
   </script>

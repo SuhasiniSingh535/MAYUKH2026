@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Mayukh 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Space+Grotesk:wght@300;500;700&display=swap');
+
+        :root { --neon-cyan: #22d3ee; }
+
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        #particle-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+        }
+
+        .home-btn {
+            position: fixed; top: 2rem; left: 2rem; z-index: 100;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;
+        }
+        .home-btn:hover {
+            background: var(--neon-cyan); color: #000; box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        /* --- Glitch Effect --- */
+        .glitch-text { position: relative; font-family: 'Syncopate', sans-serif; text-transform: uppercase; }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+        }
+        .glitch-text::before { color: #ff00ff; z-index: -1; animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite; }
+        .glitch-text::after { color: #00ffff; z-index: -2; animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite; }
+        @keyframes glitch {
+            0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); } 60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); } 100% { transform: translate(0); }
+        }
+
+        .vault-container {
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+        }
+
+        .photo-card {
+            position: relative;
+            border: 1px solid rgba(34, 211, 238, 0.1);
+            background: rgba(15, 23, 42, 0.6);
+            overflow: hidden;
+            border-radius: 12px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        .photo-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Syncopate', sans-serif;
+            color: var(--neon-cyan);
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+            margin-bottom: 2rem;
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 1.5rem;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+            padding-bottom: 1rem;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <a href="index.html" class="home-btn flex items-center gap-3 px-6 py-3 rounded-full text-xs font-bold tracking-widest text-white no-underline">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
+        Back to Home
+    </a>
+
+    <main id="main-content" class="min-h-screen w-full flex items-center justify-center p-6 pt-24 flex-col">
+        
+        <div id="coming-soon-box" class="vault-container max-w-2xl w-full p-12 rounded-3xl text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyan-500"></div>
+            <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyan-500"></div>
+            <div class="mb-6"><span class="text-cyan-500 font-mono text-xs tracking-[0.5em] animate-pulse">LOADING // 001</span></div>
+            <h1 class="text-white text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tighter glitch-text" data-text="COMING SOON">COMING SOON</h1>
+            <div class="h-1 w-full bg-slate-800 rounded-full mb-8 relative overflow-hidden">
+                <div id="progress-bar" class="absolute top-0 left-0 h-full bg-cyan-500 shadow-[0_0_15px_#22d3ee] w-0"></div>
+            </div>
+            <p class="text-slate-400 font-light text-lg">The visual archives of <span class="text-white font-bold">Mayukh 2026</span> are currently being processed.</p>
+            <div class="mt-10 flex justify-center gap-4">
+                <div class="w-2 h-2 bg-cyan-500 rounded-full animate-bounce"></div>
+                <div class="w-2 h-2 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                <div class="w-2 h-2 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+            </div>
+        </div>
+
+        <div id="general-section" class="hidden w-full max-w-7xl flex-col items-center">
+            <h2 class="section-title">MAYUKH ARCHIVES</h2>
+            <div id="general-grid" class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <div id="cultural-section" class="hidden w-full max-w-7xl flex-col items-center mt-12 mb-20">
+            <h2 class="section-title">THE CULTURAL NIGHT</h2>
+            <div id="cultural-grid" class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+    </main>
+
+    <div id="lightbox" class="fixed inset-0 z-[200] bg-black/95 hidden items-center justify-center p-4 backdrop-blur-sm" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" class="max-w-full max-h-full object-contain shadow-[0_0_50px_rgba(34,211,238,0.2)] animate-in fade-in zoom-in duration-300">
+        <button class="absolute top-6 right-6 text-white/50 hover:text-white text-5xl font-light transition-colors">&times;</button>
+    </div>
+
+    <script>
+        // --- 1. PARTICLE SYSTEM ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5, speedX: Math.random() * 0.5 - 0.25, speedY: Math.random() * 0.5 - 0.25
+                });
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX; p.y += p.speedY;
+                if (p.x > canvas.width || p.x < 0) p.speedX *= -1;
+                if (p.y > canvas.height || p.y < 0) p.speedY *= -1;
+                ctx.fillStyle = 'rgba(34, 211, 238, 0.2)';
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                particles.forEach(p2 => {
+                    let dx = p.x - p2.x; let dy = p.y - p2.y; let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(34, 211, 238, ${0.15 - dist/1000})`;
+                        ctx.lineWidth = 0.5; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', init);
+        init(); animate();
+
+        // --- 2. PROGRESS BAR ---
+        gsap.to("#progress-bar", { width: "75%", duration: 4, ease: "power2.inOut", repeat: -1, yoyo: true });
+
+        // --- 3. DYNAMIC LOGIC (SEGREGATED) ---
+       // --- FIXED API CONFIGURATION ---
+        const API_URL = 'https://mayukh-bv-1.onrender.com/api/gallery';
+
+        async function fetchGallery() {
+            try {
+                const res = await fetch(API_URL);
+                const photos = await res.json();
+
+                if (photos && photos.length > 0) {
+                    const mainContent = document.getElementById('main-content');
+                    const comingSoon = document.getElementById('coming-soon-box');
+                    
+                    // Segregate Photos
+                    const generalPhotos = photos.filter(p => !p.category || p.category === 'General');
+                    const culturalPhotos = photos.filter(p => p.category === 'Cultural Night');
+
+                    // If we have ANY photos, hide Coming Soon and adjust layout
+                    comingSoon.style.display = 'none'; 
+                    mainContent.classList.remove('items-center', 'justify-center', 'h-screen'); 
+                    mainContent.classList.add('h-auto', 'items-start');
+
+                    // Helper to create Photo HTML
+                    const createPhotoCard = (photo) => {
+                        let captionHtml = '';
+                        if (photo.caption && photo.caption.trim() !== '') {
+                            captionHtml = `
+                            <div class="absolute bottom-0 left-0 w-full p-4 border-t border-cyan-500/20 bg-slate-900/80 backdrop-blur">
+                                <p class="text-xs font-mono text-cyan-400 tracking-widest uppercase truncate">${photo.caption}</p>
+                            </div>`;
+                        }
+                        return `
+                        <div class="photo-card group" onclick="openLightbox('${photo.imageUrl}')">
+                            <div class="aspect-square w-full overflow-hidden relative">
+                                <img src="${photo.imageUrl}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 group-hover:grayscale-0 grayscale opacity-80 group-hover:opacity-100">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-60"></div>
+                            </div>
+                            ${captionHtml}
+                        </div>`;
+                    };
+
+                    // Render General
+                    if (generalPhotos.length > 0) {
+                        const section = document.getElementById('general-section');
+                        const grid = document.getElementById('general-grid');
+                        section.classList.remove('hidden');
+                        section.classList.add('flex');
+                        grid.innerHTML = generalPhotos.map(createPhotoCard).join('');
+                    }
+
+                    // Render Cultural
+                    if (culturalPhotos.length > 0) {
+                        const section = document.getElementById('cultural-section');
+                        const grid = document.getElementById('cultural-grid');
+                        section.classList.remove('hidden');
+                        section.classList.add('flex');
+                        grid.innerHTML = culturalPhotos.map(createPhotoCard).join('');
+                    }
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // --- 4. LIGHTBOX ---
+        function openLightbox(url) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = url;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+        }
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            setTimeout(() => { document.getElementById('lightbox-img').src = ''; }, 200);
+        }
+
+        fetchGallery();
+    </script>
+</body>
+</html>

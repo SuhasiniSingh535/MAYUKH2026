@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+  <title>Mayukh 2026 - History</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── CSS Reset & Box Sizing ─── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ─── CSS Custom Properties ─── */
+    :root {
+      --cyan:    #3bc4ff;
+      --purple:  #7c6bff;
+      --orange:  #f97316;
+      --white:   #ffffff;
+      --bg:      #000000;
+
+      /* Fluid type scale (clamp: min, preferred vw-based, max) */
+      --fs-xs:   clamp(0.55rem,  1.2vw, 0.75rem);
+      --fs-sm:   clamp(0.7rem,   1.5vw, 0.9rem);
+      --fs-base: clamp(0.85rem,  1.8vw, 1.1rem);
+      --fs-md:   clamp(1rem,     2.2vw, 1.4rem);
+      --fs-lg:   clamp(1.3rem,   3vw,   2rem);
+      --fs-xl:   clamp(1.8rem,   5vw,   3.5rem);
+      --fs-hero: clamp(2.5rem,   10vw,  7rem);
+
+      /* Fluid spacing */
+      --sp-xs:  clamp(0.5rem,  1.5vw, 1rem);
+      --sp-sm:  clamp(0.75rem, 2vw,   1.5rem);
+      --sp-md:  clamp(1rem,    3vw,   2rem);
+      --sp-lg:  clamp(1.5rem,  4vw,   3rem);
+      --sp-xl:  clamp(2rem,    6vw,   5rem);
+      --sp-2xl: clamp(3rem,    8vw,   7rem);
+
+      --radius-card: clamp(0.75rem, 2vw, 1.25rem);
+      --card-pad:    clamp(1rem,    4vw, 2.5rem);
+    }
+
+    /* ─── Base ─── */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100dvh;
+    }
+
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+
+    /* ─── Warp Canvas ─── */
+    #warp-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── Glow Text ─── */
+    .glow {
+      text-shadow:
+        0 0 20px rgba(59, 196, 255, 0.7),
+        0 0 40px rgba(124, 107, 255, 0.4);
+    }
+
+    /* ─── Glass Cards ─── */
+    .glass {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(59, 196, 255, 0.1), transparent);
+      transition: 0.5s;
+      pointer-events: none;
+    }
+
+    /* Only apply complex hover on non-touch devices */
+    @media (hover: hover) and (pointer: fine) {
+      .glass:hover::before { left: 100%; }
+      .glass:hover {
+        background: rgba(59, 196, 255, 0.05);
+        border: 1px solid rgba(59, 196, 255, 0.3);
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(59, 196, 255, 0.15);
+      }
+      .timeline-card:hover .timeline-dot { transform: scale(1.5); }
+    }
+
+    /* ─── Back Button ─── */
+    .back-btn {
+      position: fixed;
+      top: clamp(0.75rem, 2vw, 1.5rem);
+      left: clamp(0.75rem, 2vw, 1.5rem);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: clamp(0.4rem, 1.2vw, 0.6rem) clamp(0.75rem, 2vw, 1.25rem);
+      border-radius: 0.5rem;
+      border: 1px solid rgba(59, 196, 255, 0.2);
+      text-decoration: none;
+      color: var(--white);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .back-btn:hover {
+      border-color: rgba(59, 196, 255, 0.5);
+      color: var(--cyan);
+    }
+
+    .back-btn i {
+      font-size: var(--fs-xs);
+      transition: transform 0.3s ease;
+    }
+
+    .back-btn:hover i { transform: translateX(-3px); }
+
+    .back-btn span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Hero Section ─── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(5rem, 10vw, 8rem) clamp(1rem, 5vw, 3rem) 4rem;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-hero);
+      font-weight: 900;
+      letter-spacing: clamp(0.05em, 1.5vw, 0.2em);
+      line-height: 1;
+      word-break: break-word;
+    }
+
+    .title-line {
+      height: 1px;
+      width: 0;
+      background: var(--cyan);
+      margin: clamp(1rem, 2vw, 2rem) auto 0;
+      opacity: 0.5;
+      transition: width 1s ease;
+    }
+
+    .hero-subtitle {
+      margin-top: clamp(1rem, 2.5vw, 2rem);
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-xs);
+      color: #67e8f9;
+      font-weight: 300;
+      letter-spacing: clamp(0.2em, 2vw, 0.6em);
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 1s ease 0.7s;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: clamp(1.5rem, 4vw, 2.5rem);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.4;
+    }
+
+    .scroll-hint span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      animation: pulse 2s ease infinite;
+    }
+
+    .scroll-hint-line {
+      width: 1px;
+      height: clamp(2rem, 4vw, 3rem);
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+    }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ─── Letter Animation ─── */
+    .title-letter {
+      display: inline-block;
+      animation: reveal-text 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(20px);
+    }
+
+    @keyframes reveal-text {
+      to { opacity: 1; filter: blur(0); transform: translateY(0); }
+    }
+
+    /* ─── Timeline Section ─── */
+    .timeline-section {
+      position: relative;
+      z-index: 1;
+      padding-bottom: clamp(3rem, 8vw, 8rem);
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(59, 196, 255, 0) 0%,
+        rgba(59, 196, 255, 0.5) 20%,
+        rgba(124, 107, 255, 0.5) 80%,
+        rgba(124, 107, 255, 0) 100%
+      );
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* Hide timeline line on very small screens */
+    @media (max-width: 400px) {
+      .timeline-line { display: none; }
+    }
+
+    .timeline-dot {
+      width: clamp(8px, 1.5vw, 12px);
+      height: clamp(8px, 1.5vw, 12px);
+      background: var(--white);
+      border-radius: 50%;
+      box-shadow: 0 0 20px var(--cyan), 0 0 40px var(--purple);
+      margin: 0 auto clamp(1rem, 3vw, 2rem);
+      z-index: 5;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .timeline-card {
+      width: min(90%, 800px);
+      margin: clamp(3rem, 6vw, 6rem) auto;
+      position: relative;
+    }
+
+    /* ─── Card Inner ─── */
+    .card-inner {
+      border-radius: var(--radius-card);
+      padding: var(--card-pad);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: clamp(0.75rem, 2vw, 1rem);
+      flex-wrap: wrap;
+    }
+
+    .card-year {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-xl);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .card-edition {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.2em;
+      opacity: 0.4;
+      align-self: center;
+      white-space: nowrap;
+    }
+
+    .card-subtitle {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-md);
+      font-style: italic;
+      margin-bottom: clamp(0.75rem, 2vw, 1rem);
+    }
+
+    .card-body {
+      font-size: var(--fs-base);
+      line-height: 1.7;
+      color: #9ca3af;
+      font-weight: 300;
+    }
+
+    /* ─── Scroll Reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px) rotateX(10deg);
+      transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
+
+    /* ─── Scroll to Top ─── */
+    #scroll-to-top {
+      position: fixed;
+      bottom: clamp(1.5rem, 4vw, 2.5rem);
+      right: clamp(1.5rem, 4vw, 2.5rem);
+      width: clamp(2.5rem, 5vw, 3rem);
+      height: clamp(2.5rem, 5vw, 3rem);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan);
+      border: 1px solid rgba(59, 196, 255, 0.2);
+      background: none;
+      cursor: pointer;
+      transform: scale(0);
+      transition: all 0.7s ease;
+      z-index: 60;
+      font-size: var(--fs-sm);
+    }
+
+    #scroll-to-top.show { transform: scale(1); opacity: 1; }
+
+    #scroll-to-top:hover {
+      background: var(--cyan);
+      color: var(--bg);
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 5vw, 3rem);
+      text-align: center;
+    }
+
+    .footer-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-lg);
+      font-weight: 700;
+      letter-spacing: clamp(0.1em, 2vw, 0.5em);
+      margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+    }
+
+    .footer-icons {
+      display: flex;
+      justify-content: center;
+      gap: clamp(1rem, 4vw, 2rem);
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      margin-bottom: clamp(1rem, 2.5vw, 2rem);
+    }
+
+    .footer-icons a {
+      color: var(--white);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .footer-icons a:hover {
+      color: var(--cyan);
+      transform: scale(1.25);
+      display: inline-block;
+    }
+
+    .footer-copy {
+      font-family: 'Orbitron', sans-serif;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.2em;
+      opacity: 0.4;
+    }
+
+    /* ─── High zoom / large text accessibility ─── */
+    @media (min-resolution: 192dpi), (min-device-pixel-ratio: 2) {
+      .glass { backdrop-filter: blur(10px); }
+    }
+
+    /* ─── Reduced motion ─── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .title-letter { opacity: 1; filter: none; transform: none; }
+    }
+
+    /* ─── Portrait phones ─── */
+    @media (max-width: 480px) {
+      .card-header { flex-direction: column; gap: 0.25rem; }
+      .card-edition { font-size: 0.5rem; }
+      .timeline-card { width: min(95%, 800px); }
+    }
+
+    /* ─── Landscape phones ─── */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .hero {
+        min-height: 100svh;
+        padding-top: clamp(3rem, 8vw, 5rem);
+      }
+      .scroll-hint { display: none; }
+    }
+
+    /* ─── Very wide screens ─── */
+    @media (min-width: 1600px) {
+      .timeline-card { max-width: 900px; }
+    }
+
+    /* ─── Print ─── */
+    @media print {
+      #warp-canvas, .back-btn, #scroll-to-top, .scroll-hint { display: none !important; }
+      body { background: white; color: black; }
+      .glass { border: 1px solid #ccc; box-shadow: none; }
+      .card-year, .card-subtitle, .glow { color: black !important; text-shadow: none; }
+      .card-body { color: #333 !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="warp-canvas" aria-hidden="true"></canvas>
+
+  <!-- Back Button -->
+  <a href="index.html" class="back-btn glass" aria-label="Return to home">
+    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+    <span>Return</span>
+  </a>
+
+  <!-- Hero -->
+  <section class="hero" aria-label="Page header">
+    <div>
+      <h1 class="hero-title glow" id="main-title" aria-label="History"></h1>
+      <div class="title-line" id="title-line" role="presentation"></div>
+      <p class="hero-subtitle" id="subtitle">Archive // Mayukh </p>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-hint-line"></div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <main class="timeline-section" aria-label="Event history timeline">
+    <div class="timeline-line" aria-hidden="true"></div>
+
+    <!-- 2025 -->
+    <article class="timeline-card reveal" aria-label="2025 edition">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="glass card-inner" style="border-left: 2px solid rgba(249,115,22,0.4);">
+        <div class="card-header">
+          <h2 class="card-year" style="color: #fb923c;">2025</h2>
+          
+        </div>
+        <h3 class="card-subtitle">Pirates in the Silicon Valley</h3>
+        <p class="card-body">
+          The boldest edition yet, "Pirates in the Silicon Valley" in 2025 celebrated fearless thinkers who dared to disrupt.
+          The campus turned into a sea of innovation — hackathons themed around digital rebellion, startup simulations, and design battles.
+          Participants took inspiration from tech mavericks like Steve Jobs, Grace Hopper, and Ada Lovelace.
+        </p>
+      </div>
+    </article>
+
+    <!-- 2024 -->
+    <article class="timeline-card reveal" aria-label="2024 edition">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="glass card-inner" style="border-left: 2px solid rgba(124,107,255,0.4);">
+        <div class="card-header">
+          <h2 class="card-year" style="color: #a78bfa;">2024</h2>
+          
+        </div>
+        <h3 class="card-subtitle">Ved se Vigyaan</h3>
+        <p class="card-body">
+          The 2024 theme, "Ved se Vigyaan," bridged India's ancient wisdom with modern scientific thought.
+          Students explored the roots of algorithms in Vedic mathematics, the science of sound in Sanskrit phonetics, and traditional astronomical systems.
+        </p>
+      </div>
+    </article>
+
+    <!-- 2023 -->
+    <article class="timeline-card reveal" aria-label="2023 edition">
+      <div class="timeline-dot" aria-hidden="true"></div>
+      <div class="glass card-inner" style="border-left: 2px solid rgba(59,196,255,0.4);">
+        <div class="card-header">
+          <h2 class="card-year" style="color: #38bdf8;">2023</h2>
+          
+        </div>
+        <h3 class="card-subtitle">Women in STEM</h3>
+        <p class="card-body">
+          The journey of Mayukh began with a theme that celebrated the brilliance and resilience of women in technology.
+          "Women in STEM" highlighted the power of inclusivity and equal opportunity in innovation.
+        </p>
+      </div>
+    </article>
+
+    <button id="scroll-to-top" class="glass" aria-label="Scroll to top">
+      <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+    </button>
+  </main>
+
+
+
+  <script>
+    // ─── WARP ENGINE ───────────────────────────────────────────
+    const canvas = document.getElementById('warp-canvas');
+    const ctx    = canvas.getContext('2d');
+    let stars = [], speed = 2, raf;
+
+    function initCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = [];
+      const count = Math.min(600, Math.floor((canvas.width * canvas.height) / 3500));
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width  - canvas.width  / 2,
+          y: Math.random() * canvas.height - canvas.height / 2,
+          z: Math.random() * canvas.width,
+          px: 0, py: 0
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const cx = canvas.width  / 2;
+      const cy = canvas.height / 2;
+
+      for (const s of stars) {
+        s.z -= speed;
+        if (s.z <= 0) {
+          s.z  = canvas.width;
+          s.x  = Math.random() * canvas.width  - cx;
+          s.y  = Math.random() * canvas.height - cy;
+          s.px = 0; s.py = 0;
+        }
+
+        const x = (s.x / s.z) * cx + cx;
+        const y = (s.y / s.z) * cy + cy;
+
+        if (s.px !== 0) {
+          ctx.strokeStyle = `rgba(59,196,255,${1 - s.z / canvas.width})`;
+          ctx.lineWidth   = (1 - s.z / canvas.width) * 2.5;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(s.px, s.py);
+          ctx.stroke();
+        }
+
+        s.px = x;
+        s.py = y;
+      }
+
+      raf = requestAnimationFrame(drawStars);
+    }
+
+    // Throttled resize handler
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        cancelAnimationFrame(raf);
+        initCanvas();
+        drawStars();
+      }, 150);
+    });
+
+    // Warp on scroll
+    let speedTimer;
+    window.addEventListener('scroll', () => {
+      speed = 2 + window.scrollY * 0.04;
+      clearTimeout(speedTimer);
+      speedTimer = setTimeout(() => { speed = 2; }, 120);
+    }, { passive: true });
+
+    // ─── TITLE ANIMATION ──────────────────────────────────────
+    function initTitle() {
+      const title = "HISTORY";
+      const el    = document.getElementById('main-title');
+      el.textContent = '';   // clear before adding spans
+
+      title.split('').forEach((l, i) => {
+        const span = document.createElement('span');
+        span.textContent = l;
+        span.className   = 'title-letter';
+        span.style.animationDelay = `${i * 100}ms`;
+        el.appendChild(span);
+      });
+
+      setTimeout(() => {
+        const line = document.getElementById('title-line');
+        const sub  = document.getElementById('subtitle');
+        if (line) line.style.width = 'clamp(100px, 25vw, 200px)';
+        if (sub)  sub.style.opacity = '0.7';
+      }, 800);
+    }
+
+    // ─── SCROLL REVEAL ────────────────────────────────────────
+    const reveals = document.querySelectorAll('.reveal');
+    const topBtn  = document.getElementById('scroll-to-top');
+
+    function onScroll() {
+      const vh = window.innerHeight;
+
+      reveals.forEach(r => {
+        if (r.getBoundingClientRect().top < vh - 80) {
+          r.classList.add('active');
+        }
+      });
+
+      if (window.scrollY > 400) topBtn.classList.add('show');
+      else topBtn.classList.remove('show');
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // ─── INIT ─────────────────────────────────────────────────
+    // Skip heavy animation on reduced-motion preference
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    initCanvas();
+    if (!prefersReduced) drawStars();
+    initTitle();
+    onScroll();   // run once in case cards already in view
+  </script>
+</body>
+</html>
