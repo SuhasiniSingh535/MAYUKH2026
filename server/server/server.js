@@ -15,7 +15,14 @@ const PORT = process.env.PORT || 5001;
 // 1. CONFIGURATION
 // ==========================================
 
-app.use(cors({ origin: 'https://mayukh2026.netlify.app' })); 
+app.use(cors({ 
+    origin: [
+        'https://mayukhbanasthali.com',           // Aapka naya domain
+        'https://mayukh2026.netlify.app',         // Aapka purana Netlify link
+        'http://localhost:5173'                   // Local testing ke liye (agar React use kar rahe)
+    ],
+    credentials: true
+})); 
 app.use(express.json());
 // Isse admin.html aur media.html load hone lagenge
 app.use(express.static(path.join(__dirname, '../')));
