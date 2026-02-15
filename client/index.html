@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mayukh 2026 - Home</title>
+  <meta name="description" content="Mayukh 2026 - The official technical fest of Banasthali Vidyapith. Join us for innovation and technology." />
+  <meta name="keywords" content="Mayukh 2026, Banasthali Vidyapith fest, technical fest, coding events, B.Tech CSE" />
+
+  <meta property="og:title" content="Mayukh 2026 | Banasthali Vidyapith" />
+  <meta property="og:description" content="Official technical event of Banasthali." />
+  <meta property="og:image" content="https://mayukhbanasthali.com/assests/p6.jpg" />
+  <meta property="og:url" content="https://mayukhbanasthali.com" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -94,10 +101,10 @@
     #intro-video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: contain; /* Use contain on mobile to prevent cropping */
     }
 
-    /* On larger screens, use cover for better fill */
+    /* Switch to cover on larger screens for intro video */
     @media (min-width: 768px) {
       #intro-video {
         object-fit: cover;
@@ -110,6 +117,13 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+    }
+
+    /* Home section responsive */
+    @media (max-width: 768px) {
+      #home {
+        min-h: 100vh;
+      }
     }
 
     .video-overlay {
@@ -142,11 +156,11 @@
     @media (max-width: 768px) {
       .video-overlay {
         background: radial-gradient(
-          ellipse 400px 350px at center 45%,
-          rgba(0, 0, 0, 0.1) 0%,
-          rgba(0, 0, 0, 0.3) 40%,
-          rgba(0, 0, 0, 0.5) 70%,
-          rgba(0, 0, 0, 0.7) 100%
+          ellipse 300px 250px at center 50%,
+          rgba(0, 0, 0, 0.0) 0%,
+          rgba(0, 0, 0, 0.2) 30%,
+          rgba(0, 0, 0, 0.4) 60%,
+          rgba(0, 0, 0, 0.55) 100%
         );
       }
     }
@@ -363,7 +377,7 @@
   <!-- Intro Screen -->
   <div id="intro-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-700 ease-in-out cursor-pointer">
     <video id="intro-video" autoplay muted playsinline>
-      <source src="assests/MayukhLogo2.mp4" type="video/mp4">
+      <source src="https://res.cloudinary.com/dg7mvpvir/video/upload/v1771009532/MayukhLogo2_wlviem.mp4" type="video/mp4">
     </video>
     <!-- Skip hint -->
     <div class="absolute bottom-8 right-8 text-gray-400 text-sm orbitron opacity-50 hover:opacity-100 transition-opacity">
@@ -454,9 +468,9 @@
     <!-- HOME SECTION with Spotlight Effect -->
     <section id="home" class="relative h-screen flex flex-col justify-center items-center text-center overflow-hidden">
       <div class="video-container">
-        <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-contain z-0">
-          <source src="assests/bgwithtitle2.mp4" type="video/mp4">
-          <source src="assests/bgwithtitle2.webm" type="video/webm">
+        <video autoplay muted loop playsinline preload="auto" class="absolute inset-0 w-full h-full object-cover z-0">
+          <source src="https://res.cloudinary.com/dcxmkpffm/video/upload/v1771009444/bgwithtitle2_aqk7gt.mp4" type="video/mp4">
+          Your browser does not support the video tag.
         </video>
         <!-- Spotlight Overlay -->
         <div class="video-overlay"></div>
@@ -539,40 +553,74 @@
     </div>
   </div>
 
+<script src="api-config.js"></script>
 <script>
-    // --- API CONFIGURATION ---
-    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        ? 'http://localhost:5001/api'
-        : 'https://mayukh-bv-1.onrender.com/api'; // Make sure this URL is correct!
+    let alertCache = null;
+    let alertCacheTime = 0;
+    const ALERT_CACHE_DURATION = 30000;
 
-    // --- ALERT SYSTEM LOGIC ---
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        const bgColor = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-green-600' : 'bg-blue-600';
+        toast.className = `fixed bottom-4 right-4 ${bgColor} text-white px-4 py-3 rounded-lg shadow-lg z-50 animate-in fade-in slide-in-from-bottom-2 duration-300`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('animate-out', 'fade-out', 'slide-out-to-bottom-2');
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    }
+
     async function loadAlerts() {
         try {
-            const res = await fetch(`${API_BASE}/event-alerts`);
-            const alerts = await res.json();
-
-            if (alerts.length > 0) {
-                const container = document.getElementById('alert-system');
-                const content = document.getElementById('alert-content');
-                const count = document.getElementById('alert-count');
-
-                container.classList.remove('hidden'); 
-                count.innerText = alerts.length;
-
-                content.innerHTML = alerts.map(alert => `
-                    <div class="bg-red-900/20 p-3 rounded border-l-2 border-red-500">
-                        <h4 class="rajdhani font-bold text-white text-lg leading-tight">${alert.eventName}</h4>
-                        <div class="text-sm text-gray-300 mt-2 space-y-1 font-mono">
-                            ${alert.changes.venue ? `<p><span class="text-red-400">Venue:</span> ${alert.changes.venue}</p>` : ''}
-                            ${alert.changes.time ? `<p><span class="text-red-400">Time:</span> ${alert.changes.time}</p>` : ''}
-                            ${alert.changes.date ? `<p><span class="text-red-400">Date:</span> ${alert.changes.date}</p>` : ''}
-                            ${alert.changes.fees ? `<p><span class="text-red-400">Fee:</span> ${alert.changes.fees}</p>` : ''}
-                            ${alert.changes.note ? `<p class="italic text-yellow-400 mt-1">"${alert.changes.note}"</p>` : ''}
-                        </div>
-                    </div>
-                `).join('');
+            const now = Date.now();
+            if (alertCache && (now - alertCacheTime) < ALERT_CACHE_DURATION) {
+                renderAlerts(alertCache);
+                return;
             }
-        } catch (e) { console.error("Alert System Error", e); }
+
+            const res = await fetch(`${API_CONFIG.alertsUrl}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            
+            const alerts = await res.json();
+            alertCache = alerts;
+            alertCacheTime = now;
+            renderAlerts(alerts);
+        } catch (e) { 
+            console.error("Alert System Error", e);
+        }
+    }
+
+    function renderAlerts(alerts) {
+        if (!alerts || alerts.length === 0) return;
+        
+        const container = document.getElementById('alert-system');
+        const content = document.getElementById('alert-content');
+        const count = document.getElementById('alert-count');
+
+        container.classList.remove('hidden'); 
+        count.innerText = alerts.length;
+
+        content.innerHTML = alerts.map(alert => {
+            const sanitizeText = (text) => {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
+
+            return `
+                <div class="bg-red-900/20 p-3 rounded border-l-2 border-red-500">
+                    <h4 class="rajdhani font-bold text-white text-lg leading-tight">${sanitizeText(alert.eventName)}</h4>
+                    <div class="text-sm text-gray-300 mt-2 space-y-1 font-mono">
+                        ${alert.changes?.venue ? `<p><span class="text-red-400">Venue:</span> ${sanitizeText(alert.changes.venue)}</p>` : ''}
+                        ${alert.changes?.time ? `<p><span class="text-red-400">Time:</span> ${sanitizeText(alert.changes.time)}</p>` : ''}
+                        ${alert.changes?.date ? `<p><span class="text-red-400">Date:</span> ${sanitizeText(alert.changes.date)}</p>` : ''}
+                        ${alert.changes?.fees ? `<p><span class="text-red-400">Fee:</span> ${sanitizeText(alert.changes.fees)}</p>` : ''}
+                        ${alert.changes?.note ? `<p class="italic text-yellow-400 mt-1">"${sanitizeText(alert.changes.note)}"</p>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
     // --- ADMIN SYSTEM LOGIC ---
@@ -587,14 +635,63 @@
         }
     }
 
-    function verifyAdmin() {
-        const pass = document.getElementById('admin-passcode').value;
-        if(pass === "Mayukh@2026") { 
-            document.getElementById('admin-step-1').classList.add('hidden');
-            document.getElementById('admin-step-2').classList.remove('hidden');
+    const SESSION_DURATION = 10 * 60 * 1000;
+
+    function checkExistingSession() {
+        const lastLogin = localStorage.getItem("admin_login_time");
+        const isLoggedIn = localStorage.getItem("admin_logged_in") === "true";
+        const now = new Date().getTime();
+
+        const passInputContainer = document.getElementById('admin-step-1');
+        const actionButtons = document.getElementById('admin-step-2');
+
+        if (isLoggedIn && lastLogin && (now - lastLogin < SESSION_DURATION)) {
+            if(passInputContainer) passInputContainer.classList.add('hidden');
+            if(actionButtons) actionButtons.classList.remove('hidden');
         } else {
-            document.getElementById('admin-error').innerText = "ACCESS DENIED";
+            localStorage.removeItem("admin_logged_in");
+            localStorage.removeItem("admin_login_time");
+            
+            if(passInputContainer) passInputContainer.classList.remove('hidden');
+            if(actionButtons) actionButtons.classList.add('hidden');
         }
+    }
+
+    function verifyAdmin() {
+        const passInput = document.getElementById('admin-passcode');
+        const errorMsg = document.getElementById('admin-error');
+        const pass = passInput ? passInput.value : "";
+        
+        if(pass === "@spiderman@mayukh@2026@") { 
+            const now = new Date().getTime();
+            
+            localStorage.setItem("admin_logged_in", "true");
+            localStorage.setItem("admin_login_time", now);
+            
+            if (!localStorage.getItem("token")) {
+                localStorage.setItem("token", "admin-bypass-session-token");
+            }
+
+            checkExistingSession();
+            
+            if(errorMsg) errorMsg.innerText = "";
+            
+        } else {
+            if(errorMsg) {
+                errorMsg.innerText = "ACCESS DENIED";
+                errorMsg.classList.remove('hidden');
+            }
+            if(passInput) passInput.style.borderColor = "red";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', checkExistingSession);
+
+    const passInputField = document.getElementById('admin-passcode');
+    if(passInputField) {
+        passInputField.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') verifyAdmin();
+        });
     }
     const introVideo = document.getElementById('intro-video');
     const introScreen = document.getElementById('intro-screen');
@@ -751,11 +848,11 @@
         if (overlay) {
             if (width < 768) {
                 overlay.style.background = `radial-gradient(
-                    ellipse 400px 350px at center 45%,
-                    rgba(0, 0, 0, 0.2) 0%,
-                    rgba(0, 0, 0, 0.5) 40%,
-                    rgba(0, 0, 0, 0.75) 70%,
-                    rgba(0, 0, 0, 0.9) 100%
+                    ellipse 300px 250px at center 50%,
+                    rgba(0, 0, 0, 0.0) 0%,
+                    rgba(0, 0, 0, 0.2) 30%,
+                    rgba(0, 0, 0, 0.4) 60%,
+                    rgba(0, 0, 0, 0.55) 100%
                 )`;
             } else if (width < 1024) {
                 overlay.style.background = `radial-gradient(
