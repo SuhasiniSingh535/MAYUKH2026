@@ -43,21 +43,23 @@
       position: relative;
       width: 100%;
       background: #0a000a;
+      background-size: cover;
+      background-position: center;
       overflow: hidden;
       border-radius: 1.25rem;
       border: 3px solid rgba(255, 0, 255, 0.8);
       box-shadow: 0 0 40px rgba(255, 0, 255, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.4);
-      padding: 0.75rem; /* This padding creates the premium frame */
+      padding: 0.75rem;
       cursor: pointer;
     }
     .event-poster-box::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: var(--bg-img);
       background-size: cover;
       background-position: center;
-      filter: blur(40px) brightness(0.2);
+      background-image: inherit;
+      filter: blur(30px) brightness(0.25);
       z-index: 1;
       border-radius: 0.75rem;
     }
@@ -256,7 +258,7 @@
         
         return `
           <div class="event-card">
-            <div class="event-poster-box group" style="--bg-img: url('${sanitizeHTML(posterUrl)}')" onclick='openPosterModal("${sanitizeHTML(posterUrl)}")'>
+            <div class="event-poster-box group" style="background-image: url('${sanitizeHTML(posterUrl)}')" onclick='openPosterModal("${sanitizeHTML(posterUrl)}")'>
                 <img src="${sanitizeHTML(posterUrl)}" class="main-poster" alt="${sanitizeHTML(event.title)}">
                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 pointer-events-none rounded-[0.75rem]">
                     <i class="fas fa-search-plus text-4xl text-white drop-shadow-lg"></i>

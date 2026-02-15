@@ -74,8 +74,7 @@
         transform: scale(1.05);
     }
     
-    .event-card { display: flex; flex-direction: column; height: 100%; min-height: 420px; }
-    @media (min-width: 1024px) { .event-card { min-height: 500px; } }
+    .event-card { display: flex; flex-direction: column; height: 100%; min-height: 0; }
     .event-card-content { flex: 1; display: flex; flex-direction: column; }
     .event-card-description { flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 3.5rem; font-size: 0.8rem; line-height: 1.4; }
     .card-actions { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
@@ -103,6 +102,13 @@
     .detail-left img { width: 100%; height: auto; max-height: 35vh; object-fit: contain; border-radius: 12px; box-shadow: 0 0 40px rgba(168, 85, 247, 0.3); }
     @media (min-width: 768px) { .detail-left img { max-height: 75vh; border-radius: 20px; } }
     .detail-right { flex: 1; overflow-y: auto; padding-right: 0.25rem; }
+    @media (max-width: 640px) {
+      .workshop-poster-box { border-radius: 0.5rem; }
+      .see-more-card-btn { font-size: 0.6rem; padding: 0.5rem; }
+      .register-btn { font-size: 0.6rem; padding: 0.5rem; }
+      .event-card-description { font-size: 0.75rem; min-height: 2.5rem; }
+    }
+
     .loading { text-align: center; padding: 4rem; color: #64748b; }
     .loading i { font-size: 3rem; animation: spin 2s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

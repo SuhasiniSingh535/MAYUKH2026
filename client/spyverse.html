@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SpyVerse | Mayukh 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -35,6 +36,8 @@
         position: relative;
         width: 100%;
         background: #000;
+        background-size: cover;
+        background-position: center;
         overflow: hidden;
         border: 1px solid rgba(0, 255, 65, 0.4);
         cursor: pointer;
@@ -47,7 +50,7 @@
         inset: 0;
         background-size: cover;
         background-position: center;
-        filter: blur(25px) brightness(0.3);
+        filter: blur(30px) brightness(0.25);
         z-index: 1;
         background-image: inherit; /* Copies bg image for blur */
     }
@@ -80,6 +83,15 @@
     .poster-zoom-hint { position: absolute; bottom: 0.5rem; right: 0.5rem; background: #00FF41; color: #000; padding: 0.25rem 0.5rem; font-size: 0.65rem; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; font-weight: 700; z-index: 20; }
     .spy-poster-box:hover .poster-zoom-hint { opacity: 1; }
 
+    @media (max-width: 640px) {
+      .dossier-card { padding: 1rem !important; clip-path: none; border-radius: 0.75rem; }
+      .dossier-card h3 { font-size: 1rem !important; }
+      .spy-poster-box { border-radius: 0.5rem; }
+      .btn-see-more { padding: 8px 12px; font-size: 0.65rem; letter-spacing: 1px; }
+      .intel-label { font-size: 0.55rem; }
+      .intel-value { font-size: 0.8rem; }
+    }
+
     .detail-panel { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 1000; backdrop-filter: blur(10px); overflow-y: auto; }
     .detail-panel.active { display: block; animation: fadeIn 0.3s ease; }
     .panel-content { background: linear-gradient(135deg, rgba(0, 25, 0, 0.95), rgba(5, 15, 5, 0.98)); border: 2px solid #00FF41; border-radius: 10px; max-width: 1400px; width: 90%; margin: 2rem auto; animation: scaleIn 0.4s ease; box-shadow: 0 0 50px rgba(0, 255, 65, 0.5); position: relative; }
@@ -97,20 +109,20 @@
 <body class="overflow-x-hidden">
   <canvas id="matrix-canvas"></canvas>
   <div class="scanner"></div>
-  <a href="theme2.html#spy-verse" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-green-900 transition-all group text-green-500">
-      <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
-      <span class="text-xs tracking-widest font-bold">THEME</span>
+  <a href="theme2.html#spy-verse" class="fixed top-4 left-4 sm:top-6 sm:left-6 z-50 glass px-3 py-2 sm:px-6 sm:py-3 rounded-xl border border-green-900 transition-all group text-green-500">
+      <i class="fa-solid fa-chevron-left text-xs sm:text-sm transition-transform group-hover:-translate-x-1"></i>
+      <span class="text-[0.6rem] sm:text-xs tracking-widest font-bold">THEME</span>
   </a>
 
-  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16 md:pb-20 px-3 sm:px-4">
     <div class="text-center mb-20">
       <p class="text-xs orbitron tracking-[0.8em] mb-2 opacity-60">ENCRYPTED // DATA CHANNEL 05</p>
-      <h1 class="orbitron text-7xl md:text-8xl font-black spy-glow mb-4">SPYVERSE</h1>
+      <h1 class="orbitron text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black spy-glow mb-4">SPYVERSE</h1>
       <div class="h-1 w-48 bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto"></div>
       <p class="mt-6 text-xl max-w-2xl text-green-300/60 font-medium italic">"Secrecy is the beginning of all tyranny; innovation is the key to liberation."</p>
     </div>
 
-    <div id="spy-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-[95%] w-full px-4 lg:px-8 relative z-10">
+    <div id="spy-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 max-w-[95%] w-full px-3 sm:px-4 lg:px-8 relative z-10">
         <p class="col-span-full text-center text-green-500 animate-pulse orbitron">DECRYPTING FILES...</p>
     </div>
   </main>

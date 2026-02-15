@@ -11,7 +11,8 @@
         .poster-box {
             position: relative;
             width: 100%;
-            height: 220px; /* Standardize card poster height */
+            min-height: 180px;
+            max-height: 280px;
             background: #000;
             overflow: hidden;
             border-bottom: 1px solid rgba(168, 85, 247, 0.2);
@@ -30,7 +31,9 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            height: 100%;
+            height: auto;
+            min-height: 180px;
+            max-height: 280px;
             object-fit: contain;
             display: block;
             transition: transform 0.5s ease;
@@ -38,9 +41,35 @@
         .group:hover .main-poster {
             transform: scale(1.05);
         }
+        @media (max-width: 640px) {
+            .poster-box { min-height: 150px; max-height: 250px; }
+            .poster-box img.main-poster { min-height: 150px; max-height: 250px; }
+            main { padding: 0.75rem !important; }
+            header h1 { font-size: 2rem !important; }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans overflow-x-hidden">
+
+    <div id="detailModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);backdrop-filter:blur(15px);z-index:10000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.4s ease;padding:1rem;">
+        <button onclick="closeDetailModal()" style="position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:#a855f7;font-size:1.8rem;cursor:pointer;z-index:10001;"><i class="fa-solid fa-times"></i></button>
+        <div style="display:flex;flex-direction:column;gap:1.5rem;max-width:900px;width:100%;max-height:90vh;background:rgba(15,23,42,0.95);border:2px solid #a855f7;border-radius:1.25rem;padding:2rem;overflow-y:auto;" class="md:flex-row">
+            <div style="text-align:center;">
+                <img id="detailPosterImg" src="" alt="Poster" style="max-width:100%;max-height:400px;object-fit:contain;border-radius:0.75rem;border:1px solid rgba(168,85,247,0.3);">
+            </div>
+            <div>
+                <h2 id="detailTitle" style="font-family:'Orbitron',sans-serif;font-size:1.75rem;font-weight:900;color:#a855f7;text-transform:uppercase;margin-bottom:0.5rem;"></h2>
+                <span id="detailCategory" style="display:inline-block;font-size:0.75rem;background:rgba(168,85,247,0.2);color:#c084fc;padding:0.4rem 0.8rem;border-radius:9999px;border:1px solid rgba(168,85,247,0.3);text-transform:uppercase;font-weight:600;margin-bottom:1rem;"></span>
+                <p id="detailDescription" style="color:rgba(255,255,255,0.8);font-size:1rem;line-height:1.6;margin:1rem 0;"></p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;background:rgba(168,85,247,0.08);padding:1rem;border-radius:0.75rem;border:1px solid rgba(168,85,247,0.1);margin:1rem 0;">
+                    <div><span style="font-size:0.65rem;color:#a855f7;opacity:0.6;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.25rem;">DATE</span><p id="detailDay" style="color:white;font-weight:600;"></p></div>
+                    <div><span style="font-size:0.65rem;color:#a855f7;opacity:0.6;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.25rem;">TIME</span><p id="detailTime" style="color:white;font-weight:600;"></p></div>
+                </div>
+                <div style="margin:1rem 0;"><span style="font-size:0.65rem;color:#a855f7;opacity:0.6;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.25rem;">VENUE</span><p id="detailVenue" style="color:white;font-weight:600;"></p></div>
+                <a id="detailRegisterBtn" href="#" target="_blank" style="display:block;width:100%;text-align:center;background:linear-gradient(135deg,#a855f7,#7c3aed);color:white;font-weight:900;padding:1rem;border-radius:0.75rem;text-decoration:none;margin-top:1rem;font-family:'Orbitron',sans-serif;font-size:0.9rem;letter-spacing:0.05em;text-transform:uppercase;">REGISTER NOW</a>
+            </div>
+        </div>
+    </div>
 
     <main class="md:ml-64 min-h-screen p-6">
         <header class="mb-12 mt-12 md:mt-0 text-center md:text-left">
@@ -54,13 +83,13 @@
             <i class="fa-solid fa-search absolute left-4 top-3.5 text-gray-500"></i>
         </div>
 
-        <div id="skeletonLoader" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="skeletonLoader" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             <div class="h-96 bg-gray-800/50 rounded-2xl animate-pulse"></div>
             <div class="h-96 bg-gray-800/50 rounded-2xl animate-pulse"></div>
             <div class="h-96 bg-gray-800/50 rounded-2xl animate-pulse"></div>
         </div>
 
-        <div id="eventsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <div id="eventsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 hidden">
         </div>
     </main>
 
@@ -109,7 +138,9 @@
                 return;
             }
 
-            container.innerHTML = events.map(e => `
+            container.innerHTML = events.map(e => {
+                const eventDataStr = encodeURIComponent(JSON.stringify(e));
+                return `
                 <div class="bg-gray-800/40 border border-gray-700 rounded-2xl overflow-hidden hover:border-purple-500/50 transition-all group hover:-translate-y-1 flex flex-col">
                     
                     <div class="poster-box" style="background-image: url('${e.posterLink}')">
@@ -130,11 +161,15 @@
                         </div>
                         <div class="flex justify-between items-center mt-4 border-t border-gray-700/50 pt-4">
                             <span class="text-xs text-purple-400"><i class="fa-regular fa-calendar mr-1"></i> ${e.date || 'TBA'}</span>
-                            <a href="${e.registrationLink}" target="_blank" class="bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold px-5 py-2 rounded-full transition shadow-lg shadow-purple-600/30">REGISTER</a>
+                            <div class="flex gap-2">
+                                <button onclick='openDetailModal(JSON.parse(decodeURIComponent("${eventDataStr}")))' class="bg-gray-700 hover:bg-gray-600 text-white text-sm font-bold px-4 py-2 rounded-full transition">INFO</button>
+                                <a href="${e.registrationLink}" target="_blank" class="bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold px-5 py-2 rounded-full transition shadow-lg shadow-purple-600/30">REGISTER</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
 
         let debounceTimer;
@@ -154,6 +189,35 @@
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+
+        function openDetailModal(eventData) {
+            document.getElementById('detailPosterImg').src = eventData.posterLink || '';
+            document.getElementById('detailTitle').textContent = eventData.title;
+            document.getElementById('detailCategory').textContent = eventData.category || 'non-tech-event';
+            document.getElementById('detailDescription').textContent = eventData.description || 'No description';
+            document.getElementById('detailDay').textContent = eventData.date || eventData.day || 'TBA';
+            document.getElementById('detailTime').textContent = eventData.time || 'TBA';
+            document.getElementById('detailVenue').textContent = eventData.venue || 'TBA';
+            document.getElementById('detailRegisterBtn').href = eventData.registrationLink || '#';
+            const modal = document.getElementById('detailModal');
+            modal.style.display = 'flex';
+            modal.style.opacity = '1';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById('detailModal');
+            modal.style.display = 'none';
+            modal.style.opacity = '0';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDetailModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeDetailModal();
+        });
 
         loadData();
     </script>

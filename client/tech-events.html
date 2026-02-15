@@ -343,41 +343,32 @@
       .events-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
         width: 100%;
-      }
-
-      @media (min-width: 480px) {
-        .events-grid {
-          gap: 1.75rem;
-        }
+        max-width: 95%;
+        margin: 0 auto;
+        padding: 0 0.75rem;
       }
 
       @media (min-width: 640px) {
         .events-grid {
           grid-template-columns: repeat(2, 1fr);
-          gap: 2rem;
+          gap: 1.5rem;
+          padding: 0 1rem;
         }
       }
 
       @media (min-width: 1024px) {
         .events-grid {
           grid-template-columns: repeat(3, 1fr);
-          gap: 2.5rem;
+          gap: 2rem;
         }
       }
 
       @media (min-width: 1280px) {
         .events-grid {
           grid-template-columns: repeat(4, 1fr);
-          gap: 2.5rem;
-        }
-      }
-
-      @media (min-width: 1536px) {
-        .events-grid {
-          grid-template-columns: repeat(4, 1fr);
-          gap: 3rem;
+          gap: 2rem;
         }
       }
 
@@ -399,6 +390,8 @@
         position: relative;
         width: 100%;
         background: #000;
+        background-size: cover;
+        background-position: center;
         overflow: hidden;
         border-radius: 1.25rem;
         border: 3px solid rgba(255, 255, 255, 0.9);
@@ -412,9 +405,10 @@
         content: "";
         position: absolute;
         inset: 0;
+        background-image: inherit;
         background-size: cover;
         background-position: center;
-        filter: blur(60px) brightness(0.1);
+        filter: blur(30px) brightness(0.25);
         z-index: 1;
         border-radius: 0.75rem;
       }
@@ -561,6 +555,16 @@
         box-shadow: 0 8px 24px rgba(59, 196, 255, 0.3);
       }
 
+      @media (max-width: 640px) {
+        .event-card-poster { border-width: 2px; padding: 0.5rem; border-radius: 1rem; }
+        .event-card-body { padding: 0.75rem 0; gap: 0.35rem; }
+        .event-card-title { font-size: 0.85rem; }
+        .event-card-description { font-size: 0.7rem; }
+        .event-card-badge { font-size: 0.6rem; padding: 0.3rem 0.6rem; }
+        .event-card-btn { padding: 0.5rem; font-size: 0.6rem; }
+        .event-card-logo { width: 2rem; height: 2rem; }
+      }
+
       .modal {
         position: fixed;
         top: 0;
@@ -627,13 +631,18 @@
 
       .modal-poster-container {
         display: flex;
-        items-align: center;
+        align-items: center;
         justify-content: center;
         background: rgba(0, 0, 0, 0.4);
         padding: 1rem;
         border: 1px solid rgba(59, 196, 255, 0.2);
         border-radius: 1rem;
         overflow: hidden;
+        max-height: 70vh;
+      }
+
+      .modal-poster-container .modal-img {
+        max-height: 65vh;
       }
 
       .modal-img {
@@ -784,12 +793,10 @@
     </header>
 
     <div id="posterModal" class="modal">
-      <div class="modal-content">
-        <button onclick="closePosterModal()" class="modal-close">
-          <i class="fa-solid fa-times"></i>
-        </button>
-        <img id="posterModalImg" src="" alt="Event Poster" class="modal-img" />
-      </div>
+      <button onclick="closePosterModal()" class="modal-close">
+        <i class="fa-solid fa-times"></i>
+      </button>
+      <img id="posterModalImg" src="" alt="Event Poster" class="modal-img" style="max-width: 90vw; max-height: 90vh; object-fit: contain;" />
     </div>
 
     <div id="detailModal" class="modal">
