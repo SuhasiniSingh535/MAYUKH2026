@@ -17,12 +17,17 @@ const PORT = process.env.PORT || 5001;
 
 app.use(cors({ 
     origin: [
-        'https://mayukhbanasthali.com',           // Aapka naya domain
-        'https://mayukh2026.netlify.app',         // Aapka purana Netlify link
-        'http://localhost:5173'                   // Local testing ke liye (agar React use kar rahe)
+        'https://mayukhbanasthali.com',           // Aapka professional domain
+        'https://mayukh2026.netlify.app',         // Netlify auto-generated link
+        'http://localhost:5173',                  // Vite (React) local development
+        'http://localhost:3000',                  // Create React App default port
+        'http://localhost:5001',                  // Aapka backend port (safety ke liye)
+        'http://127.0.0.1:5500'                   // VS Code Live Server (agar use kar rahe hain)
     ],
-    credentials: true
-})); 
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],    // Saari zaroori methods allow karein
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 // Isse admin.html aur media.html load hone lagenge
 app.use(express.static(path.join(__dirname, '../')));
