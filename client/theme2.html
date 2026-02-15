@@ -16,24 +16,27 @@
     .rajdhani { font-family: 'Rajdhani', sans-serif; }
     .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff, 0 0 30px #7c6bff; }
     
+    /* Premium Glassmorphism */
     .glass {
       background: rgba(10, 14, 26, 0.6); 
       backdrop-filter: blur(15px);
-      border: 1px solid rgba(59, 196, 255, 0.3);
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(59, 196, 255, 0.1);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(59, 196, 255, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(59, 196, 255, 0.1);
     }
+    
     .glass-button {
       background: rgba(59, 196, 255, 0.1);
       border: 1px solid rgba(59, 196, 255, 0.4);
       backdrop-filter: blur(5px);
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-block;
     }
 
     .glass-button:hover {
-      background: rgba(59, 196, 255, 0.3);
-      box-shadow: 0 0 15px rgba(59, 196, 255, 0.5);
-      transform: translateY(-2px);
+      background: rgba(59, 196, 255, 0.25);
+      box-shadow: 0 0 20px rgba(59, 196, 255, 0.4);
+      transform: translateY(-3px);
     }
 
     /* Arrow Toggle Styling - MOBILE ONLY */
@@ -42,13 +45,14 @@
       top: 50%;
       transform: translateY(-50%);
       z-index: 60;
-      background: rgba(10, 14, 26, 0.8);
+      background: rgba(10, 14, 26, 0.85);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(59, 196, 255, 0.4);
       color: #3bc4ff;
-      padding: 15px 8px;
+      padding: 15px 10px;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(59, 196, 255, 0.2);
     }
 
     .toggle-left { left: 0; border-radius: 0 12px 12px 0; border-left: none; }
@@ -56,35 +60,35 @@
 
     /* Hide arrows on desktop */
     @media (min-width: 1025px) {
-      .panel-toggle {
-        display: none !important;
-      }
+      .panel-toggle { display: none !important; }
     }
 
-    /* Standardized Panel Item Styling from Index */
+    /* Standardized Panel Item Styling */
     .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
       text-align: center;
-      padding: 0.5rem 0;
+      padding: 0.75rem 0;
       transition: all 0.3s ease;
       text-decoration: none;
+      color: #9ca3af;
     }
 
-    .nav-item i { font-size: 1.5rem; margin-bottom: 0.375rem; transition: all 0.3s ease; }
-    .nav-item span { font-family: 'Orbitron', sans-serif; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; transition: all 0.3s ease; }
+    .nav-item i { font-size: 1.5rem; margin-bottom: 0.4rem; transition: all 0.3s ease; }
+    .nav-item span { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; transition: all 0.3s ease; }
 
     .nav-item:hover { color: #3bc4ff; }
-    .nav-item:hover i { transform: translateY(-2px); text-shadow: 0 0 10px #3bc4ff; }
-    .nav-item:hover span { text-shadow: 0 0 8px #3bc4ff; }
+    .nav-item:hover i { transform: translateY(-3px); text-shadow: 0 0 15px #3bc4ff; }
+    .nav-item:hover span { text-shadow: 0 0 10px #3bc4ff; }
 
-    /* Extra Menu Container */
+    /* Extra Menu Container (Smooth Expand) */
     #extra-menu-container {
+      display: grid;
       grid-template-rows: 0fr;
       opacity: 0;
-      transition: all 0.5s ease-in-out;
+      transition: grid-template-rows 0.4s ease-in-out, opacity 0.4s ease-in-out;
       width: 100%;
       pointer-events: none;
     }
@@ -103,131 +107,76 @@
     #see-more-btn {
       margin-top: 0.5rem;
       color: #3bc4ff;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
       padding: 0.5rem;
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
 
-    #see-more-btn:hover {
-      color: white;
-      transform: scale(1.1);
-    }
-
-    #see-more-btn i {
-      transition: transform 0.3s ease;
-    }
-
-    #see-more-btn.rotated i {
-      transform: rotate(180deg);
-    }
+    #see-more-btn:hover { color: white; transform: scale(1.15); }
+    #see-more-btn i { transition: transform 0.4s ease; }
+    #see-more-btn.rotated i { transform: rotate(180deg); }
 
     /* Right Panel Styles */
     .social-icon { color: #9ca3af; font-size: 1.75rem; transition: all 0.3s ease; }
-    .social-icon:hover { color: #3bc4ff; transform: scale(1.2); text-shadow: 0 0 15px #3bc4ff; }
-
-    .about-link {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 2rem;
-      color: #9ca3af;
-      transition: all 0.3s ease;
-    }
-
-    .about-link i {
-      font-size: 1.5rem;
-      margin-bottom: 0.375rem;
-    }
-
-    .about-link span {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.625rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .about-link:hover {
-      color: #3bc4ff;
-    }
-
-    .about-link:hover i {
-      transform: translateY(-2px);
-      text-shadow: 0 0 10px #3bc4ff;
-    }
+    .social-icon:hover { color: #3bc4ff; transform: scale(1.2) translateY(-2px); text-shadow: 0 0 15px #3bc4ff; }
 
     /* Mobile-specific panel behavior */
     @media (max-width: 1024px) {
       #left-panel {
-        left: 10px;
-        transform: translateY(-50%) translateX(-120%);
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        left: 0;
+        transform: translateY(-50%) translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 0 1rem 1rem 0;
+        border-left: none;
       }
       #right-panel {
-        right: 10px;
-        transform: translateY(-50%) translateX(120%);
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        right: 0;
+        transform: translateY(-50%) translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 1rem 0 0 1rem;
+        border-right: none;
       }
-      #left-panel.mobile-active {
-        transform: translateY(-50%) translateX(0);
-      }
-      #right-panel.mobile-active {
-        transform: translateY(-50%) translateX(0);
-      }
+      #left-panel.mobile-active { transform: translateY(-50%) translateX(0); box-shadow: 10px 0 30px rgba(0,0,0,0.8); }
+      #right-panel.mobile-active { transform: translateY(-50%) translateX(0); box-shadow: -10px 0 30px rgba(0,0,0,0.8); }
     }
 
     /* Desktop panel behavior */
     @media (min-width: 1025px) {
-      #left-panel {
-        left: 1.5rem;
-        transform: translateY(-50%);
-      }
-      #right-panel {
-        right: 1.5rem;
-        transform: translateY(-50%);
-      }
+      #left-panel { left: 1.5rem; transform: translateY(-50%); border-radius: 1rem; }
+      #right-panel { right: 1.5rem; transform: translateY(-50%); border-radius: 1rem; }
     }
 
     @media (min-width: 1400px) {
-      #left-panel {
-        left: 2rem;
-      }
-      #right-panel {
-        right: 2rem;
-      }
+      #left-panel { left: 2.5rem; }
+      #right-panel { right: 2.5rem; }
     }
 
-    #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: black; }
+    #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: black; pointer-events: none; }
     section { background: transparent !important; }
     
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: #0a0e1a; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #050505; }
     ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #3bc4ff, #7c6bff); border-radius: 10px; }
 
     /* Responsive content padding */
     @media (max-width: 1024px) {
-      section {
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-      
-      section .glass {
-        max-width: 90%;
-        padding: 2rem 1.5rem;
-      }
+      section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      section .glass { width: 100%; max-width: 100%; padding: 2.5rem 1.5rem; }
     }
   </style>
 </head>
 
 <body class="bg-black text-white">
 
-  <!-- Arrow Toggles for Mobile Only -->
-  <button id="left-toggle" class="panel-toggle toggle-left" onclick="togglePanel('left')">
+  <button id="left-toggle" class="panel-toggle toggle-left" onclick="togglePanel('left')" aria-label="Toggle Navigation">
     <i class="fa-solid fa-chevron-right"></i>
   </button>
 
-  <button id="right-toggle" class="panel-toggle toggle-right" onclick="togglePanel('right')">
+  <button id="right-toggle" class="panel-toggle toggle-right" onclick="togglePanel('right')" aria-label="Toggle Socials">
     <i class="fa-solid fa-chevron-left"></i>
   </button>
 
@@ -235,95 +184,92 @@
 
   <div id="main-content">
     
-    <!-- LEFT PANEL -->
-    <div id="left-panel" class="fixed top-1/2 flex flex-col justify-start items-center glass rounded-2xl py-6 px-2 w-24 border-l-4 border-cyan-400/50 z-50">
+    <div id="left-panel" class="fixed top-1/2 flex flex-col justify-start items-center glass py-6 px-2 w-24 border-l-4 border-cyan-400/50 z-50">
       <nav class="flex flex-col items-center w-full">
-        
         <div class="flex flex-col items-center space-y-4 w-full">
-          <a href="index.html" class="nav-item text-gray-300"><i class="fa-solid fa-house"></i><span>Home</span></a>
-          <a href="history.html" class="nav-item text-gray-300"><i class="fa-solid fa-hourglass-half"></i><span>History</span></a>
-          <a href="theme2.html" class="nav-item text-gray-300"><i class="fa-solid fa-globe"></i><span>Theme</span></a>
-          <a href="roadmap.html" class="nav-item text-gray-300"><i class="fa-solid fa-road"></i><span>Roadmap</span></a>
-          <a href="teams.html" class="nav-item text-gray-300"><i class="fa-solid fa-user-group"></i><span>Team</span></a>
+          <a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+          <a href="history.html" class="nav-item"><i class="fa-solid fa-hourglass-half"></i><span>History</span></a>
+          <a href="theme2.html" class="nav-item !text-cyan-400 drop-shadow-[0_0_8px_rgba(59,196,255,0.8)]"><i class="fa-solid fa-globe"></i><span>Theme</span></a>
+          <a href="roadmap.html" class="nav-item"><i class="fa-solid fa-road"></i><span>Roadmap</span></a>
+          <a href="teams.html" class="nav-item"><i class="fa-solid fa-user-group"></i><span>Team</span></a>
         </div>
 
-        <!-- Extra Menu (Expandable) -->
-        <div id="extra-menu-container" class="grid w-full mt-4">
+        <div id="extra-menu-container" class="w-full mt-2">
           <div>
-            <div class="flex flex-col items-center space-y-4">
-              <a href="tech-events.html" class="nav-item text-gray-300"><i class="fa-solid fa-calendar-days"></i><span>Events</span></a>
-              <a href="gallery.html" class="nav-item text-gray-300"><i class="fa-solid fa-images"></i><span>Gallery</span></a>
+            <div class="flex flex-col items-center space-y-4 pt-2 border-t border-cyan-400/20">
+              <a href="tech-events.html" class="nav-item"><i class="fa-solid fa-calendar-days"></i><span>Events</span></a>
+              <a href="gallery.html" class="nav-item"><i class="fa-solid fa-images"></i><span>Gallery</span></a>
             </div>
           </div>
         </div>
 
-        <!-- See More Button -->
-        <button id="see-more-btn">
-          <i class="fa-solid fa-chevron-down text-lg"></i>
+        <button id="see-more-btn" aria-label="See More Links">
+          <i class="fa-solid fa-chevron-down text-xl"></i>
         </button>
       </nav>
     </div>
 
-    <!-- RIGHT PANEL -->
-    <div id="right-panel" class="fixed top-1/2 flex flex-col justify-between items-center glass rounded-2xl py-6 px-2 w-20 h-[50vh] border-r-4 border-cyan-400/50 z-50">
+    <div id="right-panel" class="fixed top-1/2 flex flex-col justify-between items-center glass py-8 px-2 w-20 h-[55vh] border-r-4 border-cyan-400/50 z-50">
       <div class="flex flex-col items-center space-y-8 w-full">
         <a href="https://www.instagram.com/mayukh_bv/" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
         <a href="https://www.youtube.com/channel/UCelIKNgiLt_IP4aT2QmZ7WA" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
         <a href="https://www.linkedin.com/company/mayukh-banasthali/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
         <a href="mailto:mayukh@banasthali.in" class="social-icon"><i class="fa-solid fa-envelope"></i></a>
-        
-        <a href="about.html" class="about-link">
+      </div>
+      
+      <div class="mt-auto pt-6 border-t border-cyan-400/20 w-full flex justify-center">
+        <a href="about.html" class="nav-item !pb-0">
           <i class="fa-solid fa-circle-info"></i>
           <span>About</span>
         </a>
       </div>
     </div>
 
-    <section id="sci-fi-verse" data-verse="sci-fi" class="min-h-screen flex items-center justify-center">
-        <div class="glass p-10 rounded-3xl border-l-4 border-cyan-400 max-w-lg text-center">
-            <h2 class="orbitron text-4xl text-cyan-400 mb-4">SCI-FI VERSE</h2>
-            <p class="rajdhani text-lg leading-relaxed mb-6">The digital frontier. Explore cybernetic innovation and quantum possibilities.</p>
-            <a href="scifiverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-cyan-400">View Events</a>
+    <section id="sci-fi-verse" data-verse="sci-fi" class="min-h-screen flex items-center justify-center relative z-10">
+        <div class="glass rounded-3xl border-l-4 border-cyan-400 max-w-lg text-center transition-all duration-500">
+            <h2 class="orbitron text-4xl md:text-5xl font-bold text-cyan-400 mb-4 drop-shadow-[0_0_15px_rgba(59,196,255,0.5)]">SCI-FI VERSE</h2>
+            <p class="rajdhani text-lg md:text-xl text-gray-300 leading-relaxed mb-8">The digital frontier. Explore cybernetic innovation and quantum possibilities.</p>
+            <a href="scifiverse.html" class="orbitron glass-button px-8 py-3 rounded-full text-sm md:text-base font-bold uppercase tracking-widest text-cyan-400 hover:text-white">View Events</a>
         </div>
     </section>
 
-    <section id="spy-verse" data-verse="spy" class="min-h-screen flex items-center justify-center">
-        <div class="glass p-10 rounded-3xl border-l-4 border-green-500 max-w-lg text-center">
-            <h2 class="orbitron text-4xl text-green-500 mb-4">SPY VERSE</h2>
-            <p class="rajdhani text-lg text-green-100 mb-6">Infiltrate the system. Stealth and intelligence are your only weapons in the shadows.</p>
-            <a href="spyverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-green-500">View Events</a>
+    <section id="spy-verse" data-verse="spy" class="min-h-screen flex items-center justify-center relative z-10">
+        <div class="glass rounded-3xl border-l-4 border-green-500 max-w-lg text-center transition-all duration-500">
+            <h2 class="orbitron text-4xl md:text-5xl font-bold text-green-500 mb-4 drop-shadow-[0_0_15px_rgba(0,255,0,0.5)]">SPY VERSE</h2>
+            <p class="rajdhani text-lg md:text-xl text-green-100/80 leading-relaxed mb-8">Infiltrate the system. Stealth and intelligence are your only weapons in the shadows.</p>
+            <a href="spyverse.html" class="orbitron glass-button px-8 py-3 rounded-full text-sm md:text-base font-bold uppercase tracking-widest text-green-400 border-green-500/50 hover:bg-green-500/20 hover:text-white hover:shadow-[0_0_20px_rgba(0,255,0,0.4)]">View Events</a>
         </div>
     </section>
 
-    <section id="carnival-verse" data-verse="carnival" class="min-h-screen flex items-center justify-center">
-        <div class="glass p-10 rounded-3xl border-l-4 border-pink-500 max-w-lg text-center">
-            <h2 class="orbitron text-4xl text-pink-500 mb-4">CARNIVAL VERSE</h2>
-            <p class="rajdhani text-lg mb-6 text-pink-100/80">The chaos of celebration. Experience high energy and vibrant digital spectacles.</p>
-            <a href="carnivalverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-pink-400">View Events</a>
+    <section id="carnival-verse" data-verse="carnival" class="min-h-screen flex items-center justify-center relative z-10">
+        <div class="glass rounded-3xl border-l-4 border-pink-500 max-w-lg text-center transition-all duration-500">
+            <h2 class="orbitron text-4xl md:text-5xl font-bold text-pink-500 mb-4 drop-shadow-[0_0_15px_rgba(255,0,255,0.5)]">CARNIVAL VERSE</h2>
+            <p class="rajdhani text-lg md:text-xl text-pink-100/80 leading-relaxed mb-8">The chaos of celebration. Experience high energy and vibrant digital spectacles.</p>
+            <a href="carnivalverse.html" class="orbitron glass-button px-8 py-3 rounded-full text-sm md:text-base font-bold uppercase tracking-widest text-pink-400 border-pink-500/50 hover:bg-pink-500/20 hover:text-white hover:shadow-[0_0_20px_rgba(255,0,255,0.4)]">View Events</a>
         </div>
     </section>
 
-    <section id="mythic-verse" data-verse="mythic" class="min-h-screen flex items-center justify-center">
-        <div class="glass p-10 rounded-3xl border-l-4 border-orange-500 max-w-lg text-center">
-            <h2 class="orbitron text-4xl text-orange-400 mb-4">MYTHIC VERSE</h2>
-            <p class="rajdhani text-lg mb-6">Where history meets the future. Ancient legends reborn through modern code.</p>
-            <a href="mythicverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-orange-400">View Events</a>
+    <section id="mythic-verse" data-verse="mythic" class="min-h-screen flex items-center justify-center relative z-10">
+        <div class="glass rounded-3xl border-l-4 border-orange-500 max-w-lg text-center transition-all duration-500">
+            <h2 class="orbitron text-4xl md:text-5xl font-bold text-orange-400 mb-4 drop-shadow-[0_0_15px_rgba(251,146,60,0.5)]">MYTHIC VERSE</h2>
+            <p class="rajdhani text-lg md:text-xl text-orange-100/80 leading-relaxed mb-8">Where history meets the future. Ancient legends reborn through modern code.</p>
+            <a href="mythicverse.html" class="orbitron glass-button px-8 py-3 rounded-full text-sm md:text-base font-bold uppercase tracking-widest text-orange-400 border-orange-500/50 hover:bg-orange-500/20 hover:text-white hover:shadow-[0_0_20px_rgba(251,146,60,0.4)]">View Events</a>
         </div>
     </section>
 
-    <section id="dark-verse" data-verse="horror" class="min-h-screen flex items-center justify-center">
-        <div class="glass p-10 rounded-3xl border-l-4 border-red-800 max-w-lg text-center">
-            <h2 class="orbitron text-4xl text-red-600 mb-4">DARK VERSE</h2>
-            <p class="rajdhani text-lg text-red-100 mb-6">Beware the shadows. The abyss stares back as you traverse the deep web.</p>
-            <a href="darkverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-red-600">View Events</a>
+    <section id="dark-verse" data-verse="horror" class="min-h-screen flex items-center justify-center relative z-10">
+        <div class="glass rounded-3xl border-l-4 border-red-700 max-w-lg text-center transition-all duration-500">
+            <h2 class="orbitron text-4xl md:text-5xl font-bold text-red-600 mb-4 drop-shadow-[0_0_15px_rgba(255,0,0,0.5)]">DARK VERSE</h2>
+            <p class="rajdhani text-lg md:text-xl text-red-100/80 leading-relaxed mb-8">Beware the shadows. The abyss stares back as you traverse the deep web.</p>
+            <a href="darkverse.html" class="orbitron glass-button px-8 py-3 rounded-full text-sm md:text-base font-bold uppercase tracking-widest text-red-500 border-red-600/50 hover:bg-red-600/20 hover:text-white hover:shadow-[0_0_20px_rgba(255,0,0,0.4)]">View Events</a>
         </div>
     </section>
 
-    <footer class="relative border-t border-cyan-400/30 py-12 px-6 text-center z-10">
-      <div class="glass rounded-2xl p-8 max-w-4xl mx-auto">
-        <h3 class="text-3xl font-bold orbitron glow mb-4">MAYUKH 2026</h3>
-        <p class="text-gray-400 mb-6">Celebrating Innovation Beyond Boundaries</p>
-        <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
+    <footer class="relative border-t border-gray-800 py-12 px-6 text-center z-10 bg-black/50 backdrop-blur-sm mt-10">
+      <div class="max-w-4xl mx-auto">
+        <h3 class="text-2xl md:text-3xl font-bold orbitron text-white mb-2">MAYUKH 2026</h3>
+        <p class="text-gray-400 mb-6 rajdhani text-lg">Celebrating Innovation Beyond Boundaries</p>
+        <p class="text-sm text-gray-600 font-mono">© 2026 Banasthali Vidyapith. All rights reserved.</p>
       </div>
     </footer>
 
@@ -331,7 +277,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    // --- MOBILE PANEL TOGGLE FUNCTION ---
+    // --- MOBILE PANEL TOGGLE FUNCTION (PRODUCTION READY) ---
     function togglePanel(side) {
       const leftPanel = document.getElementById('left-panel');
       const rightPanel = document.getElementById('right-panel');
@@ -339,29 +285,21 @@
       const rightArrow = document.querySelector('#right-toggle i');
 
       if (side === 'left') {
-        // Toggle left, close right
         leftPanel.classList.toggle('mobile-active');
-        rightPanel.classList.remove('mobile-active');
+        rightPanel.classList.remove('mobile-active'); 
         
-        // Flip arrows for visual feedback
-        leftArrow.classList.toggle('fa-chevron-right');
-        leftArrow.classList.toggle('fa-chevron-left');
-        rightArrow.classList.add('fa-chevron-left');
-        rightArrow.classList.remove('fa-chevron-right');
+        leftArrow.className = leftPanel.classList.contains('mobile-active') ? 'fa-solid fa-chevron-left' : 'fa-solid fa-chevron-right';
+        rightArrow.className = 'fa-solid fa-chevron-left'; 
       } else {
-        // Toggle right, close left
         rightPanel.classList.toggle('mobile-active');
-        leftPanel.classList.remove('mobile-active');
+        leftPanel.classList.remove('mobile-active'); 
 
-        // Flip arrows
-        rightArrow.classList.toggle('fa-chevron-left');
-        rightArrow.classList.toggle('fa-chevron-right');
-        leftArrow.classList.add('fa-chevron-right');
-        leftArrow.classList.remove('fa-chevron-left');
+        rightArrow.className = rightPanel.classList.contains('mobile-active') ? 'fa-solid fa-chevron-right' : 'fa-solid fa-chevron-left';
+        leftArrow.className = 'fa-solid fa-chevron-right'; 
       }
     }
 
-    // Close panels if clicking on main content (mobile only)
+    // Close panels when clicking outside
     document.addEventListener('click', (e) => {
       if (window.innerWidth <= 1024) {
         const leftP = document.getElementById('left-panel');
@@ -373,14 +311,13 @@
             !rightP.contains(e.target) && !rightT.contains(e.target)) {
           leftP.classList.remove('mobile-active');
           rightP.classList.remove('mobile-active');
-          // Reset arrows
           document.querySelector('#left-toggle i').className = "fa-solid fa-chevron-right";
           document.querySelector('#right-toggle i').className = "fa-solid fa-chevron-left";
         }
       }
     });
 
-    // See More Logic (Standardized)
+    // See More Logic
     const seeMoreBtn = document.getElementById('see-more-btn');
     if (seeMoreBtn) {
       seeMoreBtn.addEventListener('click', function() {
@@ -397,10 +334,13 @@
       });
     }
 
-    // --- THREE.JS BACKGROUND LOGIC ---
+    // --- THREE.JS BACKGROUND LOGIC (OPTIMIZED) ---
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true }); // antialias false for performance
+    
+    // Crucial for production: Limit pixel ratio so phones don't lag
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('canvas-container').appendChild(renderer.domElement);
 
@@ -417,7 +357,7 @@
 
     // Particles
     const particlesGeometry = new THREE.BufferGeometry();
-    const count = 9000;
+    const count = window.innerWidth < 768 ? 4000 : 8000; // Reduce particles on mobile
     const positions = new Float32Array(count * 3);
     for(let i=0; i<count*3; i++) positions[i] = (Math.random() - 0.5) * 18;
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -472,18 +412,20 @@
     // Verse configurations
     const verses = {
         'sci-fi':  { color: 0x3bc4ff, speed: 0.003, size: 0.06 },
-        'spy':     { color: 0x00ff00, speed: 0.015, size: 0.08 },
-        'carnival':{ color: 0xff00ff, speed: 0.025, size: 0.12 },
-        'mythic':  { color: 0xfb923c, speed: 0.0015, size: 0.045 },
-        'horror':  { color: 0xff0000, speed: 0.0008, size: 0.15 } 
+        'spy':     { color: 0x22c55e, speed: 0.015, size: 0.08 }, // Adjusted green
+        'carnival':{ color: 0xec4899, speed: 0.025, size: 0.12 }, // Adjusted pink
+        'mythic':  { color: 0xf97316, speed: 0.0015, size: 0.045 }, // Adjusted orange
+        'horror':  { color: 0xdc2626, speed: 0.0008, size: 0.15 }  // Adjusted red
     };
 
     let currentVerse = 'sci-fi';
 
     function updateVerse(v) {
-        if (!verses[v]) return;
+        if (!verses[v] || currentVerse === v) return;
         currentVerse = v;
         const col = new THREE.Color(verses[v].color);
+        
+        // Transition colors smoothly (Optional advanced step, simple jump here is fine for performance)
         material.color.set(col);
         material.size = verses[v].size;
         portalUniforms.uColor.value.set(col);
@@ -492,22 +434,33 @@
         const leftPanel = document.getElementById('left-panel');
         const rightPanel = document.getElementById('right-panel');
         const hexColor = `#${col.getHexString()}`;
+        
         if (leftPanel) leftPanel.style.borderColor = `${hexColor}80`;
         if (rightPanel) rightPanel.style.borderColor = `${hexColor}80`;
+        
+        // Update Mobile Toggles border color
+        document.getElementById('left-toggle').style.borderColor = `${hexColor}80`;
+        document.getElementById('right-toggle').style.borderColor = `${hexColor}80`;
+        document.getElementById('left-toggle').style.color = hexColor;
+        document.getElementById('right-toggle').style.color = hexColor;
     }
 
-    // Intersection observer for verse changes
+    // Intersection observer for verse changes (Optimized threshold)
     const observer = new IntersectionObserver((es) => {
         es.forEach(e => { 
-          if (e.isIntersecting) updateVerse(e.target.getAttribute('data-verse')); 
+          if (e.isIntersecting) {
+            updateVerse(e.target.getAttribute('data-verse')); 
+          }
         });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.5 }); // 0.5 means when 50% of the section is visible
+    
     document.querySelectorAll('section[data-verse]').forEach(s => observer.observe(s));
 
     // Animation loop
+    const clock = new THREE.Clock();
     function animate() {
         requestAnimationFrame(animate);
-        const t = performance.now() * 0.001;
+        const t = clock.getElapsedTime();
         portalUniforms.uTime.value = t;
         points.rotation.y += verses[currentVerse].speed;
         points.rotation.x += verses[currentVerse].speed * 0.4;
