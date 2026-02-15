@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mayukh Admin Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white h-screen flex overflow-hidden font-sans">
+
+    <script>
+        (function checkAuth() {
+            const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 Minutes (in milliseconds)
+            const lastLogin = localStorage.getItem("admin_login_time");
+            const currentTime = new Date().getTime();
+
+            // 1. Check if user is logged in AND session is valid
+            if (localStorage.getItem("admin_logged_in") === "true" && lastLogin) {
+                
+                // Check if time expired
+                if (currentTime - lastLogin > SESSION_TIMEOUT) {
+                    alert("⏳ Session Expired. Please login again.");
+                    logout();
+                    return;
+                } else {
+                    // User is active, EXTEND the session time
+                    localStorage.setItem("admin_login_time", currentTime);
+                    return; // Access Granted
+                }
+            }
+
+            // // 2. If not logged in, Ask for Password
+            // const pass = prompt("🔒 ADMIN ACCESS REQUIRED:\nEnter Password:");
+            // if (pass === "Mayukh@2026") {
+            //     localStorage.setItem("admin_logged_in", "true");
+            //     localStorage.setItem("admin_login_time", new Date().getTime()); // Set Start Time
+            // } else {
+            //     alert("❌ Access Denied!");
+            //     window.location.href = "index.html"; 
+            // }
+
+            function logout() {
+                localStorage.removeItem("admin_logged_in");
+                localStorage.removeItem("admin_login_time");
+                window.location.href = "index.html";
+            }
+        })();
+    </script>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-gray-900 relative">
+        <div class="absolute top-5 right-6 z-50 flex gap-3">
+        <a href="media.html" class="bg-gray-800 border border-gray-700 text-[10px] text-purple-400 px-4 py-2 rounded-full hover:bg-purple-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
+                <i class="fa-solid fa-images"></i> MEDIA
+            </a>
+            
+            <a href="alert.html" class="bg-gray-800 border border-gray-700 text-[10px] text-red-400 px-4 py-2 rounded-full hover:bg-red-600 hover:text-white transition-all shadow-lg flex items-center gap-2">
+                <i class="fa-solid fa-bell"></i> ALERTS
+            </a>
+
+            <a href="index.html" onclick="localStorage.removeItem('admin_logged_in'); localStorage.removeItem('admin_login_time');" class="bg-red-900/80 border border-red-700 text-[10px] text-white px-4 py-2 rounded-full hover:bg-red-600 transition-all shadow-lg flex items-center gap-2">
+                <i class="fa-solid fa-power-off"></i> LOGOUT
+            </a>
+    </div>
+
+    <div class="flex h-full w-full">
+        <div id="formContainer" class="w-1/3 bg-gray-800 p-6 overflow-y-auto border-r border-gray-700 shadow-xl z-10">
+            <h2 class="text-xl font-bold text-cyan-400 mb-6 flex justify-between">
+                <span id="formTitle">ADD NEW EVENT</span> 
+                <button onclick="resetForm()" class="text-xs bg-gray-700 px-2 py-1 rounded text-white">Reset</button>
+            </h2>
+            
+            <form id="eventForm" class="space-y-4">
+                <input type="hidden" name="id" id="eventId">
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-gray-700 p-3 rounded"><label class="text-[10px] text-cyan-300 font-bold block mb-1">POSTER</label><input type="file" name="poster" class="text-xs w-full text-gray-400"></div>
+                    <div class="bg-gray-700 p-3 rounded"><label class="text-[10px] text-purple-300 font-bold block mb-1">LOGO</label><input type="file" name="logo" class="text-xs w-full text-gray-400"></div>
+                </div>
+
+                <input type="text" name="title" placeholder="Event Title" required class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-white font-bold">
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <select name="category" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600"><option value="all-verses">All Verses</option><option value="spy-verse">Spy</option><option value="scifi-verse">SciFi</option><option value="carnival-verse">Carnival</option><option value="dark-verse">Dark</option><option value="mythic-verse">Mythic</option></select>
+                    <select name="eventType" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600"><option value="tech-event">Tech Event</option><option value="non-tech-event">Non-Tech</option><option value="tech-workshop">Tech Workshop</option><option value="non-tech-workshop">Non Tech Workshop</option><option value="fun-event">Fun Event</option></select>
+                </div>
+
+                <textarea name="description" placeholder="Description" rows="2" class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-sm"></textarea>
+                <textarea name="rounds" placeholder="Rounds" rows="2" class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-sm"></textarea>
+                
+                <textarea name="requirements" placeholder="Requirements (e.g. Laptop, Software)" rows="2" class="w-full bg-gray-700 p-3 rounded border border-gray-600 text-sm"></textarea>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <select name="day" class="bg-gray-700 p-2 rounded text-xs text-white">
+                    <option value="">Select Day</option>
+                    <option value="14 Feb">Prefest (14 Feb)</option>
+                    <option value="15 Feb">Prefest (15 Feb)</option>
+                    <option value="16 Feb">Prefest (16 Feb)</option>
+                    <option value="17 Feb">Prefest (17 Feb)</option>
+                    <option value="18 Feb">Prefest (18 Feb)</option>
+                    <option value="19 Feb">Prefest (19 Feb)</option>
+                    <option value="20 Feb">Prefest (20 Feb)</option>
+                    <option value="Day 1">Day 1</option>
+                    <option value="Day 2">Day 2</option>
+                    <option value="Day 3">Day 3</option>
+                </select>
+                    <input type="date" name="date" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600 outline-none">
+                    <input type="text" name="venue" placeholder="Venue" class="bg-gray-700 p-2 rounded text-xs text-white border border-gray-600">
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <input type="text" name="time" placeholder="Time" class="bg-gray-700 p-2 rounded text-xs">
+                    <input type="text" name="duration" placeholder="Duration" class="bg-gray-700 p-2 rounded text-xs">
+                    <input type="text" name="teamSize" placeholder="Team Size" class="bg-gray-700 p-2 rounded text-xs">
+                </div>
+                
+                <input type="text" name="registrationLink" placeholder="Form Link" class="w-full bg-gray-700 p-2 rounded text-xs border border-gray-600">
+                <div id="globalStatus" class="text-center text-xs font-mono"></div>
+                <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded mt-2 transition">SAVE EVENT</button>
+            </form>
+        </div>
+
+        <div class="w-2/3 p-8 overflow-y-auto bg-black">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold text-white">Events Database</h1>
+                <input type="text" id="searchInput" onkeyup="filterEvents()" placeholder="Search..." class="bg-gray-800 text-white px-4 py-2 rounded-full border border-gray-700 outline-none w-64">
+            </div>
+            <div id="eventsList" class="flex flex-col gap-6 pb-20"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://mayukh-bv-1.onrender.com';
+        let allEventsData = [];
+
+        async function loadEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/api/events`);
+                if(!res.ok) throw new Error("Failed to load");
+                const data = await res.json();
+                allEventsData = data.events || data;
+                renderEvents(allEventsData);
+            } catch(e) {
+                console.error(e);
+                document.getElementById('eventsList').innerHTML = `<p class="text-red-500">Server Error: Check console</p>`;
+            }
+        }
+
+        function renderEvents(events) {
+    const container = document.getElementById('eventsList');
+    
+    // Yeh raha placeholder (template) wala code
+    container.innerHTML = events.map(e => `
+        <div class="bg-gray-800/40 rounded-xl border border-gray-700 p-4 flex gap-5 items-center relative group hover:border-cyan-500/50 transition-all">
+            
+            <div class="w-16 h-16 shrink-0 bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
+                <img src="${e.posterLink || 'https://via.placeholder.com/150'}" class="w-full h-full object-cover">
+            </div>
+
+            <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-cyan-400 text-lg leading-tight truncate">${e.title}</h3>
+                <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">
+                    <span class="text-purple-400">${e.category}</span> • ${e.eventType}
+                </p>
+                <p class="text-xs text-gray-300 line-clamp-1 mt-1">${e.description || 'No Description'}</p>
+            </div>
+
+            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                <button onclick="editEvent('${e._id}')" class="bg-yellow-500/10 text-yellow-500 p-2 rounded-md hover:bg-yellow-500 hover:text-black">
+                    <i class="fa-solid fa-pen text-xs"></i>
+                </button>
+                <button onclick="deleteEvent('${e._id}')" class="bg-red-500/10 text-red-500 p-2 rounded-md hover:bg-red-500 hover:text-white">
+                    <i class="fa-solid fa-trash text-xs"></i>
+                </button>
+            </div>
+
+        </div>
+    `).join('');
+}
+
+        function filterEvents() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            renderEvents(allEventsData.filter(e => e.title.toLowerCase().includes(query)));
+        }
+
+        function resetForm() {
+            document.getElementById('eventForm').reset();
+            document.getElementById('eventId').value = '';
+            document.getElementById('formTitle').innerText = "ADD NEW EVENT";
+            const btn = document.querySelector('#eventForm button[type="submit"]');
+            btn.innerText = "SAVE EVENT";
+            btn.className = "w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded mt-2 transition";
+        }
+
+        function editEvent(id) {
+            const event = allEventsData.find(e => e._id === id);
+            if(!event) return;
+            
+            // Fill Fields
+            document.getElementById('eventId').value = event._id;
+            const fields = ['title','category','eventType','description','rounds','requirements','day','date','venue','time','duration','teamSize','prizePool','registrationFee','registrationLink'];
+            fields.forEach(f => {
+                if(document.querySelector(`[name="${f}"]`)) document.querySelector(`[name="${f}"]`).value = event[f] || '';
+            });
+
+            // Update UI
+            document.getElementById('formTitle').innerText = "EDIT: " + event.title;
+            const btn = document.querySelector('#eventForm button[type="submit"]');
+            btn.innerText = "UPDATE EVENT";
+            btn.className = "w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-3 rounded mt-2 transition";
+        }
+
+        // --- SUBMIT HANDLER ---
+        document.getElementById('eventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const status = document.getElementById('globalStatus');
+            const id = document.getElementById('eventId').value; // Get the hidden ID
+            const formData = new FormData(e.target);
+
+            btn.disabled = true;
+            status.innerText = id ? "Updating..." : "Saving...";
+            status.className = "text-center text-xs text-yellow-400 font-mono animate-pulse";
+
+            try {
+                let url = `${API_BASE}/api/events`;
+                let method = 'POST';
+
+                // Agar ID hai, toh hum PUT request bhejenge
+                if (id) {
+                    url = `${API_BASE}/api/events/${id}`;
+                    method = 'PUT';
+                }
+
+                const res = await fetch(url, { method: method, body: formData });
+                
+                if (res.ok) {
+                    status.innerText = "Success!";
+                    status.className = "text-center text-xs text-green-400 font-mono";
+                    resetForm();
+                    loadEvents();
+                } else {
+                    const err = await res.json();
+                    alert("Error: " + err.message);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Server connection failed");
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // --- DELETE HANDLER ---
+        async function deleteEvent(id) {
+            if(!confirm("Delete this event?")) return;
+            await fetch(`${API_BASE}/api/events/${id}`, { method: 'DELETE' });
+            loadEvents();
+        }
+
+        loadEvents();
+    </script>
+</body>
+</html>
