@@ -13,6 +13,7 @@
     .carnival-glow { text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; }
     .glass { background: rgba(20, 0, 20, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 0, 255, 0.15); box-shadow: 0 0 20px rgba(255, 0, 255, 0.15); }
     .hover-glow:hover { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; }
+    
     .carnival-card { 
         background: rgba(20, 0, 20, 0.8); 
         border: 2px solid rgba(0, 255, 255, 0.2); 
@@ -23,319 +24,103 @@
         height: 100%;
     }
     .carnival-card:hover { border-color: #ff00ff; transform: translateY(-10px) rotate(1deg); box-shadow: 0 10px 30px rgba(255, 0, 255, 0.3); }
+    
     .btn-carnival { background: linear-gradient(45deg, #ff00ff, #00ffff); color: white; text-transform: uppercase; font-weight: 900; letter-spacing: 2px; transition: all 0.3s ease; border-radius: 10px; }
     .btn-carnival:hover { box-shadow: 0 0 20px #ff00ff; transform: scale(1.05); }
     #carnival-particles { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
     ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #0a000a; } ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #ff00ff, #00ffff); border-radius: 10px; }
 
-    /* MOBILE RESPONSIVE FIXES */
-    @media (max-width: 768px) {
-      .carnival-glow {
-        text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff;
-      }
-      
-      /* Prevent text overflow */
-      .bungee {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-      }
-
-      .carnival-card h3 {
-        font-size: 1rem !important;
-        line-height: 1.2;
-        word-wrap: break-word;
-      }
-    }
-
-    /* Modal Styles */
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.95);
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-        animation: fadeIn 0.3s ease;
-    }
-
-    .modal-overlay.active {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes scaleIn {
-        from { 
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        to { 
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    .poster-clickable {
-        cursor: pointer;
-        transition: transform 0.3s ease;
+    /* ==========================================
+       PRODUCTION FIX: DUAL-LAYER POSTER
+       ========================================== */
+    .carnival-poster-box {
         position: relative;
+        width: 100%;
+        height: 220px; /* Standard height */
+        background: #000;
+        overflow: hidden;
+        border-radius: 0.75rem;
+        border: 2px dashed rgba(255, 0, 255, 0.3);
+        cursor: pointer;
     }
-
-    .poster-clickable:hover {
+    .carnival-poster-box::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: blur(25px) brightness(0.3);
+        z-index: 1;
+        background-image: inherit; /* Copies inline background */
+    }
+    .carnival-poster-box img.main-poster {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Prevents image cutting */
+        display: block;
+        transition: transform 0.5s ease;
+    }
+    .carnival-card:hover .main-poster {
         transform: scale(1.05);
     }
 
-    .poster-zoom-hint {
-        position: absolute;
-        bottom: 0.5rem;
-        right: 0.5rem;
-        background: linear-gradient(45deg, #ff00ff, #00ffff);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.65rem;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-        font-weight: 700;
-        border-radius: 5px;
-    }
-
-    .poster-clickable:hover .poster-zoom-hint {
-        opacity: 1;
-    }
-
-    /* Mobile: Always show zoom hint */
+    /* MOBILE RESPONSIVE FIXES */
     @media (max-width: 768px) {
-      .poster-zoom-hint {
-        opacity: 0.8;
-        font-size: 0.55rem;
-        padding: 0.2rem 0.4rem;
-      }
+      .carnival-glow { text-shadow: 0 0 5px #ff00ff, 0 0 10px #00ffff; }
+      .bungee { word-wrap: break-word; overflow-wrap: break-word; hyphens: auto; }
+      .carnival-card h3 { font-size: 1rem !important; line-height: 1.2; word-wrap: break-word; }
     }
+
+    /* Modal Styles */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 1000; backdrop-filter: blur(10px); animation: fadeIn 0.3s ease; }
+    .modal-overlay.active { display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+    .poster-clickable { cursor: pointer; transition: transform 0.3s ease; position: relative; }
+    .poster-zoom-hint { position: absolute; bottom: 0.5rem; right: 0.5rem; background: linear-gradient(45deg, #ff00ff, #00ffff); color: white; padding: 0.25rem 0.5rem; font-size: 0.65rem; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; font-weight: 700; border-radius: 5px; z-index: 20; }
+    .poster-clickable:hover .poster-zoom-hint { opacity: 1; }
+    @media (max-width: 768px) { .poster-zoom-hint { opacity: 0.8; font-size: 0.55rem; padding: 0.2rem 0.4rem; } }
 
     /* Centered Detail Panel */
-    .detail-panel {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.95);
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-        padding: 1rem;
-        overflow-y: auto;
-    }
+    .detail-panel { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 1000; backdrop-filter: blur(10px); padding: 1rem; overflow-y: auto; }
+    .detail-panel.active { display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
+    @media (max-width: 768px) { .detail-panel { padding: 0.5rem; align-items: flex-start; } .detail-panel.active { padding-top: 3rem; } }
 
-    .detail-panel.active {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: fadeIn 0.3s ease;
-    }
+    .panel-content { background: linear-gradient(135deg, rgba(20, 0, 20, 0.95), rgba(10, 0, 30, 0.98)); border: 2px solid #ff00ff; border-radius: 20px; max-width: 1400px; width: 100%; max-height: 90vh; overflow-y: auto; animation: scaleIn 0.4s ease; box-shadow: 0 0 50px rgba(255, 0, 255, 0.5); position: relative; }
+    @media (max-width: 768px) { .panel-content { border-radius: 15px; max-height: 95vh; margin: 0; } }
 
-    /* Mobile adjustments for detail panel */
-    @media (max-width: 768px) {
-      .detail-panel {
-        padding: 0.5rem;
-        align-items: flex-start;
-      }
-      
-      .detail-panel.active {
-        padding-top: 3rem;
-      }
-    }
+    .close-btn { position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; border: 2px solid #ff00ff; background: rgba(255, 0, 255, 0.2); color: #ff00ff; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; z-index: 10; border-radius: 50%; }
+    @media (max-width: 768px) { .close-btn { top: 0.75rem; right: 0.75rem; width: 36px; height: 36px; } }
+    .close-btn:hover { background: linear-gradient(45deg, #ff00ff, #00ffff); color: white; transform: rotate(90deg); }
 
-    .panel-content {
-        background: linear-gradient(135deg, rgba(20, 0, 20, 0.95), rgba(10, 0, 30, 0.98));
-        border: 2px solid #ff00ff;
-        border-radius: 20px;
-        max-width: 1400px;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        animation: scaleIn 0.4s ease;
-        box-shadow: 0 0 50px rgba(255, 0, 255, 0.5);
-        position: relative;
-    }
+    .btn-see-more { background: transparent; border: 2px solid #00ffff; color: #00ffff; text-transform: uppercase; font-weight: 900; letter-spacing: 2px; transition: all 0.3s ease; border-radius: 10px; cursor: pointer; padding: 12px 20px; text-align: center; }
+    .btn-see-more:hover { background: linear-gradient(45deg, #00ffff, #ff00ff); color: white; border-color: #ff00ff; box-shadow: 0 0 20px #00ffff; }
+    @media (max-width: 768px) { .btn-see-more, .btn-carnival { padding: 10px 12px; font-size: 0.65rem; letter-spacing: 1px; } }
 
-    /* Mobile panel content */
-    @media (max-width: 768px) {
-      .panel-content {
-        border-radius: 15px;
-        max-height: 95vh;
-        margin: 0;
-      }
-    }
+    .detail-section { background: rgba(255, 0, 255, 0.05); border: 1px solid rgba(255, 0, 255, 0.2); border-radius: 15px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .detail-section { padding: 1rem; margin-bottom: 1rem; } }
+    .detail-section h3 { color: #ff00ff; font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    @media (max-width: 768px) { .detail-section h3 { font-size: 0.9rem; margin-bottom: 0.75rem; } }
 
-    .close-btn {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        width: 40px;
-        height: 40px;
-        border: 2px solid #ff00ff;
-        background: rgba(255, 0, 255, 0.2);
-        color: #ff00ff;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10;
-        border-radius: 50%;
-    }
+    .round-item { background: rgba(0, 255, 255, 0.05); border-left: 4px solid #00ffff; padding: 1rem; margin-bottom: 0.75rem; border-radius: 5px; }
+    .round-title { color: #00ffff; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+    .round-desc { color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.6; }
 
-    @media (max-width: 768px) {
-      .close-btn {
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 36px;
-        height: 36px;
-      }
-    }
+    .info-label { font-family: 'Orbitron', sans-serif; font-size: 0.65rem; letter-spacing: 0.1em; opacity: 0.6; color: #00ffff; }
+    @media (max-width: 768px) { .info-label { font-size: 0.55rem; } }
+    .info-value { font-size: 1rem; font-weight: 700; color: white; }
+    @media (max-width: 768px) { .info-value { font-size: 0.85rem; } }
 
-    .close-btn:hover {
-        background: linear-gradient(45deg, #ff00ff, #00ffff);
-        color: white;
-        transform: rotate(90deg);
-    }
-
-    .btn-see-more {
-        background: transparent;
-        border: 2px solid #00ffff;
-        color: #00ffff;
-        text-transform: uppercase;
-        font-weight: 900;
-        letter-spacing: 2px;
-        transition: all 0.3s ease;
-        border-radius: 10px;
-        cursor: pointer;
-        padding: 12px 20px;
-        text-align: center;
-    }
-
-    .btn-see-more:hover {
-        background: linear-gradient(45deg, #00ffff, #ff00ff);
-        color: white;
-        border-color: #ff00ff;
-        box-shadow: 0 0 20px #00ffff;
-    }
-
-    /* Mobile button adjustments */
-    @media (max-width: 768px) {
-      .btn-see-more, .btn-carnival {
-        padding: 10px 12px;
-        font-size: 0.65rem;
-        letter-spacing: 1px;
-      }
-    }
-
-    .detail-section {
-        background: rgba(255, 0, 255, 0.05);
-        border: 1px solid rgba(255, 0, 255, 0.2);
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    @media (max-width: 768px) {
-      .detail-section {
-        padding: 1rem;
-        margin-bottom: 1rem;
-      }
-    }
-
-    .detail-section h3 {
-        color: #ff00ff;
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-    }
-
-    @media (max-width: 768px) {
-      .detail-section h3 {
-        font-size: 0.9rem;
-        margin-bottom: 0.75rem;
-      }
-    }
-
-    .round-item {
-        background: rgba(0, 255, 255, 0.05);
-        border-left: 4px solid #00ffff;
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-        border-radius: 5px;
-    }
-
-    .round-title {
-        color: #00ffff;
-        font-weight: 700;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .round-desc {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 0.9rem;
-        line-height: 1.6;
-    }
-
-    .info-label {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.65rem;
-        letter-spacing: 0.1em;
-        opacity: 0.6;
-        color: #00ffff;
-    }
-
-    @media (max-width: 768px) {
-      .info-label {
-        font-size: 0.55rem;
-      }
-    }
-
-    .info-value {
-        font-size: 1rem;
-        font-weight: 700;
-        color: white;
-    }
-
-    @media (max-width: 768px) {
-      .info-value {
-        font-size: 0.85rem;
-      }
-    }
-
-    .panel-content::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    .panel-content::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
-    }
-
-    .panel-content::-webkit-scrollbar-thumb {
-        background: linear-gradient(to bottom, #ff00ff, #00ffff);
-        border-radius: 10px;
-    }
+    .panel-content::-webkit-scrollbar { width: 10px; }
+    .panel-content::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); border-radius: 10px; }
+    .panel-content::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #ff00ff, #00ffff); border-radius: 10px; }
 
     /* Back button mobile fix */
     @media (max-width: 768px) {
-      .back-button {
-        top: 1rem !important;
-        left: 1rem !important;
-        padding: 0.5rem 1rem !important;
-        font-size: 0.65rem !important;
-      }
+      .back-button { top: 1rem !important; left: 1rem !important; padding: 0.5rem 1rem !important; font-size: 0.65rem !important; }
     }
   </style>
 </head>
@@ -361,7 +146,6 @@
     </div>
   </main>
 
-  <!-- Full-Size Poster Modal -->
   <div id="poster-modal" class="modal-overlay">
     <button class="close-btn" onclick="closePosterModal()">
       <i class="fas fa-times"></i>
@@ -369,7 +153,6 @@
     <img id="modal-poster-img" src="" class="max-w-[90vw] max-h-[90vh] object-contain border-4 border-pink-500 shadow-2xl rounded-lg" style="box-shadow: 0 0 50px rgba(255, 0, 255, 0.5);">
   </div>
 
-  <!-- Centered Detail Panel -->
   <div id="detail-panel" class="detail-panel">
     <div class="panel-content p-4 md:p-8">
       <button class="close-btn" onclick="closeDetailPanel()">
@@ -377,15 +160,12 @@
       </button>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mt-12 md:mt-0">
-        <!-- Left: Poster -->
         <div class="flex items-start justify-center">
-          <img id="panel-poster" src="" class="w-full max-w-md border-4 border-pink-500 shadow-2xl rounded-lg lg:sticky lg:top-4" style="box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);">
+          <img id="panel-poster" src="" class="w-full max-w-md border-4 border-pink-500 shadow-2xl rounded-lg lg:sticky lg:top-4" style="box-shadow: 0 0 30px rgba(255, 0, 255, 0.4); object-fit: contain; max-height: 70vh;">
         </div>
 
-        <!-- Right: Details -->
         <div id="panel-details" class="space-y-4 md:space-y-6">
-          <!-- Content will be populated dynamically -->
-        </div>
+          </div>
       </div>
     </div>
   </div>
@@ -429,17 +209,12 @@
     }
 
     function openDetailPanel(eventId) {
-        console.log('Opening panel for:', eventId);
-        
         const event = allEvents.find(e => {
             const id = e._id || e.id || e.title.replace(/\s+/g, '-');
             return id === eventId;
         });
         
-        if (!event) {
-            console.error('Event not found:', eventId);
-            return;
-        }
+        if (!event) return;
 
         document.getElementById('panel-poster').src = event.posterLink;
         
@@ -590,10 +365,15 @@
 
         return `
           <div class="carnival-card p-4 md:p-5" data-event-id="${eventId}">
-            <div class="w-full h-48 md:h-56 bg-pink-900/20 border-2 border-dashed border-pink-500/30 rounded-xl mb-4 md:mb-6 overflow-hidden relative group poster-clickable flex-shrink-0" onclick="event.stopPropagation(); openPosterModal('${event.posterLink}')">
-              <img src="${event.posterLink}" alt="${event.title || 'Event'}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-              <span class="poster-zoom-hint bungee">ZOOM</span>
+            
+            <div class="carnival-poster-box mb-4 md:mb-6 group poster-clickable" style="background-image: url('${event.posterLink}')" onclick="event.stopPropagation(); openPosterModal('${event.posterLink}')">
+                <img src="${event.posterLink}" class="main-poster" alt="${event.title}">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 pointer-events-none rounded-[0.75rem]">
+                    <i class="fas fa-search-plus text-3xl text-white drop-shadow-lg"></i>
+                </div>
+                <span class="poster-zoom-hint bungee z-20">ZOOM</span>
             </div>
+
             <div class="flex-grow">
               <div class="flex justify-between items-start gap-2 mb-3">
                 <h3 class="bungee text-base md:text-xl text-pink-400 uppercase leading-tight break-words flex-1 min-w-0">${event.title || 'Event'}</h3>

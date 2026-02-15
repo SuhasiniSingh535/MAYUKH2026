@@ -131,6 +131,7 @@
       max-width: 1280px;
       margin: 0 auto;
       padding: clamp(5rem, 12vw, 8rem) clamp(1rem, 5vw, 3rem) var(--sp-xl);
+      overflow-x: hidden;
     }
 
     /* Stack on mobile, side-by-side on desktop */
@@ -160,6 +161,8 @@
       width: min(100%, calc(var(--ring2) + 20px));
       /* fixed height = ring diameter so rings don't overflow layout */
       height: calc(var(--ring2) + 20px);
+      max-width: 100%;
+      overflow: hidden;
     }
 
     @media (min-width: 1024px) {
@@ -167,6 +170,8 @@
         width: calc(var(--ring2) + 40px);
         height: calc(var(--ring2) + 40px);
         margin-top: -3rem; /* subtle pull-up on desktop */
+        max-width: calc(100vw - 3rem);
+        overflow: hidden;
       }
     }
 
