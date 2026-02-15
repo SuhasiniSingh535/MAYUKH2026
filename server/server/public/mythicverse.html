@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MythicVerse | Mayukh 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #0d0a05; color: #ffd384; font-family: 'Rajdhani', sans-serif; background-image: radial-gradient(circle at center, #241a08 0%, #0d0a05 100%); }
+    .cinzel { font-family: 'Cinzel', serif; } .orbitron { font-family: 'Orbitron', sans-serif; }
+    .mythic-glow { text-shadow: 0 0 10px #ff9d00, 0 0 20px #ff6a00; }
+    .artifact-card { 
+        background: rgba(40, 30, 10, 0.4); 
+        backdrop-filter: blur(8px); 
+        border: 1px solid rgba(255, 157, 0, 0.3); 
+        position: relative; 
+        overflow: hidden; 
+        transition: all 0.5s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .artifact-card:hover { border-color: #ff9d00; transform: scale(1.03); box-shadow: 0 0 30px rgba(255, 157, 0, 0.2); }
+    .btn-mythic { background: linear-gradient(45deg, #ff9d00, #ff4500); color: black; transition: all 0.3s ease; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); }
+    .btn-mythic:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 69, 0, 0.4); }
+    #mythic-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .glass { background: rgba(20, 15, 5, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 157, 0, 0.15); }
+
+    /* Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+        from { 
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to { 
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .poster-clickable {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        position: relative;
+    }
+
+    .poster-zoom-hint {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        background: linear-gradient(45deg, #ff9d00, #ff4500);
+        color: black;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.65rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        font-weight: 700;
+        clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+    }
+
+    .poster-clickable:hover .poster-zoom-hint {
+        opacity: 1;
+    }
+
+    /* Centered Detail Panel */
+    .detail-panel {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        overflow-y: auto;
+    }
+
+    .detail-panel.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .panel-content {
+        background: linear-gradient(135deg, rgba(40, 30, 10, 0.95), rgba(20, 15, 5, 0.98));
+        border: 2px solid #ff9d00;
+        border-radius: 15px;
+        max-width: 1400px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: scaleIn 0.4s ease;
+        box-shadow: 0 0 50px rgba(255, 157, 0, 0.5);
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(45deg, #ff9d00, #ff4500);
+        color: black;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+        font-weight: 900;
+    }
+
+    .close-btn:hover {
+        filter: brightness(1.3);
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    .btn-see-more {
+        background: transparent;
+        border: 2px solid #ff9d00;
+        color: #ff9d00;
+        text-transform: uppercase;
+        font-weight: 900;
+        letter-spacing: 2px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        padding: 12px 20px;
+        text-align: center;
+        clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+    }
+
+    .btn-see-more:hover {
+        background: linear-gradient(45deg, #ff9d00, #ff4500);
+        color: black;
+        border-color: #ff4500;
+        box-shadow: 0 0 20px rgba(255, 157, 0, 0.5);
+    }
+
+    .detail-section {
+        background: rgba(255, 157, 0, 0.05);
+        border: 1px solid rgba(255, 157, 0, 0.2);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .detail-section h3 {
+        color: #ff9d00;
+        font-size: 1.3rem;
+        font-weight: 900;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .round-item {
+        background: rgba(40, 30, 10, 0.6);
+        border-left: 4px solid #ff9d00;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        border-radius: 5px;
+    }
+
+    .round-title {
+        color: #ff9d00;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .round-desc {
+        color: rgba(255, 211, 132, 0.8);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .info-label {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        opacity: 0.6;
+        color: #ff9d00;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #ffd384;
+    }
+
+    .panel-content::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .panel-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+
+    .panel-content::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #ff9d00, #ff4500);
+        border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  <a href="theme2.html#mythic-verse" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-orange-900/40 flex items-center gap-2 hover:border-orange-600 hover:text-orange-500 transition-all group">
+      <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
+      <span class="text-xs tracking-widest">THEME</span>
+  </a>
+  <canvas id="mythic-particles"></canvas>
+
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
+    <div class="text-center mb-16">
+      <p class="text-xs orbitron tracking-[0.6em] mb-2 opacity-60 text-orange-400">WHERE ANCIENT WISDOM MEETS FUTURE CODE</p>
+      <h1 class="cinzel text-6xl md:text-8xl font-black mythic-glow mb-4">MYTHICVERSE</h1>
+      <div class="h-1 w-64 bg-gradient-to-r from-transparent via-orange-500 to-transparent mx-auto"></div>
+      <p class="mt-6 text-xl max-w-3xl text-orange-200/70 font-medium italic">"Bridges ancient algorithms with modern tech to shape the civilization of tomorrow."</p>
+    </div>
+
+    <div id="mythic-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl w-full px-6">
+        <p class="col-span-full text-center text-orange-500 animate-pulse">Unearthing Artifacts...</p>
+    </div>
+  </main>
+
+  <!-- Full-Size Poster Modal -->
+  <div id="poster-modal" class="modal-overlay">
+    <button class="close-btn" onclick="closePosterModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <img id="modal-poster-img" src="" class="max-w-[90vw] max-h-[90vh] object-contain border-4 border-orange-500 shadow-2xl rounded-lg" style="box-shadow: 0 0 50px rgba(255, 157, 0, 0.5);">
+  </div>
+
+  <!-- Centered Detail Panel -->
+  <div id="detail-panel" class="detail-panel">
+    <div class="panel-content p-8">
+      <button class="close-btn" onclick="closeDetailPanel()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left: Poster -->
+        <div class="flex items-start justify-center">
+          <img id="panel-poster" src="" class="w-full max-w-md border-4 border-orange-500 shadow-2xl rounded-lg sticky top-4" style="box-shadow: 0 0 30px rgba(255, 157, 0, 0.4);">
+        </div>
+
+        <!-- Right: Details -->
+        <div id="panel-details" class="space-y-6">
+          <!-- Content will be populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="api-config.js"></script>
+  <script>
+    // --- PARTICLES ---
+    const canvas = document.getElementById('mythic-particles'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let particles = [];
+    class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.1; this.speedX = Math.random() * 1 - 0.5; this.speedY = Math.random() * 1 - 0.5; this.color = `rgba(255, ${150 + Math.random() * 100}, 0, ${Math.random() * 0.5})`; } update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width; if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height; } draw() { ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
+    function init() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
+    function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+    init(); animate(); window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+    // --- DYNAMIC DATA ---
+    const CURRENT_VERSE = 'mythic-verse';
+    let allEvents = [];
+
+    function openPosterModal(posterUrl) {
+        document.getElementById('modal-poster-img').src = posterUrl;
+        document.getElementById('poster-modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePosterModal() {
+        document.getElementById('poster-modal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function openDetailPanel(eventId) {
+        console.log('Opening panel for:', eventId);
+        
+        const event = allEvents.find(e => {
+            const id = e._id || e.id || e.title.replace(/\s+/g, '-');
+            return id === eventId;
+        });
+        
+        if (!event) {
+            console.error('Event not found:', eventId);
+            return;
+        }
+
+        document.getElementById('panel-poster').src = event.posterLink;
+        
+        const detailsContainer = document.getElementById('panel-details');
+        detailsContainer.innerHTML = `
+            <div class="mb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-16 h-16 object-contain border-2 border-orange-500/30 p-2 rounded-lg bg-orange-950/40">` : ''}
+                    <div>
+                        <h2 class="cinzel text-3xl font-black text-orange-300 uppercase tracking-tight">${event.title || 'Quest'}</h2>
+                        <p class="text-orange-400 text-sm orbitron tracking-widest mt-1">${event.eventType ? event.eventType.toUpperCase().replace(/-/g, ' ') : 'QUEST'}</p>
+                    </div>
+                </div>
+                ${event.description ? `<p class="text-orange-200/80 text-base leading-relaxed rajdhani">${event.description}</p>` : ''}
+            </div>
+
+            <div class="detail-section">
+                <h3 class="cinzel">Quest Information</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    ${event.day ? `
+                    <div>
+                        <span class="info-label">DATE</span>
+                        <p class="info-value text-lg">${event.day}</p>
+                    </div>
+                    ` : ''}
+                    ${event.time ? `
+                    <div>
+                        <span class="info-label">TIME</span>
+                        <p class="info-value text-lg">${event.time}</p>
+                    </div>
+                    ` : ''}
+                    ${event.venue ? `
+                    <div class="col-span-2">
+                        <span class="info-label">VENUE</span>
+                        <p class="info-value text-lg">${event.venue}</p>
+                    </div>
+                    ` : ''}
+                    ${event.duration ? `
+                    <div>
+                        <span class="info-label">DURATION</span>
+                        <p class="info-value text-lg">${event.duration}</p>
+                    </div>
+                    ` : ''}
+                    ${event.teamSize ? `
+                    <div>
+                        <span class="info-label">TEAM SIZE</span>
+                        <p class="info-value text-lg">${event.teamSize}</p>
+                    </div>
+                    ` : ''}
+                    ${event.registrationFee ? `
+                    <div>
+                        <span class="info-label">ENTRY FEE</span>
+                        <p class="info-value text-lg">${event.registrationFee}</p>
+                    </div>
+                    ` : ''}
+                    ${event.prizePool ? `
+                    <div class="col-span-2">
+                        <span class="info-label">TREASURE POOL</span>
+                        <p class="info-value text-lg">${event.prizePool}</p>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+
+            ${event.rounds && event.rounds.trim() ? `
+            <div class="detail-section">
+                <h3 class="cinzel">Quest Phases</h3>
+                <div class="text-orange-200/80 leading-relaxed whitespace-pre-line">
+                    ${event.rounds}
+                </div>
+            </div>
+            ` : ''}
+
+            ${event.requirements && event.requirements.trim() ? `
+            <div class="detail-section">
+                <h3 class="cinzel">Requirements</h3>
+                <div class="text-orange-200/80 leading-relaxed whitespace-pre-line">
+                    ${event.requirements}
+                </div>
+            </div>
+            ` : ''}
+
+            ${event.prizes && event.prizes.length > 0 ? `
+            <div class="detail-section">
+                <h3 class="cinzel">Treasures</h3>
+                <div class="space-y-2">
+                    ${event.prizes.map(prize => `<div class="text-orange-200/80 flex items-center gap-2"><i class="fas fa-trophy text-yellow-400"></i><span>${prize}</span></div>`).join('')}
+                </div>
+            </div>
+            ` : ''}
+
+            ${event.coordinators && event.coordinators.length > 0 ? `
+            <div class="detail-section">
+                <h3 class="cinzel">Quest Masters</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    ${event.coordinators.map(coord => `
+                        <div class="flex items-center gap-3 text-orange-200/80">
+                            <i class="fas fa-user-circle text-2xl text-orange-400"></i>
+                            <div>
+                                <div class="font-semibold">${coord.name}</div>
+                                ${coord.phone ? `<div class="text-sm opacity-70">${coord.phone}</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+
+            <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic w-full py-3 orbitron text-sm font-black tracking-widest mt-8 block text-center">
+                COMMENCE RITUAL
+            </a>
+        `;
+
+        document.getElementById('detail-panel').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailPanel() {
+        document.getElementById('detail-panel').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close modals on overlay click
+    document.getElementById('poster-modal').addEventListener('click', function(e) {
+        if (e.target === this) closePosterModal();
+    });
+
+    document.getElementById('detail-panel').addEventListener('click', function(e) {
+        if (e.target === this) closeDetailPanel();
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closePosterModal();
+            closeDetailPanel();
+        }
+    });
+
+    function createCardHTML(event) {
+        let label = 'QUEST';
+        if(event.eventType && event.eventType.includes('workshop')) label = 'WORKSHOP';
+        else if(event.eventType && event.eventType.includes('non-tech')) label = 'NON-TECH';
+
+        const eventId = event._id || event.id || event.title.replace(/\s+/g, '-');
+
+        return `
+          <div class="artifact-card rounded-xl p-4" data-event-id="${eventId}">
+            <div class="w-full h-56 bg-orange-900/30 border border-orange-500/20 rounded-lg mb-4 overflow-hidden relative group poster-clickable flex-shrink-0" onclick="event.stopPropagation(); openPosterModal('${event.posterLink}')">
+              <img src="${event.posterLink}" class="w-full h-full object-cover mix-blend-overlay transition-transform duration-500 group-hover:scale-110 group-hover:mix-blend-normal">
+              <span class="poster-zoom-hint orbitron">ENLARGE</span>
+            </div>
+            <div class="px-2 flex-grow">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="cinzel text-2xl font-bold text-orange-300 leading-tight">${event.title || 'Quest'}</h3>
+                <span class="text-[10px] orbitron border border-orange-500/50 px-2 py-0.5 text-orange-400">${label}</span>
+              </div>
+              <p class="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
+                ${event.description || 'Ancient secrets await discovery...'}
+              </p>
+              ${event.day && event.time ? `
+              <div class="text-xs text-orange-500 mb-4 flex gap-3">
+                 <span><i class="fa-solid fa-calendar"></i> ${event.day}</span>
+                 <span><i class="fa-solid fa-clock"></i> ${event.time}</span>
+              </div>
+              ` : ''}
+            </div>
+            <div class="flex gap-3 flex-shrink-0">
+                <button onclick="event.stopPropagation(); openDetailPanel('${eventId}')" class="btn-see-more orbitron text-xs flex-1">
+                    SEE MORE
+                </button>
+                <a href="${event.registrationLink || '#'}" target="_blank" class="btn-mythic flex-1 py-3 orbitron text-xs font-black tracking-widest text-center">
+                    JOIN
+                </a>
+            </div>
+          </div>
+        `;
+    }
+
+    async function loadVerseData() {
+        try {
+            const res = await fetch(API_CONFIG.eventsUrl);
+            const data = await res.json();
+            const container = document.getElementById('mythic-container');
+            
+            if(!data.events) return;
+
+            let events = data.events.filter(e => e.category === CURRENT_VERSE);
+            allEvents = events;
+            
+            // Sort: Tech -> Non-Tech -> Workshops
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4 };
+            events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
+
+            if(events.length > 0) {
+                container.innerHTML = events.map(createCardHTML).join('');
+            } else {
+                container.innerHTML = `<p class="col-span-full text-center text-orange-500/50 cinzel">Prophecy awaits data...</p>`;
+            }
+        } catch(err) { console.error(err); }
+    }
+    loadVerseData();
+  </script>
+</body>
+</html>
+

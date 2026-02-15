@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayukh 2026 - Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background-color: black; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    .rajdhani { font-family: 'Rajdhani', sans-serif; }
+    .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff, 0 0 30px #7c6bff; }
+    .glass { background: rgba(10, 14, 26, 0.6); backdrop-filter: blur(15px); border: 1px solid rgba(59, 196, 255, 0.3); box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(59, 196, 255, 0.1); }
+    .hover-glow:hover { color: #3bc4ff; text-shadow: 0 0 10px #3bc4ff, 0 0 20px #7c6bff; }
+    .icon-hover:hover { color: #3bc4ff; transform: scale(1.2); transition: all 0.3s ease-in-out; text-shadow: 0 0 15px #3bc4ff; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #0a0e1a; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #3bc4ff, #7c6bff); border-radius: 10px; }
+
+    #extra-menu { overflow: visible !important; transition: all 0.5s ease-in-out; max-height: 0; opacity: 0; }
+    #extra-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+    #extra-menu.expanded { max-height: 400px; opacity: 1; margin-top: 1.5rem; overflow: visible; }
+    .rotate-180 { transform: rotate(180deg); }
+    .hidden-instant { display: none !important; }
+    .show-instant { opacity: 1 !important; transition: none !important; }
+
+    /* Dropdown positioning fix */
+    #events-dropdown-nav {
+      position: absolute !important;
+      left: 5rem;
+      top: 0;
+      z-index: 9999;
+    }
+    
+    .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}   
+    #events-dropdown-nav {
+  position: absolute;
+  left: 100%; /* Positions it to the right of the panel */
+  top: 0;
+  margin-left: 1rem;
+}
+    /* Submenu fix */
+    .submenu {
+      position: absolute !important;
+      left: 100%;
+      top: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid cyan;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      width: 12rem;
+      display: none;
+    }
+
+    .submenu.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="bg-black text-white font-[Poppins] overflow-x-hidden">
+
+  <div id="intro-screen" class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-700 ease-in-out">
+    <video id="intro-video" class="w-full h-full object-cover" autoplay muted playsinline>
+      <source src="assests/MayukhLogo2.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out">
+    
+    <!-- LEFT PANEL -->
+     <div id="left-panel" class="fixed left-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-start items-center glass rounded-2xl p-6 w-20 h-auto border-l-4 border-cyan-400/50 z-50 transition-all duration-1000 ease-out opacity-100 translate-x-0">
+  <nav class="flex flex-col items-center text-gray-300 text-[10px]  uppercase tracking-tighter w-full">
+    
+    <div class="flex flex-col items-center space-y-6 w-full">
+      <a href="index.html" class="flex flex-col items-center hover:text-cyan-400 transition-colors w-full"><i class="fa-solid fa-house text-xl mb-1"></i><span>Home</span></a>
+      <a href="history.html" class="flex flex-col items-center hover:text-cyan-400 transition-colors w-full"><i class="fa-solid fa-hourglass-half text-xl mb-1"></i><span>History</span></a>
+      <a href="theme2.html" class="flex flex-col items-center hover:text-cyan-400 transition-colors w-full"><i class="fa-solid fa-globe text-xl mb-1"></i><span>Theme</span></a>
+      <a href="roadmap.html" class="flex flex-col items-center hover:text-cyan-400 transition-colors w-full"><i class="fa-solid fa-road text-xl mb-1"></i><span>Roadmap</span></a>
+      <a href="teams.html" class="flex flex-col items-center hover:text-cyan-400 transition-colors w-full"><i class="fa-solid fa-user-group text-xl mb-1"></i><span>Team</span></a>
+    </div>
+
+    <div id="extra-menu-container" class="grid grid-rows-[0fr] opacity-0 transition-all duration-500 ease-in-out w-full pointer-events-none">
+      <div class="overflow-hidden">
+        <div class="flex flex-col items-center space-y-6 pt-4">
+          <a href="tech-events.html" class="flex flex-col items-center hover:text-cyan-400 transition-colors w-full">
+            <i class="fa-solid fa-calendar-days text-xl mb-1"></i><span>Events</span>
+          </a>
+          <a href="gallery.html" class="flex flex-col items-center hover:text-cyan-400 transition-colors w-full">
+            <i class="fa-solid fa-images text-xl mb-1"></i><span>Gallery</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <button id="see-more-btn" class="mt-4 text-cyan-400 hover:text-white transition-transform duration-300">
+      <i class="fa-solid fa-chevron-down text-lg"></i>
+    </button>
+
+  </nav>
+</div>
+    <!-- RIGHT PANEL -->
+    <div id="right-panel" class="fixed right-6 top-1/2 -translate-y-1/2 hidden lg:flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[50vh] border-r-4 border-blue-500/50 z-20 translate-x-10 opacity-0 transition-all duration-1000 ease-out">
+      <div class="flex flex-col items-center space-y-10 text-2xl text-gray-300">
+        <a href="https://www.instagram.com" target="_blank" class="icon-hover"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.youtube.com" target="_blank" class="icon-hover"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.linkedin.com" target="_blank" class="icon-hover"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:mayukh@banasthali.org" class="icon-hover"><i class="fa-solid fa-envelope"></i></a>
+        <div class="mt-6 text-sm text-gray-300">
+          <a href="about.html" class="flex flex-col items-center hover-glow"><i class="fa-solid fa-circle-info text-xl mb-1"></i><span>About</span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <section id="home" class="relative h-screen flex flex-col justify-center items-center text-center overflow-hidden">
+      <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover opacity-70 z-0">
+       <!--- <source src="assests/bgwithtitle2.mp4" type="video/mp4">-->
+        <source src="assests/bgwithtitle2.mp4" type="video/webm">
+      </video>
+      
+    </section>
+
+
+  </div>
+
+<script>
+    const introVideo = document.getElementById('intro-video');
+    const introScreen = document.getElementById('intro-screen');
+    const mainContent = document.getElementById('main-content');
+    const leftPanel = document.getElementById('left-panel');
+    const rightPanel = document.getElementById('right-panel');
+    const hasSeenIntro = sessionStorage.getItem('mayukhIntroSeen');
+
+    // --- PANEL REVEAL LOGIC ---
+    function revealPanels() {
+        if (leftPanel) { 
+            leftPanel.classList.remove('opacity-0', '-translate-x-10', 'hidden'); 
+            leftPanel.classList.add('opacity-100', 'translate-x-0', 'flex'); 
+        }
+        if (rightPanel) { 
+            rightPanel.classList.remove('opacity-0', 'translate-x-10', 'hidden'); 
+            rightPanel.classList.add('opacity-100', 'translate-x-0', 'flex'); 
+        }
+    }
+
+    function initiateReveal() {
+        if (!introScreen || introScreen.style.display === 'none') return;
+        sessionStorage.setItem('mayukhIntroSeen', 'true');
+        mainContent.classList.remove('opacity-0');
+        mainContent.classList.add('opacity-100');
+        introScreen.classList.add('opacity-0');
+        setTimeout(() => { 
+            introScreen.style.display = 'none'; 
+            revealPanels(); 
+        }, 700);
+    }
+
+    // --- INTRO HANDLING ---
+    if (hasSeenIntro) {
+        if(introScreen) introScreen.classList.add('hidden');
+        if(mainContent) mainContent.classList.add('opacity-100');
+        setTimeout(revealPanels, 100);
+    } else if (introVideo) {
+        introVideo.addEventListener('timeupdate', function() { 
+            if (this.duration - this.currentTime < 0.8) initiateReveal(); 
+        });
+        introVideo.onended = initiateReveal;
+    }
+
+    // --- SIDE PANEL "SEE MORE" LOGIC ---
+    const seeMoreBtn = document.getElementById('see-more-btn');
+    if (seeMoreBtn) {
+        seeMoreBtn.addEventListener('click', function() {
+            const container = document.getElementById('extra-menu-container');
+            const inner = document.getElementById('extra-menu-inner');
+            const isExpanded = container.classList.contains('expanded');
+            
+            if (!isExpanded) {
+                container.classList.add('expanded');
+                container.classList.replace('grid-rows-[0fr]', 'grid-rows-[1fr]');
+                container.classList.replace('opacity-0', 'opacity-100');
+                container.classList.remove('pointer-events-none');
+                this.style.transform = 'rotate(180deg)';
+                // Allow dropdowns to overflow once expanded
+                setTimeout(() => { if(inner) inner.classList.remove('overflow-hidden'); }, 500);
+            } else {
+                if(inner) inner.classList.add('overflow-hidden'); 
+                container.classList.remove('expanded');
+                container.classList.replace('grid-rows-[1fr]', 'grid-rows-[0fr]');
+                container.classList.replace('opacity-100', 'opacity-0');
+                container.classList.add('pointer-events-none');
+                this.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
+
+    // --- SMOOTH SCROLLING ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+</script>
+</body>
+</html>
+
