@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayukh 2026 - Theme</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Rajdhani', sans-serif; background-color: black; margin: 0; padding: 0; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    .rajdhani { font-family: 'Rajdhani', sans-serif; }
+    .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff, 0 0 30px #7c6bff; }
+    
+    .glass {
+      background: rgba(10, 14, 26, 0.6); 
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(59, 196, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(59, 196, 255, 0.1);
+    }
+    .glass-button {
+      background: rgba(59, 196, 255, 0.1);
+      border: 1px solid rgba(59, 196, 255, 0.4);
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .glass-button:hover {
+      background: rgba(59, 196, 255, 0.3);
+      box-shadow: 0 0 15px rgba(59, 196, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Arrow Toggle Styling - MOBILE ONLY */
+    .panel-toggle {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 60;
+      background: rgba(10, 14, 26, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 196, 255, 0.4);
+      color: #3bc4ff;
+      padding: 15px 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-left { left: 0; border-radius: 0 12px 12px 0; border-left: none; }
+    .toggle-right { right: 0; border-radius: 12px 0 0 12px; border-right: none; }
+
+    /* Hide arrows on desktop */
+    @media (min-width: 1025px) {
+      .panel-toggle {
+        display: none !important;
+      }
+    }
+
+    /* Standardized Panel Item Styling from Index */
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      text-align: center;
+      padding: 0.5rem 0;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .nav-item i { font-size: 1.5rem; margin-bottom: 0.375rem; transition: all 0.3s ease; }
+    .nav-item span { font-family: 'Orbitron', sans-serif; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; transition: all 0.3s ease; }
+
+    .nav-item:hover { color: #3bc4ff; }
+    .nav-item:hover i { transform: translateY(-2px); text-shadow: 0 0 10px #3bc4ff; }
+    .nav-item:hover span { text-shadow: 0 0 8px #3bc4ff; }
+
+    /* Extra Menu Container */
+    #extra-menu-container {
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: all 0.5s ease-in-out;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    #extra-menu-container.expanded {
+      grid-template-rows: 1fr;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #extra-menu-container > div {
+      overflow: hidden;
+    }
+
+    /* See More Button */
+    #see-more-btn {
+      margin-top: 0.5rem;
+      color: #3bc4ff;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    #see-more-btn:hover {
+      color: white;
+      transform: scale(1.1);
+    }
+
+    #see-more-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    #see-more-btn.rotated i {
+      transform: rotate(180deg);
+    }
+
+    /* Right Panel Styles */
+    .social-icon { color: #9ca3af; font-size: 1.75rem; transition: all 0.3s ease; }
+    .social-icon:hover { color: #3bc4ff; transform: scale(1.2); text-shadow: 0 0 15px #3bc4ff; }
+
+    .about-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2rem;
+      color: #9ca3af;
+      transition: all 0.3s ease;
+    }
+
+    .about-link i {
+      font-size: 1.5rem;
+      margin-bottom: 0.375rem;
+    }
+
+    .about-link span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .about-link:hover {
+      color: #3bc4ff;
+    }
+
+    .about-link:hover i {
+      transform: translateY(-2px);
+      text-shadow: 0 0 10px #3bc4ff;
+    }
+
+    /* Mobile-specific panel behavior */
+    @media (max-width: 1024px) {
+      #left-panel {
+        left: 10px;
+        transform: translateY(-50%) translateX(-120%);
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #right-panel {
+        right: 10px;
+        transform: translateY(-50%) translateX(120%);
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #left-panel.mobile-active {
+        transform: translateY(-50%) translateX(0);
+      }
+      #right-panel.mobile-active {
+        transform: translateY(-50%) translateX(0);
+      }
+    }
+
+    /* Desktop panel behavior */
+    @media (min-width: 1025px) {
+      #left-panel {
+        left: 1.5rem;
+        transform: translateY(-50%);
+      }
+      #right-panel {
+        right: 1.5rem;
+        transform: translateY(-50%);
+      }
+    }
+
+    @media (min-width: 1400px) {
+      #left-panel {
+        left: 2rem;
+      }
+      #right-panel {
+        right: 2rem;
+      }
+    }
+
+    #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: black; }
+    section { background: transparent !important; }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #0a0e1a; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #3bc4ff, #7c6bff); border-radius: 10px; }
+
+    /* Responsive content padding */
+    @media (max-width: 1024px) {
+      section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      
+      section .glass {
+        max-width: 90%;
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-black text-white">
+
+  <!-- Arrow Toggles for Mobile Only -->
+  <button id="left-toggle" class="panel-toggle toggle-left" onclick="togglePanel('left')">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+
+  <button id="right-toggle" class="panel-toggle toggle-right" onclick="togglePanel('right')">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+
+  <div id="canvas-container"></div>
+
+  <div id="main-content">
+    
+    <!-- LEFT PANEL -->
+    <div id="left-panel" class="fixed top-1/2 flex flex-col justify-start items-center glass rounded-2xl py-6 px-2 w-24 border-l-4 border-cyan-400/50 z-50">
+      <nav class="flex flex-col items-center w-full">
+        
+        <div class="flex flex-col items-center space-y-4 w-full">
+          <a href="index.html" class="nav-item text-gray-300"><i class="fa-solid fa-house"></i><span>Home</span></a>
+          <a href="history.html" class="nav-item text-gray-300"><i class="fa-solid fa-hourglass-half"></i><span>History</span></a>
+          <a href="theme2.html" class="nav-item text-gray-300"><i class="fa-solid fa-globe"></i><span>Theme</span></a>
+          <a href="roadmap.html" class="nav-item text-gray-300"><i class="fa-solid fa-road"></i><span>Roadmap</span></a>
+          <a href="teams.html" class="nav-item text-gray-300"><i class="fa-solid fa-user-group"></i><span>Team</span></a>
+        </div>
+
+        <!-- Extra Menu (Expandable) -->
+        <div id="extra-menu-container" class="grid w-full mt-4">
+          <div>
+            <div class="flex flex-col items-center space-y-4">
+              <a href="tech-events.html" class="nav-item text-gray-300"><i class="fa-solid fa-calendar-days"></i><span>Events</span></a>
+              <a href="gallery.html" class="nav-item text-gray-300"><i class="fa-solid fa-images"></i><span>Gallery</span></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- See More Button -->
+        <button id="see-more-btn">
+          <i class="fa-solid fa-chevron-down text-lg"></i>
+        </button>
+      </nav>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div id="right-panel" class="fixed top-1/2 flex flex-col justify-between items-center glass rounded-2xl py-6 px-2 w-20 h-[50vh] border-r-4 border-cyan-400/50 z-50">
+      <div class="flex flex-col items-center space-y-8 w-full">
+        <a href="https://www.instagram.com" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.youtube.com" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://www.linkedin.com" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="mailto:mayukh@banasthali.org" class="social-icon"><i class="fa-solid fa-envelope"></i></a>
+        
+        <a href="about.html" class="about-link">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>About</span>
+        </a>
+      </div>
+    </div>
+
+    <section id="sci-fi-verse" data-verse="sci-fi" class="min-h-screen flex items-center justify-center">
+        <div class="glass p-10 rounded-3xl border-l-4 border-cyan-400 max-w-lg text-center">
+            <h2 class="orbitron text-4xl text-cyan-400 mb-4">SCI-FI VERSE</h2>
+            <p class="rajdhani text-lg leading-relaxed mb-6">The digital frontier. Explore cybernetic innovation and quantum possibilities.</p>
+            <a href="scifiverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-cyan-400">View Events</a>
+        </div>
+    </section>
+
+    <section id="spy-verse" data-verse="spy" class="min-h-screen flex items-center justify-center">
+        <div class="glass p-10 rounded-3xl border-l-4 border-green-500 max-w-lg text-center">
+            <h2 class="orbitron text-4xl text-green-500 mb-4">SPY VERSE</h2>
+            <p class="rajdhani text-lg text-green-100 mb-6">Infiltrate the system. Stealth and intelligence are your only weapons in the shadows.</p>
+            <a href="spyverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-green-500">View Events</a>
+        </div>
+    </section>
+
+    <section id="carnival-verse" data-verse="carnival" class="min-h-screen flex items-center justify-center">
+        <div class="glass p-10 rounded-3xl border-l-4 border-pink-500 max-w-lg text-center">
+            <h2 class="orbitron text-4xl text-pink-500 mb-4">CARNIVAL VERSE</h2>
+            <p class="rajdhani text-lg mb-6 text-pink-100/80">The chaos of celebration. Experience high energy and vibrant digital spectacles.</p>
+            <a href="carnivalverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-pink-400">View Events</a>
+        </div>
+    </section>
+
+    <section id="mythic-verse" data-verse="mythic" class="min-h-screen flex items-center justify-center">
+        <div class="glass p-10 rounded-3xl border-l-4 border-orange-500 max-w-lg text-center">
+            <h2 class="orbitron text-4xl text-orange-400 mb-4">MYTHIC VERSE</h2>
+            <p class="rajdhani text-lg mb-6">Where history meets the future. Ancient legends reborn through modern code.</p>
+            <a href="mythicverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-orange-400">View Events</a>
+        </div>
+    </section>
+
+    <section id="dark-verse" data-verse="horror" class="min-h-screen flex items-center justify-center">
+        <div class="glass p-10 rounded-3xl border-l-4 border-red-800 max-w-lg text-center">
+            <h2 class="orbitron text-4xl text-red-600 mb-4">DARK VERSE</h2>
+            <p class="rajdhani text-lg text-red-100 mb-6">Beware the shadows. The abyss stares back as you traverse the deep web.</p>
+            <a href="darkverse.html" class="orbitron glass-button px-6 py-2 rounded-full text-sm uppercase tracking-widest text-red-600">View Events</a>
+        </div>
+    </section>
+
+    <footer class="relative border-t border-cyan-400/30 py-12 px-6 text-center z-10">
+      <div class="glass rounded-2xl p-8 max-w-4xl mx-auto">
+        <h3 class="text-3xl font-bold orbitron glow mb-4">MAYUKH 2026</h3>
+        <p class="text-gray-400 mb-6">Celebrating Innovation Beyond Boundaries</p>
+        <p class="text-sm text-gray-500">© 2026 Banasthali Vidyapith. All rights reserved.</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // --- MOBILE PANEL TOGGLE FUNCTION ---
+    function togglePanel(side) {
+      const leftPanel = document.getElementById('left-panel');
+      const rightPanel = document.getElementById('right-panel');
+      const leftArrow = document.querySelector('#left-toggle i');
+      const rightArrow = document.querySelector('#right-toggle i');
+
+      if (side === 'left') {
+        // Toggle left, close right
+        leftPanel.classList.toggle('mobile-active');
+        rightPanel.classList.remove('mobile-active');
+        
+        // Flip arrows for visual feedback
+        leftArrow.classList.toggle('fa-chevron-right');
+        leftArrow.classList.toggle('fa-chevron-left');
+        rightArrow.classList.add('fa-chevron-left');
+        rightArrow.classList.remove('fa-chevron-right');
+      } else {
+        // Toggle right, close left
+        rightPanel.classList.toggle('mobile-active');
+        leftPanel.classList.remove('mobile-active');
+
+        // Flip arrows
+        rightArrow.classList.toggle('fa-chevron-left');
+        rightArrow.classList.toggle('fa-chevron-right');
+        leftArrow.classList.add('fa-chevron-right');
+        leftArrow.classList.remove('fa-chevron-left');
+      }
+    }
+
+    // Close panels if clicking on main content (mobile only)
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 1024) {
+        const leftP = document.getElementById('left-panel');
+        const rightP = document.getElementById('right-panel');
+        const leftT = document.getElementById('left-toggle');
+        const rightT = document.getElementById('right-toggle');
+
+        if (!leftP.contains(e.target) && !leftT.contains(e.target) && 
+            !rightP.contains(e.target) && !rightT.contains(e.target)) {
+          leftP.classList.remove('mobile-active');
+          rightP.classList.remove('mobile-active');
+          // Reset arrows
+          document.querySelector('#left-toggle i').className = "fa-solid fa-chevron-right";
+          document.querySelector('#right-toggle i').className = "fa-solid fa-chevron-left";
+        }
+      }
+    });
+
+    // See More Logic (Standardized)
+    const seeMoreBtn = document.getElementById('see-more-btn');
+    if (seeMoreBtn) {
+      seeMoreBtn.addEventListener('click', function() {
+        const container = document.getElementById('extra-menu-container');
+        const isExpanded = container.classList.contains('expanded');
+        
+        if (!isExpanded) {
+          container.classList.add('expanded');
+          this.classList.add('rotated');
+        } else {
+          container.classList.remove('expanded');
+          this.classList.remove('rotated');
+        }
+      });
+    }
+
+    // --- THREE.JS BACKGROUND LOGIC ---
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    // Particle texture
+    const canvas = document.createElement('canvas');
+    canvas.width = 64; canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, 'rgba(255,255,255,1)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 64, 64);
+    const texture = new THREE.CanvasTexture(canvas);
+
+    // Particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const count = 9000;
+    const positions = new Float32Array(count * 3);
+    for(let i=0; i<count*3; i++) positions[i] = (Math.random() - 0.5) * 18;
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const material = new THREE.PointsMaterial({ 
+      size: 0.05, 
+      map: texture, 
+      transparent: true, 
+      blending: THREE.AdditiveBlending, 
+      depthWrite: false, 
+      color: 0x3bc4ff 
+    });
+    const points = new THREE.Points(particlesGeometry, material);
+    scene.add(points);
+
+    // Portal
+    const portalUniforms = { 
+      uTime: { value: 0 }, 
+      uColor: { value: new THREE.Color(0x3bc4ff) } 
+    };
+    const portalMaterial = new THREE.ShaderMaterial({
+        uniforms: portalUniforms,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        vertexShader: `
+          varying vec2 vUv; 
+          void main() { 
+            vUv = uv; 
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); 
+          }
+        `,
+        fragmentShader: `
+            uniform float uTime;
+            uniform vec3 uColor;
+            varying vec2 vUv;
+            void main() {
+                vec2 uv = vUv - 0.5;
+                float dist = length(uv);
+                float angle = atan(uv.y, uv.x);
+                float swirl = angle + (1.0 / (dist + 0.1)) * sin(uTime * 0.5);
+                float ring = smoothstep(0.4, 0.38, dist) * smoothstep(0.1, 0.2, dist);
+                gl_FragColor = vec4(uColor * (0.05 / dist) * abs(sin(swirl * 3.0)), ring * 0.8);
+            }
+        `
+    });
+    const portal = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), portalMaterial);
+    portal.position.z = -2;
+    scene.add(portal);
+
+    camera.position.z = 5;
+
+    // Verse configurations
+    const verses = {
+        'sci-fi':  { color: 0x3bc4ff, speed: 0.003, size: 0.06 },
+        'spy':     { color: 0x00ff00, speed: 0.015, size: 0.08 },
+        'carnival':{ color: 0xff00ff, speed: 0.025, size: 0.12 },
+        'mythic':  { color: 0xfb923c, speed: 0.0015, size: 0.045 },
+        'horror':  { color: 0xff0000, speed: 0.0008, size: 0.15 } 
+    };
+
+    let currentVerse = 'sci-fi';
+
+    function updateVerse(v) {
+        if (!verses[v]) return;
+        currentVerse = v;
+        const col = new THREE.Color(verses[v].color);
+        material.color.set(col);
+        material.size = verses[v].size;
+        portalUniforms.uColor.value.set(col);
+        material.needsUpdate = true;
+
+        const leftPanel = document.getElementById('left-panel');
+        const rightPanel = document.getElementById('right-panel');
+        const hexColor = `#${col.getHexString()}`;
+        if (leftPanel) leftPanel.style.borderColor = `${hexColor}80`;
+        if (rightPanel) rightPanel.style.borderColor = `${hexColor}80`;
+    }
+
+    // Intersection observer for verse changes
+    const observer = new IntersectionObserver((es) => {
+        es.forEach(e => { 
+          if (e.isIntersecting) updateVerse(e.target.getAttribute('data-verse')); 
+        });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('section[data-verse]').forEach(s => observer.observe(s));
+
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+        const t = performance.now() * 0.001;
+        portalUniforms.uTime.value = t;
+        points.rotation.y += verses[currentVerse].speed;
+        points.rotation.x += verses[currentVerse].speed * 0.4;
+        portal.position.y = Math.sin(t) * 0.2;
+        portal.rotation.z += 0.005;
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>

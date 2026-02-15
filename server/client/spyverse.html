@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SpyVerse | Mayukh 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #050805; color: #00FF41; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.15; }
+    .spy-glow { text-shadow: 0 0 10px #00FF41, 0 0 20px rgba(0, 255, 65, 0.5); }
+    
+    /* Optimized Card Size */
+    .dossier-card { 
+        background: rgba(0, 25, 0, 0.7); 
+        backdrop-filter: blur(12px); 
+        border: 1px solid rgba(0, 255, 65, 0.3); 
+        clip-path: polygon(0 0, 90% 0, 100% 10%, 100% 100%, 0 100%); 
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    .dossier-card:hover { border-color: #00FF41; transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 255, 65, 0.15); }
+    .scanner { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: rgba(0, 255, 65, 0.5); box-shadow: 0 0 15px #00FF41; z-index: 50; animation: scan 4s linear infinite; }
+    @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+    .glass { background: rgba(0, 40, 0, 0.3); backdrop-filter: blur(15px); border: 1px solid rgba(0, 255, 65, 0.3); }
+
+    .intel-label {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        opacity: 0.5;
+        color: #00FF41;
+    }
+
+    .intel-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.05em;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+        from { 
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to { 
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .poster-clickable {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        position: relative;
+    }
+
+    .poster-clickable::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0);
+        transition: all 0.3s ease;
+    }
+
+    .poster-clickable:hover::after {
+        background: rgba(0, 255, 65, 0.1);
+    }
+
+    .poster-zoom-hint {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 0.5rem;
+        background: #00FF41;
+        color: #000;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.65rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        font-weight: 700;
+    }
+
+    .poster-clickable:hover .poster-zoom-hint {
+        opacity: 1;
+    }
+
+    /* Centered Detail Panel */
+    .detail-panel {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        overflow-y: auto;
+    }
+
+    .detail-panel.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .panel-content {
+        background: linear-gradient(135deg, rgba(0, 25, 0, 0.95), rgba(5, 15, 5, 0.98));
+        border: 2px solid #00FF41;
+        border-radius: 10px;
+        max-width: 1400px;
+        width: 90%;
+        margin: 2rem auto;
+        animation: scaleIn 0.4s ease;
+        box-shadow: 0 0 50px rgba(0, 255, 65, 0.5);
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 40px;
+        height: 40px;
+        border: 2px solid #00FF41;
+        background: rgba(0, 255, 65, 0.1);
+        color: #00FF41;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+    .close-btn:hover {
+        background: #00FF41;
+        color: #000;
+        transform: rotate(90deg);
+    }
+
+    .btn-see-more {
+        border: 1px solid #00FF41;
+        padding: 10px 16px;
+        color: #00FF41;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 2px;
+        transition: 0.3s;
+        background: transparent;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .btn-see-more:hover {
+        background: #00FF41;
+        color: #000;
+        box-shadow: 0 0 20px #00FF41;
+    }
+
+    .detail-section {
+        background: rgba(0, 255, 65, 0.05);
+        border: 1px solid rgba(0, 255, 65, 0.2);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 0 100%);
+    }
+
+    .detail-section h3 {
+        color: #00FF41;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .round-item {
+        background: rgba(0, 25, 0, 0.6);
+        border-left: 3px solid #00FF41;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .round-title {
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .round-desc {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .panel-content::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .panel-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .panel-content::-webkit-scrollbar-thumb {
+        background: #00FF41;
+        border-radius: 5px;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanner"></div>
+  <a href="theme2.html#spy-verse" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-green-900 transition-all group text-green-500">
+      <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
+      <span class="text-xs tracking-widest font-bold">THEME</span>
+  </a>
+
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
+    <div class="text-center mb-20">
+      <p class="text-xs orbitron tracking-[0.8em] mb-2 opacity-60">ENCRYPTED // DATA CHANNEL 05</p>
+      <h1 class="orbitron text-7xl md:text-8xl font-black spy-glow mb-4">SPYVERSE</h1>
+      <div class="h-1 w-48 bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto"></div>
+      <p class="mt-6 text-xl max-w-2xl text-green-300/60 font-medium italic">"Secrecy is the beginning of all tyranny; innovation is the key to liberation."</p>
+    </div>
+
+    <div id="spy-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-[90%] w-full px-4 md:px-12 lg:px-20 relative z-10">
+        <p class="col-span-full text-center text-green-500 animate-pulse orbitron">DECRYPTING FILES...</p>
+    </div>
+  </main>
+
+  <!-- Full-Size Poster Modal -->
+  <div id="poster-modal" class="modal-overlay" onclick="if(event.target === this) closePosterModal()">
+    <button class="close-btn" onclick="closePosterModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <img id="modal-poster-img" src="" class="max-w-[90vw] max-h-[90vh] object-contain border-2 border-green-500 shadow-2xl">
+  </div>
+
+  <!-- Centered Detail Panel -->
+  <div id="detail-panel" class="detail-panel" onclick="if(event.target === this) closeDetailPanel()">
+    <div class="panel-content p-8">
+      <button class="close-btn" onclick="closeDetailPanel()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left: Poster -->
+        <div class="flex items-start justify-center">
+          <img id="panel-poster" src="" class="w-full max-w-lg border-2 border-green-500 shadow-2xl sticky top-4">
+        </div>
+
+        <!-- Right: Details -->
+        <div id="panel-details" class="space-y-6">
+          <!-- Content will be populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="api-config.js"></script>
+  <script>
+    const canvas = document.getElementById('matrix-canvas'); const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%'; const fontSize = 16; const columns = canvas.width / fontSize; const drops = [];
+    for (let i = 0; i < columns; i++) drops[i] = 1;
+    function draw() { ctx.fillStyle = 'rgba(5, 8, 5, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#0F0'; ctx.font = fontSize + 'px arial'; for (let i = 0; i < drops.length; i++) { const text = characters.charAt(Math.floor(Math.random() * characters.length)); ctx.fillText(text, i * fontSize, drops[i] * fontSize); if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0; drops[i]++; } } setInterval(draw, 33);
+
+    const CURRENT_VERSE = 'spy-verse';
+    let allEvents = [];
+
+    function openPosterModal(posterUrl) {
+        document.getElementById('modal-poster-img').src = posterUrl;
+        document.getElementById('poster-modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePosterModal() {
+        document.getElementById('poster-modal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function openDetailPanel(eventId) {
+        const event = allEvents.find(e => {
+            const id = e._id || e.id || e.title.replace(/\s+/g, '-');
+            return id === eventId;
+        });
+        
+        if (!event) {
+            console.error('Event not found:', eventId);
+            return;
+        }
+
+        document.getElementById('panel-poster').src = event.posterLink;
+        
+        const detailsContainer = document.getElementById('panel-details');
+        detailsContainer.innerHTML = `
+            <div class="mb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-16 h-16 object-contain border border-green-500/30 p-2 bg-green-950/40">` : ''}
+                    <div>
+                        <h2 class="orbitron text-3xl font-bold text-white uppercase tracking-tight">${event.title || 'Mission'}</h2>
+                        <p class="text-green-400 text-sm orbitron tracking-widest mt-1">${event.eventType ? event.eventType.toUpperCase().replace(/-/g, ' ') : 'CLASSIFIED'}</p>
+                    </div>
+                </div>
+                ${event.description ? `<p class="text-gray-300 text-base leading-relaxed rajdhani">${event.description}</p>` : ''}
+            </div>
+
+            <div class="detail-section">
+                <h3 class="orbitron">Mission Information</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    ${event.day ? `
+                    <div>
+                        <span class="intel-label">MISSION DATE</span>
+                        <p class="intel-value text-lg">${event.day}</p>
+                    </div>
+                    ` : ''}
+                    ${event.time ? `
+                    <div>
+                        <span class="intel-label">MISSION TIME</span>
+                        <p class="intel-value text-lg">${event.time}</p>
+                    </div>
+                    ` : ''}
+                    ${event.venue ? `
+                    <div class="col-span-2">
+                        <span class="intel-label">LOCATION</span>
+                        <p class="intel-value text-lg">${event.venue}</p>
+                    </div>
+                    ` : ''}
+                    ${event.duration ? `
+                    <div>
+                        <span class="intel-label">DURATION</span>
+                        <p class="intel-value text-lg">${event.duration}</p>
+                    </div>
+                    ` : ''}
+                    ${event.teamSize ? `
+                    <div>
+                        <span class="intel-label">TEAM SIZE</span>
+                        <p class="intel-value text-lg">${event.teamSize}</p>
+                    </div>
+                    ` : ''}
+                    ${event.registrationFee ? `
+                    <div>
+                        <span class="intel-label">ENTRY FEE</span>
+                        <p class="intel-value text-lg">${event.registrationFee}</p>
+                    </div>
+                    ` : ''}
+                    ${event.prizePool ? `
+                    <div class="col-span-2">
+                        <span class="intel-label">REWARD POOL</span>
+                        <p class="intel-value text-lg">${event.prizePool}</p>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+
+            ${event.rounds && event.rounds.trim() ? `
+            <div class="detail-section">
+                <h3 class="orbitron">Mission Phases</h3>
+                <div class="text-gray-300 leading-relaxed whitespace-pre-line">
+                    ${event.rounds}
+                </div>
+            </div>
+            ` : ''}
+
+            ${event.requirements && event.requirements.trim() ? `
+            <div class="detail-section">
+                <h3 class="orbitron">Requirements</h3>
+                <div class="text-gray-300 leading-relaxed whitespace-pre-line">
+                    ${event.requirements}
+                </div>
+            </div>
+            ` : ''}
+
+            ${event.prizes && event.prizes.length > 0 ? `
+            <div class="detail-section">
+                <h3 class="orbitron">Rewards</h3>
+                <div class="space-y-2">
+                    ${event.prizes.map(prize => `<div class="text-gray-300 flex items-center gap-2"><i class="fas fa-trophy text-yellow-400"></i><span>${prize}</span></div>`).join('')}
+                </div>
+            </div>
+            ` : ''}
+
+            ${event.coordinators && event.coordinators.length > 0 ? `
+            <div class="detail-section">
+                <h3 class="orbitron">Mission Coordinators</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    ${event.coordinators.map(coord => `
+                        <div class="flex items-center gap-3 text-gray-300">
+                            <i class="fas fa-user-secret text-2xl text-green-400"></i>
+                            <div>
+                                <div class="font-semibold">${coord.name}</div>
+                                ${coord.phone ? `<div class="text-sm opacity-70">${coord.phone}</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+
+            <a href="${event.registrationLink || '#'}" target="_blank" class="block w-full text-center py-3 border border-green-500 hover:bg-green-500 hover:text-black orbitron text-sm font-black transition-all uppercase tracking-widest mt-8">
+                REGISTER NOW
+            </a>
+        `;
+
+        document.getElementById('detail-panel').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailPanel() {
+        document.getElementById('detail-panel').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closePosterModal();
+            closeDetailPanel();
+        }
+    });
+
+    function createCardHTML(event) {
+        let code = 'CONFIDENTIAL';
+        if(event.eventType && event.eventType.includes('tech')) code = 'TECH_INTEL';
+        else if(event.eventType && event.eventType.includes('workshop')) code = 'TRAINING_MODULE';
+
+        const eventId = event._id || event.id || event.title.replace(/\s+/g, '-');
+
+        return `
+          <div class="dossier-card p-7 group" data-event-id="${eventId}">
+            <div class="flex justify-between items-start mb-6">
+               <div class="flex items-center gap-4">
+                  <div class="w-14 h-14 bg-green-950/40 border border-green-500/30 flex items-center justify-center rounded-sm flex-shrink-0">
+                    ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain opacity-80 group-hover:opacity-100 transition">` : `<i class="fa-solid fa-user-secret text-3xl opacity-60"></i>`}
+                  </div>
+                  <div class="flex flex-col">
+                     <span class="text-[10px] orbitron border border-green-500/40 px-2 py-0.5 inline-block w-fit mb-1">${code}</span>
+                     <h3 class="orbitron text-xl font-bold uppercase tracking-tight text-white leading-tight">${event.title || 'Mission'}</h3>
+                  </div>
+               </div>
+            </div>
+
+            <div class="w-full h-52 mb-6 border border-green-500/20 overflow-hidden relative bg-green-900/10 poster-clickable flex-shrink-0" onclick="event.stopPropagation(); openPosterModal('${event.posterLink}')">
+                <img src="${event.posterLink}" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700">
+                <div class="absolute inset-0 border-2 border-transparent group-hover:border-green-500/20 pointer-events-none"></div>
+                <span class="poster-zoom-hint orbitron text-xs">CLICK TO ENLARGE</span>
+            </div>
+            
+            <div class="flex-grow mb-6">
+                <p class="text-gray-300 text-sm leading-relaxed rajdhani line-clamp-3">
+                  ${event.description || 'Mission details classified...'}
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-6 pt-4 border-t border-green-900/60 flex-shrink-0">
+                ${event.day ? `
+                <div class="flex flex-col">
+                    <span class="intel-label">MISSION DATE</span>
+                    <span class="intel-value">${event.day}</span>
+                </div>
+                ` : '<div></div>'}
+                ${event.time ? `
+                <div class="flex flex-col">
+                    <span class="intel-label">MISSION TIME</span>
+                    <span class="intel-value">${event.time}</span>
+                </div>
+                ` : '<div></div>'}
+            </div>
+
+            <div class="flex gap-3 flex-shrink-0">
+                <button onclick="event.stopPropagation(); openDetailPanel('${eventId}')" class="btn-see-more orbitron text-xs flex-1">
+                    SEE MORE
+                </button>
+                <a href="${event.registrationLink || '#'}" target="_blank" class="flex-1 text-center py-3 border border-green-500 hover:bg-green-500 hover:text-black orbitron text-xs font-black transition-all uppercase tracking-widest">
+                    REGISTER
+                </a>
+            </div>
+          </div>
+        `;
+    }
+
+    async function loadVerseData() {
+        try {
+            const res = await fetch(API_CONFIG.eventsUrl);
+            const data = await res.json();
+            const container = document.getElementById('spy-container');
+            
+            if(!data.events) return;
+
+            let events = data.events.filter(e => e.category === CURRENT_VERSE);
+            allEvents = events;
+            
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4, 'fun-event': 5 };
+            events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
+
+            if(events.length > 0) {
+                container.innerHTML = events.map(createCardHTML).join('');
+            } else {
+                container.innerHTML = `<p class="col-span-full text-center text-green-800 orbitron">NO INTEL FOUND</p>`;
+            }
+        } catch(err) { console.error(err); }
+    }
+    loadVerseData();
+  </script>
+</body>
+</html>
+
+
+

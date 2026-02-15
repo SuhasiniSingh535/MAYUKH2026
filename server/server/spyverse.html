@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SpyVerse | Mayukh 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #050805; color: #00FF41; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    #matrix-canvas { position: fixed; top: 0; left: 0; z-index: 0; opacity: 0.15; }
+    .spy-glow { text-shadow: 0 0 10px #00FF41, 0 0 20px rgba(0, 255, 65, 0.5); }
+    .dossier-card { background: rgba(0, 20, 0, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 65, 0.3); clip-path: polygon(0 0, 85% 0, 100% 15%, 100% 100%, 0 100%); transition: all 0.4s; }
+    .dossier-card:hover { border-color: #00FF41; transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 255, 65, 0.2); }
+    .scanner { position: fixed; top: 0; left: 0; width: 100%; height: 2px; background: rgba(0, 255, 65, 0.5); box-shadow: 0 0 15px #00FF41; z-index: 50; animation: scan 4s linear infinite; }
+    @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+    .glass { background: rgba(0, 40, 0, 0.3); backdrop-filter: blur(15px); border: 1px solid rgba(0, 255, 65, 0.3); }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanner"></div>
+  <a href="theme.html" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-green-900 transition-all group text-green-500">
+      <i class="fa-solid fa-chevron-left text-sm transition-transform group-hover:-translate-x-1"></i>
+      <span class="text-xs tracking-widest">THEME</span>
+  </a>
+
+  <main class="relative z-10 min-h-screen flex flex-col items-center pt-24 pb-20 px-4">
+    <div class="text-center mb-20">
+      <p class="text-xs orbitron tracking-[0.8em] mb-2 opacity-60">ENCRYPTED // DATA CHANNEL 05</p>
+      <h1 class="orbitron text-7xl md:text-8xl font-black spy-glow mb-4">SPYVERSE</h1>
+      <div class="h-1 w-48 bg-gradient-to-r from-transparent via-green-500 to-transparent mx-auto"></div>
+      <p class="mt-6 text-xl max-w-2xl text-green-300/60 font-medium italic">"Secrecy is the beginning of all tyranny; innovation is the key to liberation."</p>
+    </div>
+
+    <div id="spy-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[80%] w-full px-4 md:px-12 lg:px-20 relative z-10">
+        <p class="col-span-full text-center text-green-500 animate-pulse orbitron">DECRYPTING FILES...</p>
+    </div>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('matrix-canvas'); const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%'; const fontSize = 16; const columns = canvas.width / fontSize; const drops = [];
+    for (let i = 0; i < columns; i++) drops[i] = 1;
+    function draw() { ctx.fillStyle = 'rgba(5, 8, 5, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height); ctx.fillStyle = '#0F0'; ctx.font = fontSize + 'px arial'; for (let i = 0; i < drops.length; i++) { const text = characters.charAt(Math.floor(Math.random() * characters.length)); ctx.fillText(text, i * fontSize, drops[i] * fontSize); if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0; drops[i]++; } } setInterval(draw, 33);
+
+    // --- DYNAMIC DATA ---
+    const CURRENT_VERSE = 'spy-verse';
+
+    function createCardHTML(event) {
+        let code = 'CONFIDENTIAL';
+        if(event.eventType.includes('tech')) code = 'TECH_INTEL';
+        else if(event.eventType.includes('workshop')) code = 'TRAINING_MODULE';
+
+        return `
+          <div class="dossier-card p-6 group h-full flex flex-col justify-between">
+            <div>
+              <div class="w-full h-32 mb-4 border border-green-500/30 overflow-hidden opacity-80 group-hover:opacity-100 transition">
+                 <img src="${event.posterLink}" class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-500">
+              </div>
+              <div class="flex justify-between items-start mb-4">
+                <span class="text-[10px] orbitron border border-green-500 px-2 py-0.5">${code}</span>
+                ${event.logoLink ? `<img src="${event.logoLink}" class="w-8 h-8 opacity-70">` : `<i class="fa-solid fa-user-secret text-2xl opacity-40"></i>`}
+              </div>
+              <h3 class="orbitron text-lg font-bold mb-2 uppercase">${event.title}</h3>
+              <p class="text-gray-400 text-xs leading-relaxed mb-4 line-clamp-3">
+                ${event.description}
+              </p>
+              <div class="text-[10px] text-green-400 font-mono mb-4 border-t border-green-900 pt-2">
+                 MISSION TIME: ${event.day} @ ${event.time}
+              </div>
+            </div>
+            <a href="${event.registrationLink}" target="_blank" class="block w-full text-center py-2 border border-green-500/50 hover:bg-green-500 hover:text-black orbitron text-xs font-bold transition-all mt-auto">
+              ACCESS INTEL
+            </a>
+          </div>
+        `;
+    }
+
+    async function loadVerseData() {
+        try {
+            const res = await fetch('https://mayukh-bv-1.onrender.com/api/events');
+            const data = await res.json();
+            const container = document.getElementById('spy-container');
+            
+            if(!data.events) return;
+
+            let events = data.events.filter(e => e.category === CURRENT_VERSE);
+            
+            // Sort: Tech -> Non-Tech -> Workshops
+            const order = { 'tech-event': 1, 'non-tech-event': 2, 'tech-workshop': 3, 'non-tech-workshop': 4 };
+            events.sort((a, b) => (order[a.eventType] || 9) - (order[b.eventType] || 9));
+
+            if(events.length > 0) {
+                container.innerHTML = events.map(createCardHTML).join('');
+            } else {
+                container.innerHTML = `<p class="col-span-full text-center text-green-800 orbitron">NO INTEL FOUND</p>`;
+            }
+        } catch(err) { console.error(err); }
+    }
+    loadVerseData();
+  </script>
+</body>
+</html>
