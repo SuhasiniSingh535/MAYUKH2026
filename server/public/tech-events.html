@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mayukh 2026 - Tech Events</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Rajdhani', sans-serif; background-color: black; color: white; overflow-x: hidden; }
+    .orbitron { font-family: 'Orbitron', sans-serif; }
+    .glow { text-shadow: 0 0 10px #3bc4ff, 0 0 20px #3bc4ff; }
+    .glass { background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.15); }
+    .spy-verse-bg { border-color: rgba(14, 165, 233, 0.3); } 
+    .scifi-verse-bg { border-color: rgba(168, 85, 247, 0.3); }
+    .carnival-verse-bg { border-color: rgba(239, 68, 68, 0.3); } 
+    .dark-verse-bg { border-color: rgba(71, 85, 105, 0.3); }
+    .mythic-verse-bg { border-color: rgba(249, 115, 22, 0.3); }
+    .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    ::-webkit-scrollbar { width: 8px; } 
+    ::-webkit-scrollbar-track { background: #000; } 
+    ::-webkit-scrollbar-thumb { background: #3bc4ff; border-radius: 4px; }
+    
+    /* Poster Zoom Modal */
+    .poster-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .poster-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .poster-modal img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(59, 196, 255, 0.5);
+      animation: zoomIn 0.3s ease-out;
+    }
+    
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10000;
+    }
+    
+    .close-modal:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #3bc4ff;
+      transform: rotate(90deg);
+    }
+    
+    /* Detail Modal */
+    .detail-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      padding: 2rem;
+    }
+    
+    .detail-modal.active {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .detail-content {
+      display: flex;
+      gap: 3rem;
+      max-width: 1400px;
+      width: 100%;
+      max-height: 90vh;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 196, 255, 0.3);
+      border-radius: 30px;
+      padding: 3rem;
+      overflow: hidden;
+      animation: slideUp 0.4s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .detail-left {
+      flex: 0 0 45%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .detail-left img {
+      width: 100%;
+      height: auto;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(59, 196, 255, 0.3);
+    }
+    
+    .detail-right {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+    
+    .detail-right::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .detail-right::-webkit-scrollbar-thumb {
+      background: #3bc4ff;
+      border-radius: 3px;
+    }
+    
+    /* Card Uniform Sizing */
+    .event-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .event-card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .event-card-poster {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .event-card-poster:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(59, 196, 255, 0.4);
+    }
+    
+    .event-card-description {
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-height: 4.5rem;
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    
+    .see-more-card-btn {
+      flex: 1;
+      text-align: center;
+      background: rgba(59, 196, 255, 0.2);
+      border: 1px solid rgba(59, 196, 255, 0.5);
+      color: #3bc4ff;
+      font-weight: bold;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    
+    .see-more-card-btn:hover {
+      background: rgba(59, 196, 255, 0.3);
+      box-shadow: 0 0 20px rgba(59, 196, 255, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+      .detail-content {
+        flex-direction: column;
+        padding: 2rem;
+        overflow-y: auto;
+      }
+      
+      .detail-left {
+        flex: 0 0 auto;
+      }
+      
+      .detail-left img {
+        max-height: 50vh;
+      }
+      
+      .card-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="fixed inset-0 -z-10"><img src="assests/p1.png" class="w-full h-full object-cover opacity-30"></div>
+  
+  <a href="index.html" class="fixed top-6 left-6 z-50 glass px-6 py-3 rounded-xl border border-cyan-400/30 flex items-center gap-2 hover:text-cyan-400 transition-all">
+    <i class="fa-solid fa-chevron-left"></i> 
+    <span class="orbitron text-xs font-bold tracking-widest">HOME</span>
+  </a>
+   
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex glass rounded-xl border border-white/10 p-1 md:p-2 items-center gap-1 md:gap-4 overflow-x-auto max-w-[90vw] md:max-w-none no-scrollbar">
+    <a href="tech-event.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]">TECH EVENTS</a>
+    <a href="non-tech-events.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">NON-TECH EVENTS</a>
+    <a href="tech-workshops.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">TECH WORKSHOPS</a>
+    <a href="non-tech-workshops.html" class="orbitron text-[10px] md:text-xs font-bold tracking-tighter md:tracking-widest px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all whitespace-nowrap">NON-TECH WORKSHOPS</a>
+  </nav>
+
+  <!-- Poster Zoom Modal (No "See More Details" button) -->
+  <div id="posterModal" class="poster-modal">
+    <div class="close-modal" onclick="closePosterModal()">
+      <i class="fa-solid fa-xmark text-white text-2xl"></i>
+    </div>
+    <img id="posterModalImg" src="" alt="Event Poster">
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="detail-modal">
+    <div class="close-modal" onclick="closeDetailModal()">
+      <i class="fa-solid fa-xmark text-white text-2xl"></i>
+    </div>
+    <div class="detail-content">
+      <div class="detail-left">
+        <img id="detailPosterImg" src="" alt="Event Poster">
+      </div>
+      <div class="detail-right">
+        <div class="mb-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img id="detailLogo" src="" class="w-16 h-16 object-contain" alt="Event Logo">
+            <div>
+              <h2 id="detailTitle" class="text-4xl font-black orbitron text-cyan-400 uppercase"></h2>
+              <p id="detailCategory" class="text-cyan-300 text-sm mt-1 uppercase tracking-wider"></p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="glass rounded-xl p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-lg mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-clock"></i> Event Schedule
+            </h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-gray-400 text-sm">Day</p>
+                <p id="detailDay" class="text-white font-semibold text-lg"></p>
+              </div>
+              <div>
+                <p class="text-gray-400 text-sm">Time</p>
+                <p id="detailTime" class="text-white font-semibold text-lg"></p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass rounded-xl p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-lg mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-info-circle"></i> Description
+            </h3>
+            <p id="detailDescription" class="text-gray-300 leading-relaxed"></p>
+          </div>
+          
+          <div class="glass rounded-xl p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-lg mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-trophy"></i> Prize Pool
+            </h3>
+            <p id="detailPrize" class="text-white font-bold text-2xl"></p>
+          </div>
+          
+          <div class="glass rounded-xl p-5 border border-cyan-400/20">
+            <h3 class="orbitron text-cyan-400 font-bold text-lg mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-users"></i> Team Size
+            </h3>
+            <p id="detailTeamSize" class="text-white font-semibold text-lg"></p>
+          </div>
+          
+          <a id="detailRegisterBtn" href="#" target="_blank" class="block w-full text-center bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all orbitron text-lg shadow-lg shadow-cyan-500/50">
+            REGISTER NOW
+            <i class="fa-solid fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="relative z-10 pt-20">
+    <section class="min-h-[50vh] flex flex-col justify-center items-center text-center px-6">
+      <h1 class="text-7xl md:text-8xl font-black orbitron glow mb-4 tracking-wider">TECH EVENTS</h1>
+      <p class="text-2xl text-cyan-300 font-medium">Explore the Five Verses of Innovation</p>
+    </section>
+
+    <section id="spy-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-cyan-400">SPY VERSE</h2></div>
+      <div id="spy-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="scifi-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-purple-400">SCI-FI VERSE</h2></div>
+      <div id="scifi-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="carnival-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-red-400">CARNIVAL VERSE</h2></div>
+      <div id="carnival-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="dark-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-slate-400">DARK VERSE</h2></div>
+      <div id="dark-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+
+    <section id="mythic-verse" class="py-20 px-6 reveal">
+      <div class="text-center mb-10"><h2 class="text-5xl font-black orbitron text-orange-400">MYTHIC VERSE</h2></div>
+      <div id="mythic-verse-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"></div>
+    </section>
+  </main>
+
+  <script src="api-config.js"></script>
+  <script>
+    const TARGET_TYPE = 'tech-event';
+    let currentEventData = null;
+
+    function openPosterModal(posterUrl, eventData) {
+      currentEventData = eventData;
+      document.getElementById('posterModalImg').src = posterUrl;
+      document.getElementById('posterModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePosterModal() {
+      document.getElementById('posterModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function openDetailModal(eventData) {
+      currentEventData = eventData;
+      
+      document.getElementById('detailPosterImg').src = eventData.posterLink;
+      document.getElementById('detailLogo').src = eventData.logoLink || '';
+      document.getElementById('detailTitle').textContent = eventData.title;
+      document.getElementById('detailCategory').textContent = eventData.category.replace('-', ' ');
+      document.getElementById('detailDay').textContent = eventData.day;
+      document.getElementById('detailTime').textContent = eventData.time;
+      document.getElementById('detailDescription').textContent = eventData.description;
+      document.getElementById('detailPrize').textContent = eventData.prizePool || 'TBA';
+      document.getElementById('detailTeamSize').textContent = eventData.teamSize || 'Individual/Team';
+      document.getElementById('detailRegisterBtn').href = eventData.registrationLink;
+      
+      document.getElementById('detailModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modals on outside click
+    document.getElementById('posterModal').addEventListener('click', function(e) {
+      if (e.target === this) closePosterModal();
+    });
+
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeDetailModal();
+    });
+
+    // Close modals on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePosterModal();
+        closeDetailModal();
+      }
+    });
+
+    function createCardHTML(event) {
+        const eventDataStr = encodeURIComponent(JSON.stringify(event));
+        return `
+          <div class="event-card glass rounded-2xl border border-white/10 overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+            <div class="event-card-content p-6">
+              <div class="flex justify-between items-center mb-4">
+                 ${event.logoLink ? `<img src="${event.logoLink}" class="w-10 h-10 object-contain">` : `<i class="fa-solid fa-microchip text-2xl text-cyan-400"></i>`}
+                 <span class="text-xs bg-white/10 px-3 py-1 rounded-full">${event.day} • ${event.time}</span>
+              </div>
+              <img src="${event.posterLink}" 
+                   class="event-card-poster mb-4" 
+                   onclick='openPosterModal("${event.posterLink}", JSON.parse(decodeURIComponent("${eventDataStr}")))' 
+                   alt="${event.title}">
+              <h3 class="text-xl font-bold orbitron text-cyan-400 mb-2 uppercase">${event.title}</h3>
+              <p class="event-card-description text-gray-400 text-sm mb-4">${event.description}</p>
+              
+              <div class="card-actions">
+                <button onclick='openDetailModal(JSON.parse(decodeURIComponent("${eventDataStr}")))' class="see-more-card-btn">
+                  <i class="fa-solid fa-circle-info mr-1"></i> SEE MORE
+                </button>
+                <a href="${event.registrationLink}" target="_blank" class="flex-1 text-center bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition-all">
+                  REGISTER
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+    }
+
+    async function loadAllEvents() {
+        try {
+            const response = await fetch(API_CONFIG.eventsUrl);
+            const data = await response.json();
+            
+            if (!data.events) return;
+
+            const sections = [
+                { id: 'spy-verse-container', category: 'spy-verse' },
+                { id: 'scifi-verse-container', category: 'scifi-verse' },
+                { id: 'carnival-verse-container', category: 'carnival-verse' },
+                { id: 'dark-verse-container', category: 'dark-verse' },
+                { id: 'mythic-verse-container', category: 'mythic-verse' }
+            ];
+
+            sections.forEach(section => {
+                const container = document.getElementById(section.id);
+                if (container) {
+                    const filteredEvents = data.events.filter(e => 
+                        e.category === section.category && 
+                        e.eventType === TARGET_TYPE 
+                    );
+                    
+                    if (filteredEvents.length > 0) {
+                        container.innerHTML = filteredEvents.map(createCardHTML).join('');
+                    } else {
+                        container.innerHTML = `<p class="text-gray-500 col-span-full text-center py-10 italic">No Tech Events in this Verse yet.</p>`;
+                    }
+                }
+            });
+        } catch (error) { 
+            console.error('Failed to load events:', error); 
+        }
+    }
+
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.reveal').forEach(el => {
+        if(el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+      });
+    });
+
+    loadAllEvents();
+  </script>
+</body>
+</html>
