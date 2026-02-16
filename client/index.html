@@ -4,13 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mayukh 2026 - Home</title>
-  <meta name="description" content="Mayukh 2026 - The official technical fest of Banasthali Vidyapith. Join us for innovation and technology." />
-  <meta name="keywords" content="Mayukh 2026, Banasthali Vidyapith fest, technical fest, coding events, B.Tech CSE" />
-
-  <meta property="og:title" content="Mayukh 2026 | Banasthali Vidyapith" />
-  <meta property="og:description" content="Official technical event of Banasthali." />
-  <meta property="og:image" content="https://mayukhbanasthali.com/assests/p6.jpg" />
-  <meta property="og:url" content="https://mayukhbanasthali.com" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -97,17 +90,18 @@
       }
     }
 
-    /* Intro Video Responsive Styling */
+    /* Intro Video Responsive Styling - FIXED FOR MOBILE */
     #intro-video {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Use contain on mobile to prevent cropping */
+      object-fit: cover; /* Desktop par full screen */
     }
 
-    /* Switch to cover on larger screens for intro video */
-    @media (min-width: 768px) {
+    /* Mobile par Face na kate, isliye contain use karenge */
+    @media (max-width: 768px) {
       #intro-video {
-        object-fit: cover;
+        object-fit: contain !important;
+        background-color: black;
       }
     }
 
@@ -410,10 +404,6 @@
             <i class="fa-solid fa-road"></i>
             <span>Roadmap</span>
           </a>
-          <a href="teams.html" class="nav-item text-gray-300">
-            <i class="fa-solid fa-user-group"></i>
-            <span>Team</span>
-          </a>
         </div>
 
         <!-- Extra Menu (Expandable) -->
@@ -423,6 +413,14 @@
               <a href="tech-events.html" class="nav-item text-gray-300">
                 <i class="fa-solid fa-calendar-days"></i>
                 <span>Events</span>
+              </a>
+              <a href="tech-workshops.html" class="nav-item text-gray-300">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <span>Workshops</span>
+              </a>
+              <a href="teams.html" class="nav-item text-gray-300">
+                <i class="fa-solid fa-user-group"></i>
+                <span>Team</span>
               </a>
               <a href="gallery.html" class="nav-item text-gray-300">
                 <i class="fa-solid fa-images"></i>
@@ -662,7 +660,7 @@
         const errorMsg = document.getElementById('admin-error');
         const pass = passInput ? passInput.value : "";
         
-        if(pass === "@spiderman@mayukh@2026@") { 
+        if(pass === "Mayukh@2026") { 
             const now = new Date().getTime();
             
             localStorage.setItem("admin_logged_in", "true");
