@@ -193,7 +193,7 @@ mayukh.bv/
 │   ├── index.html             # Main landing page
 │   ├── auth.js                # Frontend authentication helper
 │   ├── api-config.js          # API URL configuration
-│   ├── assests/               # Images, videos, static assets
+│   ├── assets/               # Images, videos, static assets
 │   ├── tech-events.html       # Tech events page
 │   ├── non-tech-events.html   # Non-tech events page
 │   ├── tech-workshops.html    # Tech workshops page
