@@ -439,30 +439,49 @@
     </div>
 
     <!-- RIGHT PANEL -->
-    <div id="right-panel" class="fixed top-1/2 flex flex-col justify-between items-center glass rounded-2xl p-6 w-20 h-[50vh] border-r-4 border-blue-500/50 z-50">
-      <div class="flex flex-col items-center space-y-8 w-full">
-        <!-- Social Icons -->
-        <a href="https://www.instagram.com/mayukh_bv/" target="_blank" class="social-icon">
-          <i class="fa-brands fa-instagram"></i>
-        </a>
-        <a href="https://www.youtube.com/channel/UCelIKNgiLt_IP4aT2QmZ7WA" target="_blank" class="social-icon">
-          <i class="fa-brands fa-youtube"></i>
-        </a>
-        <a href="https://www.linkedin.com/company/mayukh-banasthali/" target="_blank" class="social-icon">
-          <i class="fa-brands fa-linkedin"></i>
-        </a>
-        <a href="mailto:mayukh@banasthali.in" class="social-icon">
-          <i class="fa-solid fa-envelope"></i>
-        </a>
-        
-        <!-- About Link -->
-        <a href="about.html" class="about-link">
-          <i class="fa-solid fa-circle-info"></i>
-          <span>About</span>
-        </a>
+    <div id="right-panel" class="fixed top-1/2 flex flex-col justify-start items-center glass rounded-2xl px-2 py-6 w-24 border-r-4 border-blue-500/50 z-50">
+  <nav class="flex flex-col items-center w-full">
+    
+    <div class="flex flex-col items-center space-y-4 w-full">
+      <a href="store.html" class="nav-item text-gray-300">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span>Store</span>
+      </a>
+      <a href="https://www.instagram.com/mayukh_bv/" target="_blank" class="nav-item text-gray-300">
+        <i class="fa-brands fa-instagram"></i>
+        <span>Insta</span>
+      </a>
+      <a href="mailto:mayukh@banasthali.in" class="nav-item text-gray-300">
+        <i class="fa-solid fa-envelope"></i>
+        <span>Email</span>
+      </a>
+      <a href="about.html" class="nav-item text-gray-300">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>About</span>
+      </a>
+    </div>
+
+    <div id="right-extra-menu" class="grid w-full mt-4 opacity-0 pointer-events-none transition-all duration-500" style="grid-template-rows: 0fr;">
+      <div class="overflow-hidden">
+        <div class="flex flex-col items-center space-y-4 pb-2">
+          <a href="https://www.linkedin.com/company/mayukh-banasthali/" target="_blank" class="nav-item text-gray-300">
+            <i class="fa-brands fa-linkedin"></i>
+            <span>LinkedIn</span>
+          </a>
+          <a href="https://www.youtube.com/channel/UCelIKNgiLt_IP4aT2QmZ7WA" target="_blank" class="nav-item text-gray-300">
+            <i class="fa-brands fa-youtube"></i>
+            <span>YouTube</span>
+          </a>
+        </div>
       </div>
     </div>
 
+    <button id="right-see-more-btn" class="mt-2 text-blue-400 hover:text-white transition-all">
+      <i class="fa-solid fa-chevron-down text-lg transition-transform duration-300"></i>
+    </button>
+
+  </nav>
+</div>
     <!-- HOME SECTION with Spotlight Effect -->
     <section id="home" class="relative h-screen flex flex-col justify-center items-center text-center overflow-hidden">
       <div class="video-container">
@@ -878,6 +897,25 @@
         loadAlerts(); // Load alerts when page opens
     });
     window.addEventListener('resize', adjustSpotlight);
+    const rightSeeMoreBtn = document.getElementById('right-see-more-btn');
+    if (rightSeeMoreBtn) {
+      rightSeeMoreBtn.addEventListener('click', function() {
+        const container = document.getElementById('right-extra-menu');
+        const isExpanded = container.style.gridTemplateRows === "1fr";
+        
+        if (!isExpanded) {
+          container.style.gridTemplateRows = "1fr";
+          container.style.opacity = "1";
+          container.style.pointerEvents = "auto";
+          this.querySelector('i').style.transform = "rotate(180deg)";
+        } else {
+          container.style.gridTemplateRows = "0fr";
+          container.style.opacity = "0";
+          container.style.pointerEvents = "none";
+          this.querySelector('i').style.transform = "rotate(0deg)";
+        }
+      });
+    }
 </script>
 </body>
 </html>
